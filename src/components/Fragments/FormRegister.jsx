@@ -55,17 +55,11 @@ const FormRegister = () => {
       .required('Password harus diisi'),
     rkn_nama: Yup.string().required('Nama Perusahaan harus diisi'),
     rkn_alamat: Yup.string().required('Alamat Perusahaan harus diisi'),
-    rkn_kodepos: Yup.string().required('KodePos harus diisi'),
     rkn_prop: Yup.string().required('Pilih salah satu'),
     rkn_kota: Yup.string().required('Pilih salah satu'),
-    rkn_mobile_phone: Yup.string()
-      .matches(/^(\+62|62|0)8[1-9][0-9]{6,9}$/, 'Nomor telepon tidak valid')
-      .required('No Telepone harus diisi'),
     rkn_email: Yup.string()
       .required('Email harus diisi')
       .email('Format e-mail tidak valid'),
-    rkn_pkp: Yup.string().required('PKP harus diisi'),
-    rkn_fax: Yup.string().required('Fax harus diisi'),
     rkn_telepon: Yup.string().required('Telepon harus diisi'),
     rkn_npwp: Yup.string()
       .matches(
@@ -154,6 +148,23 @@ const FormRegister = () => {
           return kota.name.toLowerCase().includes(query.toLowerCase());
         });
 
+  const formatNpwp = (value) => {
+    if (typeof value === 'string') {
+      return value.replace(
+        /(\d{2})(\d{3})(\d{3})(\d{1})(\d{3})(\d{3})/,
+        '$1.$2.$3.$4-$5.$6'
+      );
+    }
+    return value;
+  };
+
+  const handleNPWPChange = (e) => {
+    const rawValue = e.target.value;
+    const formattedValue = formatNpwp(rawValue);
+
+    formik.setFieldValue('rkn_npwp', formattedValue);
+  };
+
   const handleCLose = () => {
     setModalOpen(false);
     navigate('/');
@@ -229,38 +240,28 @@ const FormRegister = () => {
           label="No. Handphone"
           type="text"
           {...formik.getFieldProps('rkn_mobile_phone')}
-          error={
-            formik.touched.rkn_mobile_phone && formik.errors.rkn_mobile_phone
-          }
         />
         <InputForm
           label="NPWP"
           type="text"
           {...formik.getFieldProps('rkn_npwp')}
+          onChange={handleNPWPChange}
           error={formik.touched.rkn_npwp && formik.errors.rkn_npwp}
         />
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2">
           <InputForm
             label="No PKP"
             type="text"
             {...formik.getFieldProps('rkn_pkp')}
-            error={formik.touched.rkn_pkp && formik.errors.rkn_pkp}
           />
           <InputForm
             label="No Fax"
             type="text"
             {...formik.getFieldProps('rkn_fax')}
-            error={formik.touched.rkn_fax && formik.errors.rkn_fax}
-          />
-          <InputForm
-            label="Kode Pos"
-            type="text"
-            {...formik.getFieldProps('rkn_kodepos')}
-            error={formik.touched.rkn_kodepos && formik.errors.rkn_kodepos}
           />
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-3">
           <div className="mb-6">
             <p className="mb-3 text-sm font-semibold capitalize ">
               Pilih Provinsi
@@ -387,6 +388,11 @@ const FormRegister = () => {
               </p>
             )}
           </div>
+          <InputForm
+            label="Kode Pos"
+            type="text"
+            {...formik.getFieldProps('rkn_kodepos')}
+          />
         </div>
 
         <TextAreaForm

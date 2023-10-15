@@ -137,13 +137,14 @@ function TableListsPenyedia() {
                     Nama Penyedia
                   </th>
                   <th className="px-4 py-3 border border-gray-200">status</th>
+                  <th className="px-4 py-3 border border-gray-200">
+                    Bentuk Usaha
+                  </th>
                   <th className="px-4 py-3 border border-gray-200">NPWP</th>
                   <th className="px-4 py-3 border border-gray-200">
                     Tanggal Daftar
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
-                    Bentuk Usaha
-                  </th>
+
                   <th className="px-4 py-3 border border-gray-200 ">Aksi</th>
                 </tr>
               </thead>
@@ -173,13 +174,14 @@ function TableListsPenyedia() {
                       <td className="px-3 py-4 capitalize">
                         {getStatusComponent(item)}
                       </td>
+                      <td className="px-3 py-4 text-center capitalize">
+                        {item.b__usaha.btu_nama}
+                      </td>
                       <td className="px-3 py-4 capitalize">{item.rkn_npwp}</td>
                       <td className="px-3 py-4 text-center capitalize">
                         {item.rkn_tgl_daftar}
                       </td>
-                      <td className="px-3 py-4 capitalize">
-                        {item.b__usaha.btu_nama}
-                      </td>
+
                       <td className="px-6 py-4 text-center">
                         <button
                           className="mr-2 font-semibold text-blue-500 hover:underline"
