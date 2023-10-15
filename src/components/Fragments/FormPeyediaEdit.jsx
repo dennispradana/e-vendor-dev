@@ -128,8 +128,6 @@ const FormPeyediaEdit = () => {
     fetchDataKota();
   }, [selectedProv]);
 
-  console.log(formik.errors);
-
   const filteredProv =
     query === ''
       ? alamatData.provinsi
