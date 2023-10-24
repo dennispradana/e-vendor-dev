@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from '../Fragments/Navbar';
 import Footer from '../Elements/Footer';
 
-const SettingLayout = ({ children }) => {
+const SettingPegLayout = ({ children }) => {
   return (
     <div className="container bg-slate-50">
       <Navbar />
@@ -18,4 +18,4 @@ const SettingLayout = ({ children }) => {
   );
 };
 
-export default SettingLayout;
+export default SettingPegLayout;
