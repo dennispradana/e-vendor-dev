@@ -7,6 +7,7 @@ import DashboardKipbj from '../components/Fragments/DashboardKipbj';
 import DashboardPp from '../components/Fragments/DashboardPp';
 import DashboardPpk from '../components/Fragments/DashboardPpk';
 import { SkeletonItem } from '../components/Elements/Skelekton';
+import DashboardRkn from '../components/Fragments/DashboardRkn';
 
 const breadcrumbItems = [{ label: 'Dashboard', url: '/' }];
 
@@ -18,6 +19,7 @@ const Dashboard = () => {
     KIPBJ: <DashboardKipbj />,
     PP: <DashboardPp />,
     PPK: <DashboardPpk />,
+    RKN: <DashboardRkn />,
   };
 
   const dasboardDisplay = dashboardComponents[user.role];
