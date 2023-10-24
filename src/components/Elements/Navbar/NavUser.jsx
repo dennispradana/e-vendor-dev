@@ -4,7 +4,7 @@ import { UserAvatar } from '../UserAvatar';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 
-const NavPeg = () => {
+const NavUser = () => {
   const { logout, user } = useAuthContext();
 
   return (
@@ -16,8 +16,8 @@ const NavPeg = () => {
           </div>
         </Link>
         <UserAvatar
-          user={user.peg_nama}
-          emailUser={user.peg_email}
+          user={user.nama}
+          emailUser={user.email}
           dropdownContent={(closeDropdown) => (
             <ul>
               <Link
@@ -54,4 +54,4 @@ const NavPeg = () => {
   );
 };
 
-export default NavPeg;
+export default NavUser;

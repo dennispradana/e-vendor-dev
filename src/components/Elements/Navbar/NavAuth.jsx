@@ -28,28 +28,16 @@ const NavAuth = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute right-0 py-3 mt-3 font-medium uppercase origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg w-36 ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items className="absolute right-0 py-3 mt-3 font-medium capitalize origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg w-44 ring-1 ring-black ring-opacity-5 focus:outline-none">
               <Menu.Item>
                 {({ active }) => (
                   <Link
-                    to="/login"
+                    to="/register-penyedia"
                     className={`${
                       active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                    } group flex w-full items-center rounded-md px-2 py-2 font-semibold`}
+                    } group flex w-full items-center rounded-md px-2 py-2`}
                   >
-                    Pegawai
-                  </Link>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <Link
-                    to="/login/penyedia"
-                    className={`${
-                      active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                    } group flex w-full items-center rounded-md px-2 py-2 font-semibold`}
-                  >
-                    Penyedia
+                    Register Penyedia
                   </Link>
                 )}
               </Menu.Item>

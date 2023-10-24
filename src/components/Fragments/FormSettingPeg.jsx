@@ -9,7 +9,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { toasterror, toastsuccess } from '../../utils/ToastMessage';
 import Spinner from '../Elements/Spinner';
 
-const FormSetting = () => {
+const FormSettingPeg = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [dataUser, setDataUser] = useState({});
@@ -44,7 +44,7 @@ const FormSetting = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      await updateProfilePegawai(user.peg_id, values);
+      await updateProfilePegawai(user.user_id, values);
       toastsuccess('Update Successful');
       setTimeout(() => {
         window.location.href = '/dashboard';
@@ -66,7 +66,7 @@ const FormSetting = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getProfilePegawai(user.peg_id);
+        const response = await getProfilePegawai(user.user_id);
         setDataUser(response);
         setLoading(false);
       } catch (error) {
@@ -257,4 +257,4 @@ const FormSetting = () => {
   );
 };
 
-export default FormSetting;
+export default FormSettingPeg;

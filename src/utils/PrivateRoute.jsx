@@ -23,7 +23,7 @@ export const AdminAcces = ({ redirectPath = '/unauthorized' }) => {
       </MainLayouts>
     );
   }
-  if (!user || user.usrgroup !== 'ADM') {
+  if (!user || user.role !== 'ADM') {
     return <Navigate to={redirectPath} replace />;
   }
 

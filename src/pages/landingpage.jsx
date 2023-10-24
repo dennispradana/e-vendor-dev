@@ -22,17 +22,17 @@ const LandingPage = () => {
       </div>
       <div className="w-full px-2 py-3 bg-blue-100 rounded-lg">
         <h1 className="text-2xl font-extrabold text-center text-black capitalize">
-          silahkan pilih masuk sebagai
+          silahkan pilih
         </h1>
       </div>
       <Link to="/login">
         <Button cN="btn-full bg-blue-300 text-black text-xl font-bold hover:bg-blue-500">
-          Pegawai
+          Login
         </Button>
       </Link>
-      <Link to="/login/penyedia">
+      <Link to="/register-penyedia">
         <Button cN="btn-full bg-red-300 text-black text-xl font-bold hover:bg-red-500">
-          Penyedia
+          Register Penyedia
         </Button>
       </Link>
     </LandingPageLayout>

@@ -25,69 +25,30 @@ export const userAuth = () => {
     }
   };
 
-  const loginPenyedia = async (data) => {
-    try {
-      const authResult = await api.post('/penyedia/login', data);
-      const token = authResult.data;
-      setUserToken(token);
-      toastsuccess('Login Successfull');
-    } catch (error) {
-      toasterror('Login Failed');
-      throw new Error('Login failed. Please check your credentials.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleInvalidToken = () => {
     setUserToken(null);
     window.location.href = '/login';
   };
 
-  const fetchDataPegawai = async () => {
-    try {
-      if (userToken) {
-        const response = await api.get('/me', {
-          headers: {
-            Authorization: `Bearer ${userToken.access_token}`,
-          },
-        });
-        const userData = response.data;
-        setUser(userData);
-      }
-    } catch (error) {
-      handleInvalidToken();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchDataPenyedia = async () => {
-    try {
-      if (userToken) {
-        const response = await api.get('/penyedia/me', {
-          headers: {
-            Authorization: `Bearer ${userToken.access_token}`,
-          },
-        });
-        const userData = response.data;
-        setUser(userData);
-      }
-    } catch (error) {
-      handleInvalidToken();
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (userToken) {
-      if (window.location.pathname === '/login/penyedia') {
-        fetchDataPenyedia();
-      } else {
-        fetchDataPegawai();
+    const fetchDataUser = async () => {
+      try {
+        if (userToken) {
+          const response = await api.get('auth/me', {
+            headers: {
+              Authorization: `Bearer ${userToken.access_token}`,
+            },
+          });
+          const userData = response.data;
+          setUser(userData);
+        }
+      } catch (error) {
+        handleInvalidToken();
+      } finally {
+        setLoading(false);
       }
-    }
+    };
+    fetchDataUser();
   }, [userToken]);
 
   const logout = async () => {
@@ -109,5 +70,5 @@ export const userAuth = () => {
     }
   };
 
-  return { user, loading, login, logout, loginPenyedia, userToken };
+  return { user, loading, login, logout, userToken };
 };
