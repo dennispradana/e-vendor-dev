@@ -46,6 +46,7 @@ const FormSettingRkn = () => {
     rkn_telepon: '',
     rkn_isactive: '',
     rkn_status: '',
+    rkn_status_verifikasi: '',
     rkn_mobile_phone: '',
   };
 
@@ -70,7 +71,8 @@ const FormSettingRkn = () => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      await updateProfilePenyedia(user.user_id, values);
+      const updateValues = { ...values, rkn_status_verifikasi: 'non' };
+      await updateProfilePenyedia(user.user_id, updateValues);
       toastsuccess('Update Sukses');
       navigate('/dashboard');
     } catch (error) {
@@ -175,6 +177,7 @@ const FormSettingRkn = () => {
       rkn_telepon: dataUser.rkn_telepon || '',
       rkn_isactive: dataUser.rkn_isactive || '',
       rkn_status: dataUser.rkn_status || '',
+      rkn_status_verifikasi: dataUser.rkn_status_verifikasi || '',
       rkn_mobile_phone: dataUser.rkn_mobile_phone || '',
     });
   }, [dataUser]);
