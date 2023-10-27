@@ -1,8 +1,12 @@
 import 'react-toastify/dist/ReactToastify.css';
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuthContext } from './contexts/AuthContext';
-import { AdminAcces, ProtectedRoute } from './utils/PrivateRoute';
+import {
+  AdminAcces,
+  PenyediaAcces,
+  ProtectedRoute,
+} from './utils/PrivateRoute';
 import { ToastContainer } from 'react-toastify';
 import Login from './pages/login';
 import RegisterPenyedia from './pages/penyedia/registerPenyedia';
@@ -16,6 +20,10 @@ import ListPegawai from './pages/pegawai/admin/listPegawai';
 import ListPenyedia from './pages/pegawai/admin/listPenyedia';
 import UpdatePegawaiPage from './pages/pegawai/admin/updatePegawai';
 import UpdatePenyediaPage from './pages/pegawai/admin/updatePenyedia';
+import DataPenyedia from './pages/penyedia/dataPenyedia';
+import Identitas from './pages/penyedia/dataPenyedia/identitas';
+import IzinUsaha from './pages/penyedia/dataPenyedia/izinUsaha';
+import AddIzinUsaha from './pages/penyedia/dataPenyedia/addIzinUsaha';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -40,6 +48,20 @@ const AppRoute = () => {
               path="/daftar-penyedia/edit/:penyediaId"
               element={<UpdatePenyediaPage />}
             />
+          </Route>
+          <Route element={<PenyediaAcces />}>
+            <Route path="data-penyedia" element={<DataPenyedia />}>
+              <Route
+                path="/data-penyedia"
+                element={<Navigate to="identitas" />}
+              />
+              <Route path="identitas" element={<Identitas />} />
+              <Route path="izin-usaha" element={<IzinUsaha />} />
+              <Route
+                path="izin-usaha/tambah-izin-usaha"
+                element={<AddIzinUsaha />}
+              />
+            </Route>
           </Route>
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />

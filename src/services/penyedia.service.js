@@ -48,11 +48,24 @@ export const penyediaService = () => {
     }
   };
 
+  const getIzinUsaha = async (penyediaId, dataPenyedia) => {
+    try {
+      const response = await api.get(
+        `/penyedia/ijin/${penyediaId}`,
+        dataPenyedia
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data Izin Usaha');
+    }
+  };
+
   return {
     btkUsaha,
     registerPenyedia,
     getPenyedia,
     editPenyedia,
     updatePenyedia,
+    getIzinUsaha,
   };
 };

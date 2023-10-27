@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Fragments/Navbar';
 import SideBar from '../Fragments/SideBar';
 
-const MainLayouts = ({ children }) => {
+const MainLayouts = ({ children, type }) => {
   return (
     <div className="container">
       <Navbar type="user" />
-      <div className="flex w-full h-screen bg-sky-50">
+      <div
+        className={`flex h-screen ${
+          type === 'RKN' ? 'bg-white' : 'bg-sky-50'
+        } `}
+      >
         <SideBar />
-        <main className="w-3/4 pt-20 overflow-y-auto page-padding">
+        <main className="w-full pt-24 overflow-y-auto page-padding">
           {children}
         </main>
       </div>

@@ -59,34 +59,40 @@ function TableListsPenyedia() {
     setCurrentPage(page);
   };
 
-  const getStatusComponent = (item) => {
-    const verif =
-      item.rkn_isactive === '1' &&
-      item.rkn_status === '1' &&
-      item.rkn_status_verifikasi === 'verif';
-    const nonVerif = item.rkn_status_verifikasi === 'non';
-    const nonAktif = item.rkn_isactive === '0';
-
-    switch (true) {
-      case nonVerif:
-        return (
-          <p className="p-1 font-bold text-center text-red-400">
-            Belum di Verifikasi
-          </p>
-        );
-      case verif:
-        return (
+  const renderStatus = (item) => {
+    const statusConfig = {
+      verif: {
+        condition:
+          item.rkn_isactive === '1' &&
+          item.rkn_status === '1' &&
+          item.rkn_status_verifikasi === 'verif',
+        render: (
           <p className="p-1 font-bold text-center text-green-600">
             ter-Verifikasi
           </p>
-        );
-      case nonAktif:
-        return (
+        ),
+      },
+      nonVerif: {
+        condition: item.rkn_status_verifikasi === 'non',
+        render: (
+          <p className="p-1 font-bold text-center text-red-400">
+            Belum di Verifikasi
+          </p>
+        ),
+      },
+      nonAktif: {
+        condition: item.rkn_isactive === '0',
+        render: (
           <p className="p-1 font-bold text-center text-red-800">non-aktif</p>
-        );
-      default:
-        return null;
-    }
+        ),
+      },
+    };
+
+    const status = Object.keys(statusConfig).find(
+      (key) => statusConfig[key].condition
+    );
+
+    return status ? statusConfig[status].render : null;
   };
 
   const TableDataPenyedia = () => {
@@ -172,7 +178,7 @@ function TableListsPenyedia() {
                       </th>
                       <td className="px-3 py-4 capitalize">{item.rkn_nama}</td>
                       <td className="px-3 py-4 capitalize">
-                        {getStatusComponent(item)}
+                        {renderStatus(item)}
                       </td>
                       <td className="px-3 py-4 text-center capitalize">
                         {item.b__usaha.btu_nama}

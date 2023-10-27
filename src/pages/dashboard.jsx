@@ -1,6 +1,5 @@
 import React from 'react';
 import MainLayouts from '../components/Layouts/MainLayouts';
-import Breadcrumb from '../components/Elements/Breadcrumb';
 import { useAuthContext } from '../contexts/AuthContext';
 import DashboardAdm from '../components/Fragments/DashboardAdm';
 import DashboardKipbj from '../components/Fragments/DashboardKipbj';
@@ -8,8 +7,6 @@ import DashboardPp from '../components/Fragments/DashboardPp';
 import DashboardPpk from '../components/Fragments/DashboardPpk';
 import { SkeletonItem } from '../components/Elements/Skelekton';
 import DashboardRkn from '../components/Fragments/DashboardRkn';
-
-const breadcrumbItems = [{ label: 'Dashboard', url: '/' }];
 
 const Dashboard = () => {
   const { user, loading } = useAuthContext();
@@ -25,8 +22,7 @@ const Dashboard = () => {
   const dasboardDisplay = dashboardComponents[user.role];
 
   return (
-    <MainLayouts>
-      <Breadcrumb items={breadcrumbItems} />
+    <MainLayouts type={user.role}>
       {loading ? (
         <>
           <SkeletonItem itemCount={1} cN="bg-gray-200 h-6 w-1/4" />

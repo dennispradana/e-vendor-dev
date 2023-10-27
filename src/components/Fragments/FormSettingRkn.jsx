@@ -214,7 +214,7 @@ const FormSettingRkn = () => {
       </div>
     </>
   ) : (
-    <div className="mb-20">
+    <>
       <form onSubmit={formik.handleSubmit}>
         <div className="mb-6">
           <label className="text-sm font-semibold capitalize ">
@@ -471,7 +471,7 @@ const FormSettingRkn = () => {
           showContinueButton={true}
         />
       )}
-    </div>
+    </>
   );
 };
 
