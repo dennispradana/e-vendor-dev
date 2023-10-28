@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 export const TabsBar = ({ items }) => {
   const location = useLocation();
+  const pathname = location.pathname;
   return (
     <div className="mb-5 border-b border-gray-200">
       <ul className="flex flex-wrap -mb-px text-center text-gray-500 ">
@@ -11,7 +12,7 @@ export const TabsBar = ({ items }) => {
             <Link
               to={item.url}
               className={`inline-flex items-center justify-center border-b p-2 rounded-t-lg ease-in-out duration-150  ${
-                location.pathname === item.url
+                pathname.startsWith(item.url)
                   ? 'bg-violet-600 text-white border-transparent'
                   : 'hover:text-violet-500 hover:border-violet-600 hover:font-semibold '
               }`}

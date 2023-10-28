@@ -10,6 +10,15 @@ export const penyediaService = () => {
     }
   };
 
+  const jenisIzin = async () => {
+    try {
+      const response = await api.get('jenis_ijin');
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Jenis Izin');
+    }
+  };
+
   const registerPenyedia = async (dataPenyedia) => {
     try {
       const response = await api.post('v1/penyedia', dataPenyedia);
@@ -62,6 +71,7 @@ export const penyediaService = () => {
 
   return {
     btkUsaha,
+    jenisIzin,
     registerPenyedia,
     getPenyedia,
     editPenyedia,

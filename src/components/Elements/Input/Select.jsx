@@ -5,7 +5,7 @@ const Select = (props) => {
   return (
     <select
       name={name}
-      className={`w-full mt-2 p-1 px-3 text-gray-700 bg-white border ${
+      className={`w-full mt-2 py-2 px-3 text-gray-700 bg-white border ${
         error
           ? 'border-red-500 focus:ring-red-600'
           : 'border-gray-300  focus:ring-sky-600'
