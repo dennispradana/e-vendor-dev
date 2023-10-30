@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import Spinner from '../Elements/Spinner';
 import { toasterror } from '../../utils/ToastMessage';
+import { formatDate } from '../../utils/formatDate';
 
 const TabIdentitas = () => {
   const { user } = useAuthContext();
@@ -182,7 +183,7 @@ const TabIdentitas = () => {
               <div className="p-2">
                 <label className="capitalize ">Tanggal Daftar</label>
                 <p className="py-2 text-gray-500 capitalize">
-                  {dataUser.rkn_tgl_daftar}
+                  {formatDate(new Date(dataUser.rkn_tgl_daftar))}
                 </p>
               </div>
               <div className="p-2">

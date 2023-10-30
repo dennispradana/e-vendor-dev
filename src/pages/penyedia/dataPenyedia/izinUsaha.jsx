@@ -3,7 +3,7 @@ import TabIzinUsaha from '../../../components/Fragments/TabIzinUsaha';
 
 const IzinUsaha = () => {
   return (
-    <div className="p-6 bg-white border rounded-lg">
+    <div className="py-4 bg-white border rounded-lg page-padding">
       <TabIzinUsaha />
     </div>
   );
