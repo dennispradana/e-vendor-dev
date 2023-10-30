@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { iusService } from '../../services/ius.service';
 import { SkeletonItem } from '../Elements/Skelekton';
@@ -19,6 +19,7 @@ const TabIzinUsaha = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [entryNumber, setEntryNumber] = useState(1);
   const [debaouceSearch] = useDebounce(searchTerm, 2000);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,8 +47,8 @@ const TabIzinUsaha = () => {
 
   console.log(datas);
 
-  const handleEdit = (iusId) => {
-    navigate(`edit/${iusId}`);
+  const handleEdit = (penyediaIusId) => {
+    navigate(`edit-izin-usaha/${penyediaIusId}`);
   };
 
   const handleSearch = (e) => {

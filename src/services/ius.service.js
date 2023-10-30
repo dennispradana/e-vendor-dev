@@ -21,29 +21,39 @@ export const iusService = () => {
     }
   };
 
-  const postIzinUsaha = async (penyediaId, dataPenyedia) => {
+  const postIzinUsaha = async (iusId, dataPenyedia) => {
     try {
-      const response = await api.post(
-        `/penyedia/ijin/${penyediaId}`,
-        dataPenyedia
-      );
+      const response = await api.post(`/penyedia/ijin/${iusId}`, dataPenyedia);
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data Izin Usaha');
     }
   };
 
-  const editIzinUsaha = async (penyediaId, dataPenyedia) => {
+  const editIzinUsaha = async (iusId, dataPenyedia) => {
     try {
-      const response = await api.get(
-        `/penyedia/ijin/${penyediaId}`,
-        dataPenyedia
-      );
+      const response = await api.get(`/penyedia/ijin/${iusId}`, dataPenyedia);
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data Izin Usaha');
     }
   };
 
-  return { jenisIzin, getIzinUsaha, postIzinUsaha, editIzinUsaha };
+  const updateIzinUsaha = async (iusId, dataPenyedia) => {
+    try {
+      const response = await api.put(`/penyedia/ijin/${iusId}`, dataPenyedia);
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data Izin Usaha');
+    }
+  };
+
+  return {
+    jenisIzin,
+    getIzinUsaha,
+    postIzinUsaha,
+    editIzinUsaha,
+    updateIzinUsaha,
+  };
 };

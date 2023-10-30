@@ -11,7 +11,8 @@ import Button from '../Elements/Button';
 import { IzinUsahaUpload } from '../Elements/Modal/fileUpload';
 import { iusService } from '../../services/ius.service';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { formatEditDate } from '../../utils/formatDate';
 
 const options = [
   { value: 0, label: 'Tanggal' },
@@ -25,8 +26,10 @@ const optionsKualifikasi = [
 
 const FormIzinUsaha = () => {
   const { user } = useAuthContext();
-  const { jenisIzin, postIzinUsaha } = iusService();
+  const { jenisIzin, postIzinUsaha, editIzinUsaha, updateIzinUsaha } =
+    iusService();
   const [jnsIzin, setJnsIzin] = useState([]);
+  const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [tags, setTags] = useState([]);
@@ -34,6 +37,30 @@ const FormIzinUsaha = () => {
   const [showModal, setShowModal] = useState(false);
   const [iusId, setIusId] = useState('');
   const navigate = useNavigate();
+  const { penyediaIusId } = useParams();
+  const isEdit = penyediaIusId !== undefined;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isEdit) {
+        try {
+          const response = await editIzinUsaha(penyediaIusId);
+          const izinUsahaData = response.data;
+          setData(izinUsahaData);
+          if (izinUsahaData.ius_klasifikasi) {
+            const tagsArray = izinUsahaData.ius_klasifikasi.split(',');
+            setTags(tagsArray);
+          }
+          setLoading(false);
+        } catch (error) {
+          toasterror(error.message);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const initialValues = {
     jni_nama: '',
@@ -71,12 +98,20 @@ const FormIzinUsaha = () => {
       ius_klasifikasi,
     };
     try {
-      const response = await postIzinUsaha(user.user_id, newValues);
+      let response;
+      let message;
+      if (isEdit) {
+        response = await updateIzinUsaha(penyediaIusId, newValues);
+        message = 'Update Sukses';
+      } else {
+        response = await postIzinUsaha(user.user_id, newValues);
+        message = 'Izin Usaha ditambahakan';
+      }
       if (response.success) {
         localStorage.removeItem('idIzinContent');
         setTags([]);
         formik.resetForm();
-        toastsuccess('Izin Usaha ditambahakan');
+        toastsuccess(message);
         navigate('/data-penyedia/izin-usaha');
       }
     } catch (error) {
@@ -138,6 +173,25 @@ const FormIzinUsaha = () => {
     setIusId(iusIdAttachment);
     formik.setFieldValue('ius_id_attachment', iusIdAttachment);
   };
+
+  const handleBack = () => {
+    history.back();
+  };
+
+  useEffect(() => {
+    formik.setValues({
+      jni_nama: data.jni_nama || '',
+      ius_no: data.ius_no || '',
+      status_berlaku: data.status_berlaku || '',
+      ius_berlaku: data.ius_berlaku
+        ? formatEditDate(new Date(data.ius_berlaku))
+        : '',
+      kls_id: data.kls_id || '',
+      ius_klasifikasi: data.ius_klasifikasi || '',
+      ius_instansi: data.ius_instansi || '',
+      ius_id_attachment: data.ius_id_attachment || '',
+    });
+  }, [data]);
 
   return loading ? (
     <div className="flex items-center justify-center h-[70vh]">
@@ -303,17 +357,32 @@ const FormIzinUsaha = () => {
         </div>
         <div className="flex gap-4 mt-20">
           <Button
-            cN={`btn bg-sky-500 text-white hover:bg-blue-600 ease-in duration-200 ${
+            cN={`btn bg-sky-500 text-white  hover:bg-blue-600 ease-in duration-200 ${
               formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             type="submit"
             disabled={formik.isSubmitting}
           >
-            {formik.isSubmitting ? <Spinner /> : 'Submit'}
+            {formik.isSubmitting ? <Spinner /> : isEdit ? 'Update' : 'Submit'}
+          </Button>
+          <Button
+            cN={`btn bg-slate-300 text-black hover:bg-slate-400 ease-in duration-200 ${
+              formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            disabled={formik.isSubmitting}
+            type="button"
+            onClick={() => handleBack()}
+          >
+            Kembali
           </Button>
         </div>
       </form>
-      {showModal && <IzinUsahaUpload close={handleCloseModal} iusId={iusId} />}
+      {showModal && (
+        <IzinUsahaUpload
+          close={handleCloseModal}
+          iusId={isEdit ? data.ius_id_attachment : iusId}
+        />
+      )}
     </>
   );
 };

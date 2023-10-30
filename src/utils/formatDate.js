@@ -21,6 +21,14 @@ export const formatDate = (date) => {
   return `${day} ${monthName} ${year}`;
 };
 
+export const formatEditDate = (date) => {
+  const year = date.getFullYear(); // Mendapatkan tahun (yyyy)
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Mendapatkan bulan (mm)
+  const day = date.getDate().toString().padStart(2, '0'); // Mendapatkan tanggal (dd)
+
+  return `${year}-${month}-${day}`;
+};
+
 export const getColorClass = (expirationDate) => {
   if (expirationDate) {
     const today = new Date();
@@ -29,12 +37,12 @@ export const getColorClass = (expirationDate) => {
     oneMonthFromToday.setMonth(oneMonthFromToday.getMonth() + 1);
 
     if (expiration < today) {
-      return 'text-red-500 font-semibold'; // Warna merah
+      return 'text-red-500 font-semibold';
     } else if (expiration < oneMonthFromToday) {
-      return 'text-yellow-500 font-semibold'; // Warna kuning
+      return 'text-yellow-500 font-semibold';
     } else {
-      return 'text-green-500 font-semibold'; // Warna hijau
+      return 'text-green-500 font-semibold';
     }
   }
-  return 'text-black'; // Warna default jika tanggal tidak ada
+  return 'text-black';
 };
