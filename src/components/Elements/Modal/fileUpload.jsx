@@ -7,18 +7,25 @@ import { fileService } from '../../../services/file.service';
 import { toasterror, toastsuccess } from '../../../utils/ToastMessage';
 import { BsFillTrashFill } from 'react-icons/bs';
 
-export const IzinUsahaUpload = ({ close }) => {
+export const IzinUsahaUpload = ({ close, iusId }) => {
   const { postIzinFile, getIzinFile, downloadIzinFile, deleteizinFile } =
     fileService();
-  const [idContent, setIdContent] = useState('');
   const [files, setFiles] = useState([]);
+  const [idContent, setIdContent] = useState(
+    localStorage.getItem('idIzinContent') || iusId
+  );
   const [uploadCount, setUploadCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const fileInputRef = useRef();
 
   const initialValues = {
     file: null,
-    id_content: idContent,
   };
+  useEffect(() => {
+    localStorage.setItem('idIzinContent', idContent);
+  }, [idContent]);
 
   const validationSchema = Yup.object({
     file: Yup.mixed()
@@ -40,10 +47,15 @@ export const IzinUsahaUpload = ({ close }) => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const newValue = { ...values, id_content: idContent };
+      const newValue = {
+        ...values,
+        id_content: idContent,
+      };
       const response = await postIzinFile(newValue);
       if (response) {
-        setIdContent(response.ctn_id_content);
+        if (idContent === '') {
+          setIdContent(response.ctn_id_content);
+        }
         toastsuccess('file berhasil diUpload');
         fileInputRef.current.value = null;
         formik.resetForm();
@@ -63,11 +75,28 @@ export const IzinUsahaUpload = ({ close }) => {
 
   useEffect(() => {
     const getTableFile = async () => {
-      const response = await getIzinFile(idContent);
-      setFiles(response);
+      try {
+        const response = await getIzinFile(idContent);
+        setFiles(response);
+        if (response.length === 0) {
+          setIdContent('');
+          localStorage.removeItem('idIzinContent');
+        }
+      } catch (error) {
+        toasterror(error.message);
+      } finally {
+        setLoading(false);
+      }
     };
     getTableFile();
-  }, [idContent, uploadCount]);
+  }, [uploadCount, idContent]);
+
+  const handleClose = () => {
+    if (files.length === 0) {
+      localStorage.removeItem('idIzinContent');
+    }
+    close(files.length > 0 ? idContent : '');
+  };
 
   const handleDownload = async (idContent, versi, fileName) => {
     try {
@@ -107,6 +136,107 @@ export const IzinUsahaUpload = ({ close }) => {
     }
   };
 
+  const RenderTable = () => {
+    return (
+      <div className="relative flex flex-col h-[60vh] overflow-x-auto rounded-lg px-6 py-8">
+        <div className="flex-grow">
+          <table className="w-full text-sm text-left text-gray-600 md:text-sm">
+            <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
+              <tr role="row" className="text-center border border-gray-200">
+                <th className="px-4 py-3 border border-gray-200">No</th>
+                <th className="px-4 py-3 border border-gray-200">Nama File</th>
+                <th className="px-4 py-3 border border-gray-200">
+                  Tanggal Upload
+                </th>
+                <th className="px-4 py-3 border border-gray-200">Aksi</th>
+              </tr>
+            </thead>
+            {loading ? (
+              <tbody>
+                <tr className="h-56 capitalize bg-gray-200 border-b">
+                  <td colSpan="4" className="text-center">
+                    <Spinner />
+                  </td>
+                </tr>
+              </tbody>
+            ) : (
+              <tbody className="overflow-y-auto ">
+                {files.length === 0 ? (
+                  <tr className="capitalize bg-gray-200 border-b">
+                    <td
+                      colSpan="4"
+                      className="px-6 py-4 italic font-semibold text-center"
+                    >
+                      belum ada file yang di Upload
+                    </td>
+                  </tr>
+                ) : (
+                  files.map((file, index) => (
+                    <tr
+                      key={index}
+                      className="duration-150 ease-out bg-white border-b hover:bg-gray-200"
+                    >
+                      <th
+                        scope="row"
+                        className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                      >
+                        {index + 1}
+                      </th>
+                      <td className="px-4 py-4">
+                        <button
+                          onClick={() => {
+                            if (!downloading) {
+                              setDownloading(true);
+                              handleDownload(
+                                file.ctn_id_content,
+                                file.ctn_versi,
+                                JSON.parse(file.blb_path).name
+                              ).then(() => setDownloading(false));
+                            }
+                          }}
+                          className={`font-semibold hover:text-blue-500 hover:underline ${
+                            downloading ? 'cursor-not-allowed' : ''
+                          }`}
+                          disabled={downloading}
+                        >
+                          {downloading
+                            ? 'Download....'
+                            : JSON.parse(file.blb_path).name}
+                        </button>
+                      </td>
+                      <td className="px-3 py-4 text-center">
+                        {file.blb_date_time}
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <button
+                          onClick={() => {
+                            if (!deleting) {
+                              setDeleting(true);
+                              handleDelete(
+                                file.ctn_id_content,
+                                file.ctn_versi
+                              ).then(() => setDeleting(false));
+                            }
+                          }}
+                          className={`mr-2 font-semibold text-blue-500 hover:text-red-500 ${
+                            deleting ? 'cursor-not-allowed' : ''
+                          }`}
+                          disabled={deleting}
+                        >
+                          <BsFillTrashFill size="1.2rem" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            )}
+          </table>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
@@ -114,27 +244,26 @@ export const IzinUsahaUpload = ({ close }) => {
           <div className="relative flex flex-col w-full px-3 py-6 bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
             <form onSubmit={formik.handleSubmit} className="px-4">
               <div className="mb-4">
-                <label className="block text-gray-600">
-                  Pilih file untuk diunggah:
-                </label>
                 <input
                   type="file"
                   name="file"
+                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-slate-50 hover:file:bg-blue-700 bg-gray-50"
                   accept=".pdf, .doc, .docx, .xlsx"
                   ref={fileInputRef}
                   onChange={(event) => {
                     formik.setFieldValue('file', event.currentTarget.files[0]);
+                    formik.submitForm();
                   }}
                 />
-              </div>
-              <div className="my-2 text-sm text-center text-red-500 capitalize">
-                {formik.errors.file && formik.touched.file ? (
-                  <p>{formik.errors.file}</p>
-                ) : null}
+                <div className="my-2 text-sm text-red-500 capitalize">
+                  {formik.errors.file && formik.touched.file ? (
+                    <p>{formik.errors.file}</p>
+                  ) : null}
+                </div>
               </div>
 
               <Button
-                cN={`btn bg-blue-600 text-white hover:bg-blue-800 ease-in duration-200 ${
+                cN={`btn bg-blue-600 text-white hover:bg-blue-800 ease-in duration-200 text-sm ${
                   formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
                 type="submit"
@@ -143,85 +272,11 @@ export const IzinUsahaUpload = ({ close }) => {
                 {formik.isSubmitting ? <Spinner /> : 'upload'}
               </Button>
             </form>
-            <div className="relative flex flex-col h-[60vh] overflow-x-auto rounded-lg px-6 py-8">
-              <div className="flex-grow">
-                <table className="w-full text-sm text-left text-gray-600 md:text-base">
-                  <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
-                    <tr
-                      role="row"
-                      className="text-center border border-gray-200"
-                    >
-                      <th className="px-4 py-3 border border-gray-200">No</th>
-                      <th className="px-4 py-3 border border-gray-200">
-                        Nama File
-                      </th>
-                      <th className="px-4 py-3 border border-gray-200">
-                        Tanggal Upload
-                      </th>
-                      <th className="px-4 py-3 border border-gray-200">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody className="overflow-y-auto ">
-                    {files.length === 0 ? (
-                      <tr className="capitalize bg-gray-200 border-b">
-                        <td
-                          colSpan="4"
-                          className="px-6 py-4 italic font-semibold text-center"
-                        >
-                          belum ada file yang di Upload
-                        </td>
-                      </tr>
-                    ) : (
-                      files.map((file, index) => (
-                        <tr
-                          key={index}
-                          className="duration-150 ease-out bg-white border-b hover:bg-gray-200"
-                        >
-                          <th
-                            scope="row"
-                            className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
-                          >
-                            {index + 1}
-                          </th>
-                          <td className="px-4 py-4">
-                            <button
-                              onClick={() =>
-                                handleDownload(
-                                  file.ctn_id_content,
-                                  file.ctn_versi,
-                                  JSON.parse(file.blb_path).name
-                                )
-                              }
-                              className="font-semibold hover:text-blue-500 hover:underline"
-                            >
-                              {JSON.parse(file.blb_path).name}
-                            </button>
-                          </td>
-                          <td className="px-3 py-4 text-center">
-                            {file.blb_date_time}
-                          </td>
-                          <td className="px-6 py-4 text-center">
-                            <button
-                              onClick={() => {
-                                handleDelete(
-                                  file.ctn_id_content,
-                                  file.ctn_versi
-                                );
-                              }}
-                              className="mr-2 font-semibold text-blue-500 hover:text-red-500"
-                            >
-                              <BsFillTrashFill size="1.2rem" />
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+
+            <RenderTable />
+
             <button
-              onClick={close}
+              onClick={handleClose}
               className="p-3 font-bold text-red-500 border-b border-solid rounded-md rounded-t hover:text-red-600 border-slate-200"
               type="button"
             >

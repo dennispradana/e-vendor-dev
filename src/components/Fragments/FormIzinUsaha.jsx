@@ -3,13 +3,15 @@ import { Combobox, Transition } from '@headlessui/react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { InputForm, SelectForm } from '../Elements/Input';
-import { penyediaService } from '../../services/penyedia.service';
-import { toasterror } from '../../utils/ToastMessage';
+import { toasterror, toastsuccess } from '../../utils/ToastMessage';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { IoMdRemoveCircleOutline } from 'react-icons/io';
 import Spinner from '../Elements/Spinner';
 import Button from '../Elements/Button';
 import { IzinUsahaUpload } from '../Elements/Modal/fileUpload';
+import { iusService } from '../../services/ius.service';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const options = [
   { value: 0, label: 'Tanggal' },
@@ -22,13 +24,16 @@ const optionsKualifikasi = [
 ];
 
 const FormIzinUsaha = () => {
-  const { jenisIzin } = penyediaService();
+  const { user } = useAuthContext();
+  const { jenisIzin, postIzinUsaha } = iusService();
   const [jnsIzin, setJnsIzin] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [iusId, setIusId] = useState('');
+  const navigate = useNavigate();
 
   const initialValues = {
     jni_nama: '',
@@ -56,24 +61,28 @@ const FormIzinUsaha = () => {
       }
     ),
     kls_id: Yup.string().required('Pilih salah satu'),
-    ius_id_attachment: Yup.string().required('uploadFile terlebih dahulu'),
+    ius_id_attachment: Yup.string().required('belum ada file yang ter-upload'),
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
+    const ius_klasifikasi = tags.join(', ');
+    const newValues = {
+      ...values,
+      ius_klasifikasi,
+    };
     try {
-      const ius_klasifikasi = tags.join(', ');
-      const dataToSend = {
-        ...values,
-        ius_klasifikasi,
-      };
-      console.log(dataToSend);
-      formik.resetForm();
+      const response = await postIzinUsaha(user.user_id, newValues);
+      if (response.success) {
+        localStorage.removeItem('idIzinContent');
+        setTags([]);
+        formik.resetForm();
+        toastsuccess('Izin Usaha ditambahakan');
+        navigate('/data-penyedia/izin-usaha');
+      }
     } catch (error) {
       toasterror(error.message);
     } finally {
       setSubmitting(false);
-      setTags([]);
-      setIusIdAttachment('');
     }
   };
 
@@ -118,6 +127,16 @@ const FormIzinUsaha = () => {
 
   const handleRemoveTag = (tagToRemove) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = (iusIdAttachment) => {
+    setShowModal(false);
+    setIusId(iusIdAttachment);
+    formik.setFieldValue('ius_id_attachment', iusIdAttachment);
   };
 
   return loading ? (
@@ -234,9 +253,9 @@ const FormIzinUsaha = () => {
             klasifikasi
           </label>
           <div className="flex flex-wrap gap-2">
-            {tags.map((tag) => (
+            {tags.map((tag, i) => (
               <div
-                key={tag}
+                key={i}
                 className="flex items-center px-3 py-1 text-sm rounded-full bg-sky-200 text-sky-700"
               >
                 {tag}
@@ -268,21 +287,20 @@ const FormIzinUsaha = () => {
             </button>
           </div>
         </div>
-        <div className="mb-6">
+        <div className="my-10">
           <button
             type="button"
-            onClick={() => setShowModal(true)}
-            className="text-white duration-200 ease-in btn bg-violet-400 hover:bg-violet-500"
+            onClick={handleOpenModal}
+            className="w-full py-2 font-bold text-white duration-200 ease-in rounded-lg bg-violet-400 hover:bg-violet-500"
           >
             Upload File
           </button>
+          {formik.errors.ius_id_attachment && (
+            <p className="mt-2 text-sm text-center text-red-500 ">
+              {formik.errors.ius_id_attachment}
+            </p>
+          )}
         </div>
-
-        {formik.errors.ius_id_attachment && (
-          <p className="mt-2 text-sm italic text-red-500">
-            {formik.errors.ius_id_attachment}
-          </p>
-        )}
         <div className="flex gap-4 mt-20">
           <Button
             cN={`btn bg-sky-500 text-white hover:bg-blue-600 ease-in duration-200 ${
@@ -291,11 +309,11 @@ const FormIzinUsaha = () => {
             type="submit"
             disabled={formik.isSubmitting}
           >
-            Submit
+            {formik.isSubmitting ? <Spinner /> : 'Submit'}
           </Button>
         </div>
       </form>
-      {showModal && <IzinUsahaUpload close={() => setShowModal(false)} />}
+      {showModal && <IzinUsahaUpload close={handleCloseModal} iusId={iusId} />}
     </>
   );
 };
