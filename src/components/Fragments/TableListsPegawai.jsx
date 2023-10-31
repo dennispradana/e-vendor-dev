@@ -5,6 +5,8 @@ import { SkeletonItem } from '../Elements/Skelekton';
 import Pagination from '../Elements/Pagination';
 import { useDebounce } from 'use-debounce';
 import { toasterror } from '../../utils/ToastMessage';
+import DataEmpty from '../Elements/DataEmpty';
+import { FaRegFolderOpen } from 'react-icons/fa6';
 
 const TableListsPegawai = () => {
   const [datas, setDatas] = useState([]);
@@ -201,6 +203,19 @@ const TableListsPegawai = () => {
           <SkeletonItem itemCount={10} cN="bg-gray-200 h-8" />
         </div>
       </>
+    ) : dataTotal === 0 ? (
+      <div className="flex items-center flex-col justify-center h-[50vh]">
+        <DataEmpty
+          title="Pegawai"
+          icon={<FaRegFolderOpen size="12rem" className="mb-4 text-gray-400" />}
+        />
+        <Link
+          to="/tambah-pegawai"
+          className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
+        >
+          tambah data
+        </Link>
+      </div>
     ) : (
       <TableDataPegawai />
     );

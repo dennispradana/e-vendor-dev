@@ -5,6 +5,7 @@ import { SkeletonItem } from '../Elements/Skelekton';
 import Pagination from '../Elements/Pagination';
 import { useDebounce } from 'use-debounce';
 import { toasterror } from '../../utils/ToastMessage';
+import { FaRegFolderOpen } from 'react-icons/fa6';
 
 function TableListsPenyedia() {
   const [datas, setDatas] = useState([]);
@@ -241,6 +242,13 @@ function TableListsPenyedia() {
           <SkeletonItem itemCount={10} cN="bg-gray-200 h-8" />
         </div>
       </>
+    ) : dataTotal === 0 ? (
+      <div className="flex items-center flex-col justify-center h-[50vh]">
+        <DataEmpty
+          title="Penyedia"
+          icon={<FaRegFolderOpen size="12rem" className="mb-4 text-gray-400" />}
+        />
+      </div>
     ) : (
       <TableDataPenyedia />
     );

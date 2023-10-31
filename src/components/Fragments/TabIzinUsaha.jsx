@@ -7,6 +7,8 @@ import { formatDate, getColorClass } from '../../utils/formatDate';
 import { useDebounce } from 'use-debounce';
 import Pagination from '../Elements/Pagination';
 import { toasterror } from '../../utils/ToastMessage';
+import DataEmpty from '../Elements/DataEmpty';
+import { FaFileSignature } from 'react-icons/fa6';
 
 const TabIzinUsaha = () => {
   const { user } = useAuthContext();
@@ -228,6 +230,19 @@ const TabIzinUsaha = () => {
           <SkeletonItem itemCount={10} cN="bg-gray-200 h-8" />
         </div>
       </>
+    ) : dataTotal === 0 ? (
+      <div className="flex items-center flex-col justify-center h-[50vh]">
+        <DataEmpty
+          title="Izin Usaha"
+          icon={<FaFileSignature size="12rem" className="mb-4 text-gray-400" />}
+        />
+        <Link
+          to="tambah-izin-usaha"
+          className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
+        >
+          tambah data
+        </Link>
+      </div>
     ) : (
       <TableIzinUsaha />
     );

@@ -3,30 +3,32 @@ import { Outlet } from 'react-router-dom';
 import MainLayouts from '../../components/Layouts/MainLayouts';
 import { TabsBar } from '../../components/Elements/Tabsbar';
 import {
-  FaUserEdit,
   FaTools,
   FaFileInvoiceDollar,
   FaUserTie,
   FaRegPaperPlane,
+  FaFileInvoice,
 } from 'react-icons/fa';
-import { FaPersonDigging, FaLandmark, FaCalendarCheck } from 'react-icons/fa6';
+import { FaPersonDigging, FaFileSignature } from 'react-icons/fa6';
+
+import { BsFillPersonLinesFill } from 'react-icons/bs';
 
 const DataPenyedia = () => {
   const tabLists = [
     {
       label: 'identitas',
       url: '/data-penyedia/identitas',
-      icon: <FaUserEdit size="1rem" className="hidden 2xl:block" />,
+      icon: <BsFillPersonLinesFill size="1rem" className="hidden 2xl:block" />,
     },
     {
       label: 'Izin usaha',
       url: '/data-penyedia/izin-usaha',
-      icon: <FaLandmark size="1rem" className="hidden 2xl:block" />,
+      icon: <FaFileSignature size="1rem" className="hidden 2xl:block" />,
     },
     {
       label: 'Akta',
       url: '/data-penyedia/akta',
-      icon: <FaCalendarCheck size="1rem" className="hidden 2xl:block" />,
+      icon: <FaFileInvoice size="1rem" className="hidden 2xl:block" />,
     },
     {
       label: 'Manajerial',
