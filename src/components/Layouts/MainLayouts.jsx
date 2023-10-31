@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Navbar from '../Fragments/Navbar';
 import SideBar from '../Fragments/SideBar';
 
@@ -12,7 +12,7 @@ const MainLayouts = ({ children, type }) => {
         } `}
       >
         <SideBar />
-        <main className="w-full pt-24 overflow-y-auto page-padding">
+        <main className="flex-1 pt-24 overflow-y-auto page-padding">
           {children}
         </main>
       </div>

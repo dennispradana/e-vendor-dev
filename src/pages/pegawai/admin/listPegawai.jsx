@@ -5,7 +5,9 @@ import TableListsPegawai from '../../../components/Fragments/TableListsPegawai';
 const ListPegawai = () => {
   return (
     <MainLayouts>
-      <TableListsPegawai />
+      <div className="relative">
+        <TableListsPegawai />
+      </div>
     </MainLayouts>
   );
 };

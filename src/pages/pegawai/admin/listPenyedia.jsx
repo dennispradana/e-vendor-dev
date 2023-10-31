@@ -5,7 +5,9 @@ import TableListsPenyedia from '../../../components/Fragments/TableListsPenyedia
 const ListPenyedia = () => {
   return (
     <MainLayouts>
-      <TableListsPenyedia />
+      <div className="relative">
+        <TableListsPenyedia />
+      </div>
     </MainLayouts>
   );
 };

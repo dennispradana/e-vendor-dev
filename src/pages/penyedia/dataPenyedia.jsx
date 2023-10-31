@@ -58,7 +58,9 @@ const DataPenyedia = () => {
   return (
     <MainLayouts type="RKN">
       <TabsBar items={tabLists} />
-      <Outlet />
+      <div className="pb-10">
+        <Outlet />
+      </div>
     </MainLayouts>
   );
 };

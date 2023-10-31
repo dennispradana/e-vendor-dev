@@ -105,7 +105,7 @@ const TableListsPegawai = () => {
             </Link>
           </div>
         </div>
-        <div className="relative flex flex-col h-[60vh] overflow-x-auto rounded-lg">
+        <div className="relative flex flex-col h-[80vh] overflow-x-auto rounded-lg">
           <div className="flex-grow">
             <table className="w-full text-sm text-left text-gray-600 md:text-base">
               <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">

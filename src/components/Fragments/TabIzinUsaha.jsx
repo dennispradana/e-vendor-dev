@@ -111,7 +111,7 @@ const TabIzinUsaha = () => {
             </Link>
           </div>
         </div>
-        <div className="relative flex flex-col h-[60vh] overflow-x-auto rounded-lg">
+        <div className="relative flex flex-col h-[50vh] overflow-x-auto rounded-lg">
           <div className="flex-grow">
             <table className="w-full text-sm text-left text-gray-600 md:text-base">
               <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
@@ -201,10 +201,10 @@ const TabIzinUsaha = () => {
               value={dataLenght}
               onChange={handleShowData}
             >
+              <option value={5}>5</option>
               <option value={10}>10</option>
               <option value={20}>20</option>
               <option value={30}>30</option>
-              <option value={40}>40</option>
               <option value={50}>50</option>
             </select>
             <p className="ml-2 text-sm italic font-semibold capitalize">
