@@ -187,6 +187,13 @@ const AppRoute = () => {
               <Route path="down" element={<Down />} />
               <Route path="up" element={<Up />} />
             </Route>
+            <Route path="/tambah-izin-usaha" element={<AddIzinUsaha />} />
+            <Route
+              path="/edit-izin-usaha/:penyediaIusId"
+              element={<UpdateIzinUsaha />}
+            />
+            <Route path="/tambah-akta" element={<AddAkta />} />
+            <Route path="/edit-akta/:penyediaLhkpId" element={<UpdateAkta />} />
           </Route>
           <Route path="evaluasi/:llsId" element={<Evaluasi />} />
           <Route
