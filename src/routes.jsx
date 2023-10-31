@@ -23,10 +23,11 @@ import UpdatePenyediaPage from './pages/pegawai/admin/updatePenyedia';
 import DataPenyedia from './pages/penyedia/dataPenyedia';
 import Identitas from './pages/penyedia/dataPenyedia/identitas';
 import IzinUsaha from './pages/penyedia/dataPenyedia/izinUsaha';
-import AddIzinUsaha from './pages/penyedia/dataPenyedia/addIzinUsaha';
-import UpdateIzinUsaha from './pages/penyedia/dataPenyedia/updateIzinUsaha';
+import AddIzinUsaha from './pages/penyedia/addIzinUsaha';
+import UpdateIzinUsaha from './pages/penyedia/updateIzinUsaha';
 import Akta from './pages/penyedia/dataPenyedia/akta';
-import AddAkta from './pages/penyedia/dataPenyedia/addAkta';
+import AddAkta from './pages/penyedia/addAkta';
+import UpdateAkta from './pages/penyedia/updateAkta';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -60,21 +61,16 @@ const AppRoute = () => {
               />
               <Route path="identitas" element={<Identitas />} />
               <Route path="izin-usaha" element={<IzinUsaha />} />
-              <Route
-                path="izin-usaha/tambah-izin-usaha"
-                element={<AddIzinUsaha />}
-              />
-              <Route
-                path="izin-usaha/edit-izin-usaha/:penyediaIusId"
-                element={<UpdateIzinUsaha />}
-              />
+
               <Route path="akta" element={<Akta />} />
-              <Route path="akta/tambah-akta" element={<AddAkta />} />
-              <Route
-                path="akta/edit-akta/:penyediaLhkpId"
-                element={<AddAkta />}
-              />
             </Route>
+            <Route path="/tambah-izin-usaha" element={<AddIzinUsaha />} />
+            <Route
+              path="/edit-izin-usaha/:penyediaIusId"
+              element={<UpdateIzinUsaha />}
+            />
+            <Route path="/tambah-akta" element={<AddAkta />} />
+            <Route path="/edit-akta/:penyediaLhkpId" element={<UpdateAkta />} />
           </Route>
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />

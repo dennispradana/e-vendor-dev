@@ -49,7 +49,7 @@ const TabIzinUsaha = () => {
   }, [dataLenght, currentPage, debaouceSearch]);
 
   const handleEdit = (penyediaIusId) => {
-    navigate(`edit-izin-usaha/${penyediaIusId}`);
+    navigate(`/edit-izin-usaha/${penyediaIusId}`);
   };
 
   const handleSearch = (e) => {
@@ -105,7 +105,7 @@ const TabIzinUsaha = () => {
           </div>
           <div>
             <Link
-              to="tambah-izin-usaha"
+              to="/tambah-izin-usaha"
               className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
             >
               tambah data
@@ -237,7 +237,7 @@ const TabIzinUsaha = () => {
           icon={<FaFileSignature size="12rem" className="mb-4 text-gray-400" />}
         />
         <Link
-          to="tambah-izin-usaha"
+          to="/tambah-izin-usaha"
           className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
         >
           tambah data

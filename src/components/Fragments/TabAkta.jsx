@@ -49,7 +49,7 @@ const TabAkta = () => {
   }, [dataLenght, currentPage, debaouceSearch]);
 
   const handleEdit = (penyediaLhkpId) => {
-    navigate(`edit-akta/${penyediaLhkpId}`);
+    navigate(`/edit-akta/${penyediaLhkpId}`);
   };
 
   const handleSearch = (e) => {
@@ -105,7 +105,7 @@ const TabAkta = () => {
           </div>
           <div>
             <Link
-              to="tambah-akta"
+              to="/tambah-akta"
               className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
             >
               tambah data
@@ -217,7 +217,7 @@ const TabAkta = () => {
           icon={<FaFileInvoice size="12rem" className="mb-4 text-gray-400" />}
         />
         <Link
-          to="tambah-akta"
+          to="/tambah-akta"
           className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
         >
           tambah data
