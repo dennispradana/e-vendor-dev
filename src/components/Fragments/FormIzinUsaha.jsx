@@ -8,7 +8,7 @@ import { AiFillCaretDown } from 'react-icons/ai';
 import { IoMdRemoveCircleOutline } from 'react-icons/io';
 import Spinner from '../Elements/Spinner';
 import Button from '../Elements/Button';
-import { IzinUsahaUpload } from '../Elements/Modal/fileUpload';
+import { FileUpload } from '../Elements/Modal/fileUpload';
 import { iusService } from '../../services/ius.service';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -109,7 +109,7 @@ const FormIzinUsaha = () => {
         message = 'Izin Usaha ditambahakan';
       }
       if (response.success) {
-        localStorage.removeItem('idIzinContent');
+        localStorage.removeItem('idContent');
         setTags([]);
         formik.resetForm();
         toastsuccess(message);
@@ -196,7 +196,7 @@ const FormIzinUsaha = () => {
 
   useEffect(() => {
     return () => {
-      localStorage.removeItem('idIzinContent');
+      localStorage.removeItem('idContent');
     };
   }, []);
 
@@ -386,9 +386,9 @@ const FormIzinUsaha = () => {
         </div>
       </form>
       {showModal && (
-        <IzinUsahaUpload
+        <FileUpload
           close={handleCloseModal}
-          iusId={isEdit ? data.ius_id_attachment : iusId}
+          Id={isEdit ? data.ius_id_attachment : iusId}
         />
       )}
     </>

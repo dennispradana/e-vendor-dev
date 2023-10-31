@@ -7,12 +7,11 @@ import { fileService } from '../../../services/file.service';
 import { toasterror, toastsuccess } from '../../../utils/ToastMessage';
 import { BsFillTrashFill } from 'react-icons/bs';
 
-export const IzinUsahaUpload = ({ close, iusId }) => {
-  const { postIzinFile, getIzinFile, downloadIzinFile, deleteizinFile } =
-    fileService();
+export const FileUpload = ({ close, Id }) => {
+  const { postFile, getFile, deleteFile, downloadFile } = fileService();
   const [files, setFiles] = useState([]);
   const [idContent, setIdContent] = useState(
-    localStorage.getItem('idIzinContent') || iusId
+    localStorage.getItem('idContent') || Id
   );
   const [uploadCount, setUploadCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -24,7 +23,7 @@ export const IzinUsahaUpload = ({ close, iusId }) => {
     file: null,
   };
   useEffect(() => {
-    localStorage.setItem('idIzinContent', idContent);
+    localStorage.setItem('idContent', idContent);
   }, [idContent]);
 
   const validationSchema = Yup.object({
@@ -51,7 +50,7 @@ export const IzinUsahaUpload = ({ close, iusId }) => {
         ...values,
         id_content: idContent,
       };
-      const response = await postIzinFile(newValue);
+      const response = await postFile(newValue);
       if (response) {
         if (idContent === '') {
           setIdContent(response.ctn_id_content);
@@ -76,11 +75,11 @@ export const IzinUsahaUpload = ({ close, iusId }) => {
   useEffect(() => {
     const getTableFile = async () => {
       try {
-        const response = await getIzinFile(idContent);
+        const response = await getFile(idContent);
         setFiles(response);
         if (response.length === 0) {
           setIdContent('');
-          localStorage.removeItem('idIzinContent');
+          localStorage.removeItem('idContent');
         }
       } catch (error) {
         toasterror(error.message);
@@ -93,14 +92,14 @@ export const IzinUsahaUpload = ({ close, iusId }) => {
 
   const handleClose = () => {
     if (files.length === 0) {
-      localStorage.removeItem('idIzinContent');
+      localStorage.removeItem('idContent');
     }
     close(files.length > 0 ? idContent : '');
   };
 
   const handleDownload = async (idContent, versi, fileName) => {
     try {
-      const response = await downloadIzinFile(idContent, versi);
+      const response = await downloadFile(idContent, versi);
       const blob = new Blob([response.data]);
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -119,7 +118,7 @@ export const IzinUsahaUpload = ({ close, iusId }) => {
 
   const handleDelete = async (idContent, versi) => {
     try {
-      const response = await deleteizinFile(idContent, versi);
+      const response = await deleteFile(idContent, versi);
       if (response.status === 201) {
         setFiles((prevFiles) =>
           prevFiles.filter(

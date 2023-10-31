@@ -1,7 +1,7 @@
 import api from '../config/api';
 
 export const fileService = () => {
-  const postIzinFile = async (fileData) => {
+  const postFile = async (fileData) => {
     try {
       const response = await api.post('/v1/upload', fileData, {
         headers: {
@@ -13,7 +13,7 @@ export const fileService = () => {
       throw new Error('terjadi kesalahan saat Mengupload File');
     }
   };
-  const getIzinFile = async (idContent, fileData) => {
+  const getFile = async (idContent, fileData) => {
     try {
       const response = await api.get(
         `v1/list?id_content=${idContent}`,
@@ -25,7 +25,7 @@ export const fileService = () => {
     }
   };
 
-  const downloadIzinFile = async (idContent, versi, fileName) => {
+  const downloadFile = async (idContent, versi, fileName) => {
     try {
       const response = await api.get(
         `v1/download?id_content=${idContent}&versi=${versi}`,
@@ -37,7 +37,7 @@ export const fileService = () => {
     }
   };
 
-  const deleteizinFile = async (idContent, versi) => {
+  const deleteFile = async (idContent, versi) => {
     try {
       const response = await api.get(
         `v1/delete?id_content=${idContent}&versi=${versi}`
@@ -48,5 +48,5 @@ export const fileService = () => {
     }
   };
 
-  return { postIzinFile, getIzinFile, downloadIzinFile, deleteizinFile };
+  return { postFile, getFile, downloadFile, deleteFile };
 };

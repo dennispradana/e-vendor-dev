@@ -25,6 +25,8 @@ import Identitas from './pages/penyedia/dataPenyedia/identitas';
 import IzinUsaha from './pages/penyedia/dataPenyedia/izinUsaha';
 import AddIzinUsaha from './pages/penyedia/dataPenyedia/addIzinUsaha';
 import UpdateIzinUsaha from './pages/penyedia/dataPenyedia/updateIzinUsaha';
+import Akta from './pages/penyedia/dataPenyedia/akta';
+import AddAkta from './pages/penyedia/dataPenyedia/addAkta';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -65,6 +67,12 @@ const AppRoute = () => {
               <Route
                 path="izin-usaha/edit-izin-usaha/:penyediaIusId"
                 element={<UpdateIzinUsaha />}
+              />
+              <Route path="akta" element={<Akta />} />
+              <Route path="akta/tambah-akta" element={<AddAkta />} />
+              <Route
+                path="akta/edit-akta/:penyediaLhkpId"
+                element={<AddAkta />}
               />
             </Route>
           </Route>

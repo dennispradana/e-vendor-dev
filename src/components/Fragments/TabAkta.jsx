@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { iusService } from '../../services/ius.service';
-import { SkeletonItem } from '../Elements/Skelekton';
-import { formatDate, getColorClass } from '../../utils/formatDate';
+import { aktaService } from '../../services/akta.service';
 import { useDebounce } from 'use-debounce';
-import Pagination from '../Elements/Pagination';
+import { Link, useNavigate } from 'react-router-dom';
 import { toasterror } from '../../utils/ToastMessage';
+import { formatDate } from '../../utils/formatDate';
+import { SkeletonItem } from '../Elements/Skelekton';
+import Pagination from '../Elements/Pagination';
 
-const TabIzinUsaha = () => {
+const TabAkta = () => {
   const { user } = useAuthContext();
-  const { getIzinUsaha } = iusService();
+  const { getAkta } = aktaService();
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,14 +25,14 @@ const TabIzinUsaha = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getIzinUsaha(
+        const response = await getAkta(
           user.user_id,
           dataLenght,
           currentPage,
           debaouceSearch
         );
-        const dataIzin = response.data;
-        setDatas(dataIzin);
+        const akta = response.data;
+        setDatas(akta);
         const number = (currentPage - 1) * dataLenght + 1;
         setEntryNumber(number);
         SetDataTotal(response.total);
@@ -46,8 +46,8 @@ const TabIzinUsaha = () => {
     fetchData();
   }, [dataLenght, currentPage, debaouceSearch]);
 
-  const handleEdit = (penyediaIusId) => {
-    navigate(`edit-izin-usaha/${penyediaIusId}`);
+  const handleEdit = (penyediaLhkpId) => {
+    navigate(`edit-akta/${penyediaLhkpId}`);
   };
 
   const handleSearch = (e) => {
@@ -64,7 +64,7 @@ const TabIzinUsaha = () => {
     setCurrentPage(page);
   };
 
-  const TableIzinUsaha = () => {
+  const TableAkta = () => {
     return (
       <>
         <div className="flex items-center justify-between pb-4 ">
@@ -94,7 +94,7 @@ const TabIzinUsaha = () => {
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-50 md:w-80 bg-gray-50 focus:outline-violet-300"
-                placeholder="Cari Data Izin Usaha"
+                placeholder="Cari Data Akta"
                 value={searchTerm}
                 onChange={handleSearch}
                 autoFocus
@@ -103,7 +103,7 @@ const TabIzinUsaha = () => {
           </div>
           <div>
             <Link
-              to="tambah-izin-usaha"
+              to="tambah-akta"
               className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
             >
               tambah data
@@ -117,20 +117,12 @@ const TabIzinUsaha = () => {
                 <tr role="row" className="text-center border border-gray-200">
                   <th className="px-4 py-3 border border-gray-200">No</th>
                   <th className="px-4 py-3 border border-gray-200">
-                    Izin Usaha
+                    Nomor Akta
                   </th>
                   <th className="px-4 py-3 border border-gray-200">
-                    Nomor Surat
+                    Tanggal Akta
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
-                    Berlaku Sampai
-                  </th>
-                  <th className="px-4 py-3 border border-gray-200">
-                    Instansi Pemberi
-                  </th>
-                  <th className="px-4 py-3 border border-gray-200">
-                    Kualfikasi
-                  </th>
+                  <th className="px-4 py-3 border border-gray-200">Notaris</th>
                   <th className="px-4 py-3 border border-gray-200">Aksi</th>
                 </tr>
               </thead>
@@ -138,16 +130,16 @@ const TabIzinUsaha = () => {
                 {datas.length === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
-                      colSpan="7"
+                      colSpan="4"
                       className="px-6 py-4 italic font-semibold text-center"
                     >
-                      Data Izin tidak ditemukan
+                      Akta tidak ditemukan
                     </td>
                   </tr>
                 ) : (
                   datas.map((item, index) => (
                     <tr
-                      key={item.ius_id}
+                      key={item.lhkp_no}
                       className="duration-150 ease-out bg-white border-b hover:bg-gray-200"
                     >
                       <th
@@ -156,29 +148,17 @@ const TabIzinUsaha = () => {
                       >
                         {entryNumber + index}
                       </th>
-                      <td className="px-3 py-4 capitalize">{item.jni_nama}</td>
-                      <td className="px-3 py-4">{item.ius_no}</td>
-                      <td
-                        className={`px-3 py-4 text-center ${getColorClass(
-                          item.ius_berlaku
-                        )}`}
-                      >
-                        {item.ius_berlaku !== null
-                          ? formatDate(new Date(item.ius_berlaku))
-                          : 'Seumur Hidup'}
+                      <td className="px-3 py-4 capitalize">{item.lhkp_no}</td>
+                      <td className="px-3 py-4">
+                        {formatDate(new Date(item.lhkp_tanggal))}
                       </td>
                       <td className="px-3 py-4 text-center">
-                        {item.ius_instansi}
-                      </td>
-                      <td className="px-3 py-4 text-center">
-                        {item.ius_klasifikasi === null
-                          ? '-'
-                          : item.ius_klasifikasi}
+                        {item.lhkp_notaris}
                       </td>
                       <td className="px-6 py-4 text-center">
                         <button
                           className="mr-2 font-semibold text-blue-500 hover:underline"
-                          onClick={() => handleEdit(item.ius_id)}
+                          onClick={() => handleEdit(item.lhkp_id)}
                         >
                           Edit
                         </button>
@@ -229,11 +209,11 @@ const TabIzinUsaha = () => {
         </div>
       </>
     ) : (
-      <TableIzinUsaha />
+      <TableAkta />
     );
   };
 
   return <RenderContent />;
 };
 
-export default TabIzinUsaha;
+export default TabAkta;

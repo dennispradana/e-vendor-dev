@@ -42,7 +42,6 @@ export const iusService = () => {
   const updateIzinUsaha = async (iusId, dataPenyedia) => {
     try {
       const response = await api.put(`/penyedia/ijin/${iusId}`, dataPenyedia);
-      console.log(response);
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data Izin Usaha');
