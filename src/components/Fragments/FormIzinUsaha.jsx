@@ -89,6 +89,7 @@ const FormIzinUsaha = () => {
     ),
     kls_id: Yup.string().required('Pilih salah satu'),
     ius_id_attachment: Yup.string().required('belum ada file yang ter-upload'),
+    ius_instansi: Yup.string().required('Instansi Pemberi Izin harus diisi'),
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -192,6 +193,12 @@ const FormIzinUsaha = () => {
       ius_id_attachment: data.ius_id_attachment || '',
     });
   }, [data]);
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('idIzinContent');
+    };
+  }, []);
 
   return loading ? (
     <div className="flex items-center justify-center h-[70vh]">
@@ -349,11 +356,12 @@ const FormIzinUsaha = () => {
           >
             Upload File
           </button>
-          {formik.errors.ius_id_attachment && (
-            <p className="mt-2 text-sm text-center text-red-500 ">
-              {formik.errors.ius_id_attachment}
-            </p>
-          )}
+          {formik.touched.ius_id_attachment &&
+            formik.errors.ius_id_attachment && (
+              <p className="mt-2 text-sm text-center text-red-500 ">
+                {formik.errors.ius_id_attachment}
+              </p>
+            )}
         </div>
         <div className="flex gap-4 mt-20">
           <Button

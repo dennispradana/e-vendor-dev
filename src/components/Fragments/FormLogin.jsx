@@ -77,12 +77,12 @@ const FormLogin = () => {
           <div className="relative">
             <input
               type={showPassword ? 'text' : 'password'}
-              {...formik.getFieldProps('password')}
               className={`w-full mt-2 p-1 px-3 text-gray-700 bg-white border ${
-                formik.errors.password
+                formik.touched.password && formik.errors.password
                   ? 'border-red-500 focus:ring-red-600'
                   : 'border-gray-300  focus:ring-sky-600'
               } rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2  focus:border-transparent`}
+              {...formik.getFieldProps('password')}
             />
             <div className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-600">
               <button
@@ -98,7 +98,7 @@ const FormLogin = () => {
               </button>
             </div>
           </div>
-          {formik.errors.password && (
+          {formik.touched.password && formik.errors.password && (
             <p className="mt-2 text-sm italic text-red-500">
               {formik.errors.password}
             </p>
