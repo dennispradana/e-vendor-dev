@@ -12,9 +12,12 @@ export const aktaService = () => {
     }
   };
 
-  const postAkta = async (lhkId, dataPenyedia) => {
+  const postAkta = async (penyediaId, dataPenyedia) => {
     try {
-      const response = await api.post(`/penyedia/akta/${lhkId}`, dataPenyedia);
+      const response = await api.post(
+        `/penyedia/akta/${penyediaId}`,
+        dataPenyedia
+      );
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengirim Data Akta');

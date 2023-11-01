@@ -21,9 +21,12 @@ export const iusService = () => {
     }
   };
 
-  const postIzinUsaha = async (iusId, dataPenyedia) => {
+  const postIzinUsaha = async (penyediaId, dataPenyedia) => {
     try {
-      const response = await api.post(`/penyedia/ijin/${iusId}`, dataPenyedia);
+      const response = await api.post(
+        `/penyedia/ijin/${penyediaId}`,
+        dataPenyedia
+      );
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data Izin Usaha');
