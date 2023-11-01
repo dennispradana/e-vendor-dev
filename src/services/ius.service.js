@@ -23,7 +23,7 @@ export const iusService = () => {
     }
   };
 
-  const postIzinUsaha = async (iusId, dataPenyedia) => {
+  const postIzinUsaha = async (penyediaId, dataPenyedia) => {
     try {
       const response = await api.post(
         `v1/RKN/ijin/${penyediaId}`,
