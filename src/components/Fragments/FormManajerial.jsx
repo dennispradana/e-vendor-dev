@@ -58,7 +58,12 @@ const FormManajerial = () => {
         'NPWP tidak valid'
       )
       .required('NPWP harus diisi'),
-    mjr_ktp: Yup.string().required('KTP harus diisi'),
+    mjr_ktp: Yup.string()
+      .matches(
+        /^\d{6}([04][1-9]|[1256][0-9]|[37][01])(0[1-9]|1[0-2])\d{2}\d{4}$/,
+        'KTP Tidak Valid'
+      )
+      .required('KTP harus diisi'),
     mjr_alamat: Yup.string().required('Alamat harus diisi'),
   });
 
