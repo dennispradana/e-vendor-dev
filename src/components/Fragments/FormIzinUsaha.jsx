@@ -220,7 +220,7 @@ const FormIzinUsaha = () => {
             <div className="relative mt-1">
               <div className="relative w-full">
                 <Combobox.Input
-                  className={`w-full p-1 px-3 text-gray-700 bg-white border ${
+                  className={`w-full p-1 px-3 text-gray-700 bg-white border capitalize ${
                     formik.touched.jni_nama && formik.errors.jni_nama
                       ? 'border-red-500 focus:ring-red-600'
                       : 'border-gray-300  focus:ring-sky-600'
@@ -254,7 +254,7 @@ const FormIzinUsaha = () => {
                         value={izin.name}
                         className="cursor-pointer"
                       >
-                        {izin.name}
+                        <p className="capitalize">{izin.name}</p>
                       </Combobox.Option>
                     ))
                   )}
