@@ -9,19 +9,37 @@ import Pagination from '../Elements/Pagination';
 import { toasterror } from '../../utils/ToastMessage';
 import DataEmpty from '../Elements/DataEmpty';
 import { FaFileSignature } from 'react-icons/fa6';
+import { FiEdit } from 'react-icons/fi';
+import { MdDeleteOutline } from 'react-icons/md';
+import { Tooltip } from '../Elements/Tooltip';
+
+const initialState = {
+  datas: [],
+  search: '',
+  dataTotal: 0,
+  dataLength: 0,
+  currentPage: 1,
+  totalPages: 1,
+  entryNumber: 1,
+  showItem: 10,
+};
 
 const TabIzinUsaha = () => {
+  const [state, setState] = useState(initialState);
+  const {
+    datas,
+    entryNumber,
+    search,
+    dataTotal,
+    dataLength,
+    currentPage,
+    showItem,
+    totalPages,
+  } = state;
   const { user } = useAuthContext();
   const { getIzinUsaha } = iusService();
-  const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [dataLenght, SetDataLenght] = useState(5);
-  const [dataTotal, SetDataTotal] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [entryNumber, setEntryNumber] = useState(1);
-  const [debaouceSearch] = useDebounce(searchTerm, 2000);
+  const [debaouceSearch] = useDebounce(search, 2000);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,16 +47,18 @@ const TabIzinUsaha = () => {
       try {
         const response = await getIzinUsaha(
           user.user_id,
-          dataLenght,
+          showItem,
           currentPage,
           debaouceSearch
         );
-        const dataIzin = response.data;
-        setDatas(dataIzin);
-        const number = (currentPage - 1) * dataLenght + 1;
-        setEntryNumber(number);
-        SetDataTotal(response.total);
-        setTotalPages(Math.ceil(response.total / dataLenght));
+        setState((prev) => ({
+          ...prev,
+          dataTotal: response.total,
+          datas: response.data.data,
+          dataLength: response.data.total,
+          totalPages: Math.ceil(response.data.total / state.showItem),
+          entryNumber: (state.currentPage - 1) * state.showItem + 1,
+        }));
       } catch (error) {
         toasterror(error.message);
       } finally {
@@ -46,24 +66,35 @@ const TabIzinUsaha = () => {
       }
     };
     fetchData();
-  }, [dataLenght, currentPage, debaouceSearch]);
+  }, [showItem, currentPage, debaouceSearch]);
 
   const handleEdit = (penyediaIusId) => {
     navigate(`/edit-izin-usaha/${penyediaIusId}`);
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
+  const handleShowData = (e) => {
+    const showData = e.target.value;
+    setState((prev) => ({
+      ...prev,
+      showItem: showData,
+      currentPage: 1,
+    }));
   };
 
-  const handleShowData = (e) => {
-    SetDataLenght(e.target.value);
-    setCurrentPage(1);
+  const handleSearch = (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    setState((prev) => ({
+      ...prev,
+      search: searchTerm,
+      currentPage: 1,
+    }));
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    setState((prev) => ({
+      ...prev,
+      currentPage: page,
+    }));
   };
 
   const TableIzinUsaha = () => {
@@ -97,7 +128,7 @@ const TabIzinUsaha = () => {
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-50 md:w-80 bg-gray-50 focus:outline-violet-300"
                 placeholder="Cari Data Izin Usaha"
-                value={searchTerm}
+                value={search}
                 onChange={handleSearch}
                 autoFocus
               />
@@ -137,7 +168,7 @@ const TabIzinUsaha = () => {
                 </tr>
               </thead>
               <tbody className="overflow-y-auto ">
-                {datas.length === 0 ? (
+                {dataLength === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
                       colSpan="7"
@@ -178,12 +209,21 @@ const TabIzinUsaha = () => {
                           : item.ius_klasifikasi}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <button
-                          className="mr-2 font-semibold text-blue-500 hover:underline"
-                          onClick={() => handleEdit(item.ius_id)}
-                        >
-                          Edit
-                        </button>
+                        <div className="flex items-center justify-center gap-2">
+                          <Tooltip text="Edit">
+                            <button
+                              className="mr-2 text-blue-500 hover:text-blue-700"
+                              onClick={() => handleEdit(item.ius_id)}
+                            >
+                              <FiEdit size="1.2rem" />
+                            </button>
+                          </Tooltip>
+                          <Tooltip text="delete">
+                            <button className="mr-2 text-red-500 hover:text-red-700">
+                              <MdDeleteOutline size="1.4rem" />
+                            </button>
+                          </Tooltip>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -199,24 +239,32 @@ const TabIzinUsaha = () => {
             </label>
             <select
               className="px-3 py-1 cursor-pointer"
-              value={dataLenght}
+              value={showItem}
               onChange={handleShowData}
             >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={30}>30</option>
-              <option value={50}>50</option>
+              {dataLength === 0 ? (
+                <option value={0}>0</option>
+              ) : (
+                <>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={30}>30</option>
+                  <option value={40}>40</option>
+                  <option value={50}>50</option>
+                </>
+              )}
             </select>
             <p className="ml-2 text-sm italic font-semibold capitalize">
-              dari {dataTotal} data
+              dari {dataLength} data
             </p>
           </div>
-          <Pagination
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-            totalPages={totalPages}
-          />
+          {dataLength !== 0 && (
+            <Pagination
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              totalPages={totalPages}
+            />
+          )}
         </div>
       </>
     );

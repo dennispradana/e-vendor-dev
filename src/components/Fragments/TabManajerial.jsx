@@ -5,19 +5,39 @@ import { useDebounce } from 'use-debounce';
 import { Link, useNavigate } from 'react-router-dom';
 import { SkeletonItem } from '../Elements/Skelekton';
 import Pagination from '../Elements/Pagination';
+import { FaPersonDigging } from 'react-icons/fa6';
+import DataEmpty from '../Elements/DataEmpty';
+import { Tooltip } from '../Elements/Tooltip';
+import { FiEdit } from 'react-icons/fi';
+import { MdDeleteOutline } from 'react-icons/md';
+
+const initialState = {
+  datas: [],
+  search: '',
+  dataTotal: 0,
+  dataLength: 0,
+  currentPage: 1,
+  totalPages: 1,
+  entryNumber: 1,
+  showItem: 10,
+};
 
 const TabManajerial = () => {
+  const [state, setState] = useState(initialState);
+  const {
+    datas,
+    entryNumber,
+    search,
+    dataTotal,
+    dataLength,
+    currentPage,
+    showItem,
+    totalPages,
+  } = state;
   const { user } = useAuthContext();
   const { getManajer } = manajerialService();
-  const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [dataLenght, SetDataLenght] = useState(5);
-  const [dataTotal, SetDataTotal] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [entryNumber, setEntryNumber] = useState(1);
-  const [debaouceSearch] = useDebounce(searchTerm, 2000);
+  const [debaouceSearch] = useDebounce(search, 2000);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,16 +45,18 @@ const TabManajerial = () => {
       try {
         const response = await getManajer(
           user.user_id,
-          dataLenght,
+          showItem,
           currentPage,
           debaouceSearch
         );
-        const akta = response.data;
-        setDatas(akta);
-        const number = (currentPage - 1) * dataLenght + 1;
-        setEntryNumber(number);
-        SetDataTotal(response.total);
-        setTotalPages(Math.ceil(response.total / dataLenght));
+        setState((prev) => ({
+          ...prev,
+          dataTotal: response.total,
+          datas: response.data.data,
+          dataLength: response.data.total,
+          totalPages: Math.ceil(response.data.total / state.showItem),
+          entryNumber: (state.currentPage - 1) * state.showItem + 1,
+        }));
       } catch (error) {
         toasterror(error.message);
       } finally {
@@ -42,27 +64,36 @@ const TabManajerial = () => {
       }
     };
     fetchData();
-  }, [dataLenght, currentPage, debaouceSearch]);
+  }, [showItem, currentPage, debaouceSearch]);
 
   const handleEdit = (penyediaManajerId) => {
     navigate(`/edit-manajerial/${penyediaManajerId}`);
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
+  const handleShowData = (e) => {
+    const showData = e.target.value;
+    setState((prev) => ({
+      ...prev,
+      showItem: showData,
+      currentPage: 1,
+    }));
   };
 
-  const handleShowData = (e) => {
-    SetDataLenght(e.target.value);
-    setCurrentPage(1);
+  const handleSearch = (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    setState((prev) => ({
+      ...prev,
+      search: searchTerm,
+      currentPage: 1,
+    }));
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    setState((prev) => ({
+      ...prev,
+      currentPage: page,
+    }));
   };
-
-  console.log(datas);
 
   const TableManajerial = () => {
     return (
@@ -95,7 +126,7 @@ const TabManajerial = () => {
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-50 md:w-80 bg-gray-50 focus:outline-violet-300"
                 placeholder="Cari Data Izin Usaha"
-                value={searchTerm}
+                value={search}
                 onChange={handleSearch}
                 autoFocus
               />
@@ -126,7 +157,7 @@ const TabManajerial = () => {
                 </tr>
               </thead>
               <tbody className="overflow-y-auto ">
-                {datas.length === 0 ? (
+                {dataLength === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
                       colSpan="7"
@@ -156,12 +187,21 @@ const TabManajerial = () => {
                         {item.mjr_jenis === '0' ? 'Pengurus' : 'Pemilik'}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <button
-                          className="mr-2 font-semibold text-blue-500 hover:underline"
-                          onClick={() => handleEdit(item.id_manajerial)}
-                        >
-                          Edit
-                        </button>
+                        <div className="flex items-center justify-center gap-2">
+                          <Tooltip text="Edit">
+                            <button
+                              className="mr-2 text-blue-500 hover:text-blue-700"
+                              onClick={() => handleEdit(item.id_manajerial)}
+                            >
+                              <FiEdit size="1.2rem" />
+                            </button>
+                          </Tooltip>
+                          <Tooltip text="delete">
+                            <button className="mr-2 text-red-500 hover:text-red-700">
+                              <MdDeleteOutline size="1.4rem" />
+                            </button>
+                          </Tooltip>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -177,24 +217,32 @@ const TabManajerial = () => {
             </label>
             <select
               className="px-3 py-1 cursor-pointer"
-              value={dataLenght}
+              value={showItem}
               onChange={handleShowData}
             >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={30}>30</option>
-              <option value={50}>50</option>
+              {dataLength === 0 ? (
+                <option value={0}>0</option>
+              ) : (
+                <>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={30}>30</option>
+                  <option value={40}>40</option>
+                  <option value={50}>50</option>
+                </>
+              )}
             </select>
             <p className="ml-2 text-sm italic font-semibold capitalize">
-              dari {dataTotal} data
+              dari {dataLength} data
             </p>
           </div>
-          <Pagination
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-            totalPages={totalPages}
-          />
+          {dataLength !== 0 && (
+            <Pagination
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              totalPages={totalPages}
+            />
+          )}
         </div>
       </>
     );
@@ -208,6 +256,19 @@ const TabManajerial = () => {
           <SkeletonItem itemCount={10} cN="bg-gray-200 h-8" />
         </div>
       </>
+    ) : dataTotal === 0 ? (
+      <div className="flex items-center flex-col justify-center h-[50vh]">
+        <DataEmpty
+          title="Akta"
+          icon={<FaPersonDigging size="12rem" className="mb-4 text-gray-400" />}
+        />
+        <Link
+          to="/tambah-akta"
+          className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
+        >
+          tambah data
+        </Link>
+      </div>
     ) : (
       <TableManajerial />
     );

@@ -7,17 +7,35 @@ import { useDebounce } from 'use-debounce';
 import { toasterror } from '../../utils/ToastMessage';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 import DataEmpty from '../Elements/DataEmpty';
+import { Tooltip } from '../Elements/Tooltip';
+import { FiEdit } from 'react-icons/fi';
 
-function TableListsPenyedia() {
-  const [datas, setDatas] = useState([]);
+const initialState = {
+  datas: [],
+  search: '',
+  dataTotal: 0,
+  dataLength: 0,
+  currentPage: 1,
+  totalPages: 1,
+  entryNumber: 1,
+  showItem: 10,
+};
+
+const TableListsPenyedia = () => {
+  const [state, setState] = useState(initialState);
+  const {
+    datas,
+    entryNumber,
+    search,
+    dataTotal,
+    dataLength,
+    currentPage,
+    showItem,
+    totalPages,
+  } = state;
+
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [dataLenght, SetDataLenght] = useState(10);
-  const [dataTotal, SetDataTotal] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [entryNumber, setEntryNumber] = useState(1);
-  const [debaouceSearch] = useDebounce(searchTerm, 2000);
+  const [debaouceSearch] = useDebounce(search, 2000);
   const { getPenyedia } = penyediaService();
   const navigate = useNavigate();
 
@@ -25,40 +43,53 @@ function TableListsPenyedia() {
     const fetchDataPenyedia = async () => {
       try {
         const response = await getPenyedia(
-          dataLenght,
+          showItem,
           currentPage,
           debaouceSearch
         );
-        const responseData = response.data;
-        const number = (currentPage - 1) * dataLenght + 1;
-        setEntryNumber(number);
-        setDatas(responseData);
-        SetDataTotal(response.total);
-        setTotalPages(Math.ceil(response.total / dataLenght));
+        setState((prev) => ({
+          ...prev,
+          dataTotal: response.total,
+          datas: response.data.data,
+          dataLength: response.data.total,
+          totalPages: Math.ceil(response.data.total / state.showItem),
+          entryNumber: (state.currentPage - 1) * state.showItem + 1,
+        }));
         setLoading(false);
       } catch (error) {
         toasterror(error.message);
       }
     };
     fetchDataPenyedia();
-  }, [dataLenght, currentPage, debaouceSearch]);
+  }, [showItem, currentPage, debaouceSearch]);
 
   const handleEdit = (penyediaId) => {
     navigate(`edit/${penyediaId}`);
   };
 
   const handleShowData = (e) => {
-    SetDataLenght(e.target.value);
-    setCurrentPage(1);
+    const showData = e.target.value;
+    setState((prev) => ({
+      ...prev,
+      showItem: showData,
+      currentPage: 1,
+    }));
   };
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
+    const searchTerm = e.target.value;
+    setState((prev) => ({
+      ...prev,
+      search: searchTerm,
+      currentPage: 1,
+    }));
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    setState((prev) => ({
+      ...prev,
+      currentPage: page,
+    }));
   };
 
   const renderStatus = (item) => {
@@ -128,7 +159,7 @@ function TableListsPenyedia() {
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-50 md:w-80 bg-gray-50 focus:outline-violet-300"
                 placeholder="Cari Data Penyedia"
-                value={searchTerm}
+                value={search}
                 onChange={handleSearch}
                 autoFocus
               />
@@ -157,7 +188,7 @@ function TableListsPenyedia() {
                 </tr>
               </thead>
               <tbody className="overflow-y-auto ">
-                {datas.length === 0 ? (
+                {dataLength === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
                       colSpan="10"
@@ -191,12 +222,14 @@ function TableListsPenyedia() {
                       </td>
 
                       <td className="px-6 py-4 text-center">
-                        <button
-                          className="mr-2 font-semibold text-blue-500 hover:underline"
-                          onClick={() => handleEdit(item.rkn_id)}
-                        >
-                          Edit
-                        </button>
+                        <Tooltip text="Edit">
+                          <button
+                            className="mr-2 text-blue-500 hover:text-blue-700"
+                            onClick={() => handleEdit(item.rkn_id)}
+                          >
+                            <FiEdit size="1.2rem" />
+                          </button>
+                        </Tooltip>
                       </td>
                     </tr>
                   ))
@@ -212,24 +245,32 @@ function TableListsPenyedia() {
             </label>
             <select
               className="px-3 py-1 cursor-pointer"
-              value={dataLenght}
+              value={showItem}
               onChange={handleShowData}
             >
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={30}>30</option>
-              <option value={40}>40</option>
-              <option value={50}>50</option>
+              {dataLength === 0 ? (
+                <option value={0}>0</option>
+              ) : (
+                <>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={30}>30</option>
+                  <option value={40}>40</option>
+                  <option value={50}>50</option>
+                </>
+              )}
             </select>
             <p className="ml-2 text-sm italic font-semibold capitalize">
-              dari {dataTotal} data
+              dari {dataLength} data
             </p>
           </div>
-          <Pagination
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-            totalPages={totalPages}
-          />
+          {dataLength !== 0 && (
+            <Pagination
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              totalPages={totalPages}
+            />
+          )}
         </div>
       </>
     );
@@ -264,6 +305,6 @@ function TableListsPenyedia() {
       </div>
     </div>
   );
-}
+};
 
 export default TableListsPenyedia;
