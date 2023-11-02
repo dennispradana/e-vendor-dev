@@ -10,6 +10,15 @@ export const penyediaService = () => {
     }
   };
 
+  const jenisIzin = async () => {
+    try {
+      const response = await api.get('jenis_ijin');
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Jenis Izin');
+    }
+  };
+
   const registerPenyedia = async (dataPenyedia) => {
     try {
       const response = await api.post('v1/penyedia', dataPenyedia);
@@ -48,11 +57,25 @@ export const penyediaService = () => {
     }
   };
 
+  const getIzinUsaha = async (penyediaId, dataPenyedia) => {
+    try {
+      const response = await api.get(
+        `/penyedia/ijin/${penyediaId}`,
+        dataPenyedia
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data Izin Usaha');
+    }
+  };
+
   return {
     btkUsaha,
+    jenisIzin,
     registerPenyedia,
     getPenyedia,
     editPenyedia,
     updatePenyedia,
+    getIzinUsaha,
   };
 };

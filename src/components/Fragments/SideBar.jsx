@@ -18,8 +18,8 @@ const SideBar = () => {
     PPK: [{ label: 'dashboard', link: '/dashboard' }],
     RKN: [
       { label: 'dashboard', link: '/dashboard' },
-      { label: 'data penyedia', link: '/dashboard' },
-      { label: 'daftar paket', link: '/dashboard' },
+      { label: 'data penyedia', link: '/data-penyedia' },
+      { label: 'daftar paket', link: '/daftar-paket' },
     ],
   };
 

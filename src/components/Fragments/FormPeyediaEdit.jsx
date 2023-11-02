@@ -216,63 +216,66 @@ const FormPeyediaEdit = () => {
     formik.setFieldValue('rkn_npwp', formattedValue);
   };
 
+  const statusConfig = {
+    verif: {
+      condition:
+        formik.values.rkn_isactive === '1' &&
+        formik.values.rkn_status === '1' &&
+        formik.values.rkn_status_verifikasi === 'verif',
+      render: (
+        <div>
+          <Button
+            type="button"
+            cN="btn bg-red-500 text-white  hover:bg-red-600 ease-in duration-200"
+            onClick={() => handleNonAktifkan(formik.values, formik.setValues)}
+          >
+            Non-Aktifkan
+          </Button>
+        </div>
+      ),
+    },
+    nonVerif: {
+      condition: formik.values.rkn_status_verifikasi === 'non',
+      render: (
+        <div className="flex gap-4">
+          <Button
+            cN="btn bg-green-500 text-white  hover:bg-green-600 ease-in duration-200"
+            type="button"
+            onClick={() => handleVerifikasi(formik.values, formik.setValues)}
+          >
+            Verifikasi
+          </Button>
+          <Button
+            type="button"
+            cN="btn bg-red-500 text-white  hover:bg-red-600 ease-in duration-200"
+            onClick={() => handleNonAktifkan(formik.values, formik.setValues)}
+          >
+            Non-Aktifkan
+          </Button>
+        </div>
+      ),
+    },
+    nonAktif: {
+      condition: formik.values.rkn_isactive === '0',
+      render: (
+        <div className="flex gap-4">
+          <Button
+            type="button"
+            cN="btn bg-blue-500 text-white  hover:bg-blue-600 ease-in duration-200"
+            onClick={() => handleAktifkan(formik.values, formik.setValues)}
+          >
+            Aktifkan
+          </Button>
+        </div>
+      ),
+    },
+  };
+
   const renderStatus = () => {
-    const verif =
-      formik.values.rkn_isactive === '1' &&
-      formik.values.rkn_status === '1' &&
-      formik.values.rkn_status_verifikasi === 'verif';
-    const nonVerif = formik.values.rkn_status_verifikasi === 'non';
-    const nonAktif = formik.values.rkn_isactive === '0';
-
-    switch (true) {
-      case verif:
-        return (
-          <div>
-            <Button
-              type="button"
-              cN="btn bg-red-500 text-white  hover:bg-red-600 ease-in duration-200"
-              onClick={() => handleNonAktifkan(formik.values, formik.setValues)}
-            >
-              Non-Aktifkan
-            </Button>
-          </div>
-        );
-
-      case nonVerif:
-        return (
-          <div className="flex gap-4">
-            <Button
-              cN="btn bg-green-500 text-white  hover:bg-green-600 ease-in duration-200"
-              type="button"
-              onClick={() => handleVerifikasi(formik.values, formik.setValues)}
-            >
-              Verifikasi
-            </Button>
-            <Button
-              type="button"
-              cN="btn bg-red-500 text-white  hover:bg-red-600 ease-in duration-200"
-              onClick={() => handleNonAktifkan(formik.values, formik.setValues)}
-            >
-              Non-Aktifkan
-            </Button>
-          </div>
-        );
-
-      case nonAktif:
-        return (
-          <div className="flex gap-4">
-            <Button
-              type="button"
-              cN="btn bg-blue-500 text-white  hover:bg-blue-600 ease-in duration-200"
-              onClick={() => handleAktifkan(formik.values, formik.setValues)}
-            >
-              Aktifkan
-            </Button>
-          </div>
-        );
-      default:
-        return null;
-    }
+    const status = Object.keys(statusConfig).find(
+      (key) => statusConfig[key].condition
+    );
+    return status ? statusConfig[status].render : null;
   };
 
   return loading ? (

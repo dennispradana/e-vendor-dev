@@ -102,7 +102,10 @@ const FormPegawai = () => {
     usrgroup: Yup.string().required('Pilih salah satu'),
     peg_nama: Yup.string().required('Nama Pegawai harus diisi'),
     peg_nik: Yup.string()
-      .matches(/^\d{16}$/, 'NIK tidak valid')
+      .matches(
+        /^\d{6}([04][1-9]|[1256][0-9]|[37][01])(0[1-9]|1[0-2])\d{2}\d{4}$/,
+        'NIK tidak valid'
+      )
       .required('NIK harus diisi'),
     peg_nip: Yup.string()
       .matches(/^\d{18}$/, 'NIP tidak valid')

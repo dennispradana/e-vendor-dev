@@ -1,8 +1,12 @@
 import 'react-toastify/dist/ReactToastify.css';
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuthContext } from './contexts/AuthContext';
-import { AdminAcces, ProtectedRoute } from './utils/PrivateRoute';
+import {
+  AdminAcces,
+  PenyediaAcces,
+  ProtectedRoute,
+} from './utils/PrivateRoute';
 import { ToastContainer } from 'react-toastify';
 import Login from './pages/login';
 import RegisterPenyedia from './pages/penyedia/registerPenyedia';
@@ -16,6 +20,17 @@ import ListPegawai from './pages/pegawai/admin/listPegawai';
 import ListPenyedia from './pages/pegawai/admin/listPenyedia';
 import UpdatePegawaiPage from './pages/pegawai/admin/updatePegawai';
 import UpdatePenyediaPage from './pages/pegawai/admin/updatePenyedia';
+import DataPenyedia from './pages/penyedia/dataPenyedia';
+import Identitas from './pages/penyedia/dataPenyedia/identitas';
+import IzinUsaha from './pages/penyedia/dataPenyedia/izinUsaha';
+import AddIzinUsaha from './pages/penyedia/addIzinUsaha';
+import UpdateIzinUsaha from './pages/penyedia/updateIzinUsaha';
+import Akta from './pages/penyedia/dataPenyedia/akta';
+import AddAkta from './pages/penyedia/addAkta';
+import UpdateAkta from './pages/penyedia/updateAkta';
+import Manajerial from './pages/penyedia/dataPenyedia/manajerial';
+import AddManajerial from './pages/penyedia/addManajerial';
+import UpdateManajerial from './pages/penyedia/updateManajerial';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -39,6 +54,31 @@ const AppRoute = () => {
             <Route
               path="/daftar-penyedia/edit/:penyediaId"
               element={<UpdatePenyediaPage />}
+            />
+          </Route>
+          <Route element={<PenyediaAcces />}>
+            <Route path="data-penyedia" element={<DataPenyedia />}>
+              <Route
+                path="/data-penyedia"
+                element={<Navigate to="identitas" />}
+              />
+              <Route path="identitas" element={<Identitas />} />
+              <Route path="izin-usaha" element={<IzinUsaha />} />
+
+              <Route path="akta" element={<Akta />} />
+              <Route path="manajerial" element={<Manajerial />} />
+            </Route>
+            <Route path="/tambah-izin-usaha" element={<AddIzinUsaha />} />
+            <Route
+              path="/edit-izin-usaha/:penyediaIusId"
+              element={<UpdateIzinUsaha />}
+            />
+            <Route path="/tambah-akta" element={<AddAkta />} />
+            <Route path="/edit-akta/:penyediaLhkpId" element={<UpdateAkta />} />
+            <Route path="/tambah-manajerial" element={<AddManajerial />} />
+            <Route
+              path="/edit-manajerial/:penyediaManajerId"
+              element={<UpdateManajerial />}
             />
           </Route>
         </Route>

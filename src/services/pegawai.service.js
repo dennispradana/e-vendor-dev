@@ -4,10 +4,10 @@ import { useAuthContext } from '../contexts/AuthContext';
 export const pegawaiService = () => {
   const { userToken } = useAuthContext();
 
-  const getPegawai = async (lenght, page, search) => {
+  const getPegawai = async (show, page, search) => {
     try {
       const response = await api.get(
-        `/v1/pegawai?length=${lenght}&page=${page}&q=${search}`,
+        `/v1/pegawai?length=${show}&page=${page}&q=${search}`,
         {
           headers: {
             Authorization: `Bearer ${userToken.access_token}`,

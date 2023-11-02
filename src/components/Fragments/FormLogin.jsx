@@ -6,10 +6,12 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useAuthContext } from '../../contexts/AuthContext';
 import Captcha from '../Elements/Captcha';
+import { PiEyeLight, PiEyeClosedLight } from 'react-icons/pi';
 
 const FormLogin = () => {
   const [verified, setIsVerified] = useState(null);
   const [loginFailed, setLoginFailed] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuthContext();
 
   const handleRecaptcha = (value) => {
@@ -50,6 +52,10 @@ const FormLogin = () => {
     onSubmit: handleLogin,
   });
 
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
@@ -64,12 +70,40 @@ const FormLogin = () => {
           {...formik.getFieldProps('username')}
           error={formik.touched.username && formik.errors.username}
         />
-        <InputForm
-          label="password"
-          type="password"
-          {...formik.getFieldProps('password')}
-          error={formik.touched.password && formik.errors.password}
-        />
+        <div className="mb-6">
+          <label className="mb-4 text-sm font-semibold capitalize ">
+            Password
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className={`w-full mt-2 p-1 px-3 text-gray-700 bg-white border ${
+                formik.touched.password && formik.errors.password
+                  ? 'border-red-500 focus:ring-red-600'
+                  : 'border-gray-300  focus:ring-sky-600'
+              } rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2  focus:border-transparent`}
+              {...formik.getFieldProps('password')}
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-600">
+              <button
+                type="button"
+                onClick={handleShowPassword}
+                className={`mt-2 ${showPassword ? '' : 'text-blue-600'}`}
+              >
+                {showPassword ? (
+                  <PiEyeLight size="1.2rem" />
+                ) : (
+                  <PiEyeClosedLight size="1.2rem" />
+                )}
+              </button>
+            </div>
+          </div>
+          {formik.touched.password && formik.errors.password && (
+            <p className="mt-2 text-sm italic text-red-500">
+              {formik.errors.password}
+            </p>
+          )}
+        </div>
         <Captcha onCaptchaChange={handleRecaptcha} />
         <Button
           cN={`btn-full bg-blue-600 text-white hover:bg-blue-800 ease-in duration-200 ${
