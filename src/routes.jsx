@@ -202,6 +202,7 @@ const AppRoute = () => {
             <Route path="/tambah-sdm" element={<AddTenagaAhli />} />
             <Route path="/tambah-pengalaman" element={<AddPengalaman />} />
             <Route path="/tambah-peralatan" element={<AddPeralatan />} />
+            <Route path="/tambah-pajak" element={<AddPajak />} />
           </Route>
           <Route path="evaluasi/:llsId" element={<Evaluasi />} />
           <Route
