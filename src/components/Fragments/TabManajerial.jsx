@@ -5,7 +5,7 @@ import { useDebounce } from 'use-debounce';
 import { Link, useNavigate } from 'react-router-dom';
 import { SkeletonItem } from '../Elements/Skelekton';
 import Pagination from '../Elements/Pagination';
-import { FaPersonDigging } from 'react-icons/fa6';
+import { FaUserTie } from 'react-icons/fa';
 import DataEmpty from '../Elements/DataEmpty';
 import { Tooltip } from '../Elements/Tooltip';
 import { FiEdit } from 'react-icons/fi';
@@ -160,7 +160,7 @@ const TabManajerial = () => {
                 {dataLength === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
-                      colSpan="7"
+                      colSpan="6"
                       className="px-6 py-4 italic font-semibold text-center"
                     >
                       Data Izin tidak ditemukan
@@ -260,7 +260,7 @@ const TabManajerial = () => {
       <div className="flex items-center flex-col justify-center h-[50vh]">
         <DataEmpty
           title="Akta"
-          icon={<FaPersonDigging size="12rem" className="mb-4 text-gray-400" />}
+          icon={<FaUserTie size="12rem" className="mb-4 text-gray-400" />}
         />
         <Link
           to="/tambah-akta"
