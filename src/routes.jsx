@@ -200,6 +200,7 @@ const AppRoute = () => {
               element={<UpdateManajerial />}
             />
             <Route path="/tambah-sdm" element={<AddTenagaAhli />} />
+            <Route path="/tambah-pengalaman" element={<AddPengalaman />} />
           </Route>
           <Route path="evaluasi/:llsId" element={<Evaluasi />} />
           <Route
