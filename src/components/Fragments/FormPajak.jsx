@@ -2,16 +2,43 @@ import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FileUpload } from '../Elements/Modal/fileUpload';
-import { InputForm, SelectForm, TextAreaForm } from '../Elements/Input';
+import { InputForm } from '../Elements/Input';
 import Button from '../Elements/Button';
 import Spinner from '../Elements/Spinner';
+import { pajakService } from '../../services/pajak.service';
+import { formatEditDate } from '../../utils/formatDate';
+import { toasterror, toastsuccess } from '../../utils/ToastMessage';
+
 const FormPajak = () => {
   const { user } = useAuthContext();
+  const { editPajak, postPajak, updatePajak } = pajakService();
+  const [data, setData] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [pjkId, setPjkId] = useState('');
   const navigate = useNavigate();
+  const { penyediaPjkId } = useParams();
+  const isEdit = penyediaPjkId !== undefined;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isEdit) {
+        try {
+          const response = await editPajak(penyediaPjkId);
+          const pajakData = response.data;
+          setData(pajakData);
+          setLoading(false);
+        } catch (error) {
+          toasterror(error.message);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const initialValues = {
     pjk_jenis: '',
@@ -33,12 +60,34 @@ const FormPajak = () => {
     pjk_id_attachment: Yup.string().required('belum ada file yang ter-upload'),
   });
 
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      let response;
+      let message;
+      if (isEdit) {
+        response = await updatePajak(penyediaPjkId, values);
+        message = 'Update Sukses';
+      } else {
+        response = await postPajak(user.user_id, values);
+        message = 'data Pajak ditambahakan';
+      }
+      if (response.success) {
+        localStorage.removeItem('idContent');
+        formik.resetForm();
+        toastsuccess(message);
+        navigate('/data-penyedia/pajak');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validation,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: handleSubmit,
   });
 
   const handleOpenModal = () => {
@@ -53,9 +102,26 @@ const FormPajak = () => {
 
   const handleBack = () => {
     history.back();
+    localStorage.removeItem('idContent');
   };
 
-  return (
+  useEffect(() => {
+    formik.setValues({
+      pjk_jenis: data.pjk_jenis || '',
+      pjk_no: data.pjk_no || '',
+      pjk_tahun: data.pjk_tahun || '',
+      pjk_tanggal: data.pjk_tanggal
+        ? formatEditDate(new Date(data.pjk_tanggal))
+        : '',
+      pjk_id_attachment: data.pjk_id_attachment || '',
+    });
+  }, [data]);
+
+  return loading ? (
+    <div className="flex items-center justify-center h-[70vh]">
+      <Spinner />
+    </div>
+  ) : (
     <>
       <form onSubmit={formik.handleSubmit}>
         <InputForm
@@ -107,7 +173,7 @@ const FormPajak = () => {
             type="submit"
             disabled={formik.isSubmitting}
           >
-            {formik.isSubmitting ? <Spinner /> : 'submit'}
+            {formik.isSubmitting ? <Spinner /> : isEdit ? 'Update' : 'Submit'}
           </Button>
           <Button
             cN={`btn bg-slate-300 text-black hover:bg-slate-400 ease-in duration-200 ${
@@ -121,7 +187,12 @@ const FormPajak = () => {
           </Button>
         </div>
       </form>
-      {showModal && <FileUpload close={handleCloseModal} Id={pjkId} />}
+      {showModal && (
+        <FileUpload
+          close={handleCloseModal}
+          Id={isEdit ? data.pjk_id_attachment : pjkId}
+        />
+      )}
     </>
   );
 };
