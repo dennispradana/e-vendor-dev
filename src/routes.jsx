@@ -37,6 +37,8 @@ import Pengalaman from './pages/penyedia/dataPenyedia/pengalaman';
 import AddPengalaman from './pages/penyedia/addPengalaman';
 import Peralatan from './pages/penyedia/dataPenyedia/peralatan';
 import AddPeralatan from './pages/penyedia/addPeralatan';
+import Pajak from './pages/penyedia/dataPenyedia/pajak';
+import AddPajak from './pages/penyedia/addPajak';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -76,6 +78,7 @@ const AppRoute = () => {
               <Route path="sdm" element={<TenagaAhli />} />
               <Route path="pengalaman" element={<Pengalaman />} />
               <Route path="peralatan" element={<Peralatan />} />
+              <Route path="pajak" element={<Pajak />} />
             </Route>
             <Route path="/tambah-izin-usaha" element={<AddIzinUsaha />} />
             <Route
@@ -92,6 +95,7 @@ const AppRoute = () => {
             <Route path="/tambah-sdm" element={<AddTenagaAhli />} />
             <Route path="/tambah-pengalaman" element={<AddPengalaman />} />
             <Route path="/tambah-peralatan" element={<AddPeralatan />} />
+            <Route path="/tambah-pajak" element={<AddPajak />} />
           </Route>
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
