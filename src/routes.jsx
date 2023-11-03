@@ -35,6 +35,8 @@ import TenagaAhli from './pages/penyedia/dataPenyedia/tenagaAhli';
 import AddTenagaAhli from './pages/penyedia/addTenagaAhli';
 import Pengalaman from './pages/penyedia/dataPenyedia/pengalaman';
 import AddPengalaman from './pages/penyedia/addPengalaman';
+import Peralatan from './pages/penyedia/dataPenyedia/peralatan';
+import AddPeralatan from './pages/penyedia/addPeralatan';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -73,6 +75,7 @@ const AppRoute = () => {
               <Route path="manajerial" element={<Manajerial />} />
               <Route path="sdm" element={<TenagaAhli />} />
               <Route path="pengalaman" element={<Pengalaman />} />
+              <Route path="peralatan" element={<Peralatan />} />
             </Route>
             <Route path="/tambah-izin-usaha" element={<AddIzinUsaha />} />
             <Route
@@ -88,6 +91,7 @@ const AppRoute = () => {
             />
             <Route path="/tambah-sdm" element={<AddTenagaAhli />} />
             <Route path="/tambah-pengalaman" element={<AddPengalaman />} />
+            <Route path="/tambah-peralatan" element={<AddPeralatan />} />
           </Route>
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
