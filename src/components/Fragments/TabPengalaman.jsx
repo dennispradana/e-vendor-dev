@@ -1,11 +1,11 @@
 import React from 'react';
-import { SkeletonItem } from '../Elements/Skelekton';
-import DataEmpty from '../Elements/DataEmpty';
-import { FaPersonDigging } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
+import DataEmpty from '../Elements/DataEmpty';
+import { SkeletonItem } from '../Elements/Skelekton';
+import { FaRegPaperPlane } from 'react-icons/fa';
 
-const TabTenagaAhli = () => {
-  const TableTenagaAhli = () => {
+const TabPengalaman = () => {
+  const TablePengalaman = () => {
     return (
       <>
         <div className="flex items-center justify-between pb-4 ">
@@ -35,7 +35,7 @@ const TabTenagaAhli = () => {
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-50 md:w-80 bg-gray-50 focus:outline-violet-300"
-                placeholder="Cari Data Tenaga Ahli"
+                placeholder="Cari Data Pengalaman"
                 //   value={search}
                 //   onChange={handleSearch}
                 // autoFocus
@@ -44,7 +44,7 @@ const TabTenagaAhli = () => {
           </div>
           <div>
             <Link
-              to="/tambah-sdm"
+              to="/tambah-pengalaman"
               className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
             >
               tambah data
@@ -57,19 +57,21 @@ const TabTenagaAhli = () => {
               <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
                 <tr role="row" className="text-center border border-gray-200">
                   <th className="px-4 py-3 border border-gray-200">No</th>
-                  <th className="px-4 py-3 border border-gray-200">Nama</th>
-                  <th className="px-4 py-3 border border-gray-200">NPWP</th>
                   <th className="px-4 py-3 border border-gray-200">
-                    Tanggal Lahir
+                    Pekerjaan
+                  </th>
+                  <th className="px-4 py-3 border border-gray-200">Lokasi</th>
+                  <th className="px-4 py-3 border border-gray-200">
+                    Instansi Pemberi Pekerjaan
                   </th>
                   <th className="px-4 py-3 border border-gray-200">
-                    Pendidikan Akhir
+                    Tanggal Kontrak
                   </th>
                   <th className="px-4 py-3 border border-gray-200">
-                    Pengalaman Kerja
+                    Tanggal Selesai Kontrak
                   </th>
                   <th className="px-4 py-3 border border-gray-200">
-                    Profesi Keahlian
+                    Nilai Kontrak
                   </th>
                   <th className="px-4 py-3 border border-gray-200">Aksi</th>
                 </tr>
@@ -176,7 +178,7 @@ const TabTenagaAhli = () => {
       <div className="flex items-center flex-col justify-center h-[50vh]">
         <DataEmpty
           title="Akta"
-          icon={<FaPersonDigging size="12rem" className="mb-4 text-gray-400" />}
+          icon={<FaRegPaperPlane size="12rem" className="mb-4 text-gray-400" />}
         />
         <Link
           to="/tambah-akta"
@@ -186,11 +188,11 @@ const TabTenagaAhli = () => {
         </Link>
       </div>
     ) : (
-      <TableTenagaAhli />
+      <TablePengalaman />
     );
   };
 
-  return <TableTenagaAhli />;
+  return <TablePengalaman />;
 };
 
-export default TabTenagaAhli;
+export default TabPengalaman;

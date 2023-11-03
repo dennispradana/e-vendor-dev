@@ -108,8 +108,6 @@ const FormTenagaAhli = () => {
     formik.setFieldValue('sta_npwp', formattedValue);
   };
 
-  console.log(formik.errors);
-
   return (
     <>
       <form onSubmit={formik.handleSubmit}>

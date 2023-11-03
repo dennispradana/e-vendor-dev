@@ -33,6 +33,8 @@ import AddManajerial from './pages/penyedia/addManajerial';
 import UpdateManajerial from './pages/penyedia/updateManajerial';
 import TenagaAhli from './pages/penyedia/dataPenyedia/tenagaAhli';
 import AddTenagaAhli from './pages/penyedia/addTenagaAhli';
+import Pengalaman from './pages/penyedia/dataPenyedia/pengalaman';
+import AddPengalaman from './pages/penyedia/addPengalaman';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -70,6 +72,7 @@ const AppRoute = () => {
               <Route path="akta" element={<Akta />} />
               <Route path="manajerial" element={<Manajerial />} />
               <Route path="sdm" element={<TenagaAhli />} />
+              <Route path="pengalaman" element={<Pengalaman />} />
             </Route>
             <Route path="/tambah-izin-usaha" element={<AddIzinUsaha />} />
             <Route
@@ -84,6 +87,7 @@ const AppRoute = () => {
               element={<UpdateManajerial />}
             />
             <Route path="/tambah-sdm" element={<AddTenagaAhli />} />
+            <Route path="/tambah-pengalaman" element={<AddPengalaman />} />
           </Route>
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
