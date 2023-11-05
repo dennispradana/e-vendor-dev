@@ -96,6 +96,7 @@ const FormAkta = () => {
 
   const handleBack = () => {
     history.back();
+    localStorage.removeItem('idContent');
   };
 
   useEffect(() => {

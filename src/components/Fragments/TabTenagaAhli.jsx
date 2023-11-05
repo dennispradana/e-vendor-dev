@@ -97,8 +97,6 @@ const TabTenagaAhli = () => {
     }));
   };
 
-  console.log(datas);
-
   const TableTenagaAhli = () => {
     return (
       <>

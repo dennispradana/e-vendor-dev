@@ -42,8 +42,8 @@ const FormTenagaAhli = () => {
       if (isEdit) {
         try {
           const response = await editSdm(penyediaStpId);
-          const pajakData = response.data;
-          setData(pajakData);
+          const sdmData = response.data;
+          setData(sdmData);
           setLoading(false);
         } catch (error) {
           toasterror(error.message);

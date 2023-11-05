@@ -2,17 +2,44 @@ import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FileUpload } from '../Elements/Modal/fileUpload';
-import { InputForm, SelectForm, TextAreaForm } from '../Elements/Input';
+import { InputForm, TextAreaForm } from '../Elements/Input';
 import Button from '../Elements/Button';
 import Spinner from '../Elements/Spinner';
+import { pengalamanService } from '../../services/pengalaman.service';
+import { formatEditDate } from '../../utils/formatDate';
+import { toasterror, toastsuccess } from '../../utils/ToastMessage';
 
 const FormPengalaman = () => {
   const { user } = useAuthContext();
+  const { postPengalaman, editPengalaman, updatePengalaman } =
+    pengalamanService();
+  const [data, setData] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [pglId, setPglId] = useState('');
   const navigate = useNavigate();
+  const { penyediaPenId } = useParams();
+  const isEdit = penyediaPenId !== undefined;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isEdit) {
+        try {
+          const response = await editPengalaman(penyediaPenId);
+          const pengalamanData = response.data;
+          setData(pengalamanData);
+          setLoading(false);
+        } catch (error) {
+          toasterror(error.message);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const initialValues = {
     pgl_kegiatan: '',
@@ -47,12 +74,34 @@ const FormPengalaman = () => {
       .max(100, 'Progress tidak bisa diatas 100%'),
   });
 
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      let response;
+      let message;
+      if (isEdit) {
+        response = await updatePengalaman(penyediaPenId, values);
+        message = 'Update Sukses';
+      } else {
+        response = await postPengalaman(user.user_id, values);
+        message = 'data Pengalaman ditambahakan';
+      }
+      if (response.success) {
+        localStorage.removeItem('idContent');
+        formik.resetForm();
+        toastsuccess(message);
+        navigate('/data-penyedia/pengalaman');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validation,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: handleSubmit,
   });
 
   const handleOpenModal = () => {
@@ -74,7 +123,34 @@ const FormPengalaman = () => {
     history.back();
   };
 
-  return (
+  useEffect(() => {
+    formik.setValues({
+      pgl_kegiatan: data.pgl_kegiatan || '',
+      pgl_pembtgs: data.pgl_pembtgs || '',
+      pgl_nokontrak: data.pgl_nokontrak || '',
+      pgl_nilai: data.pgl_nilai || '',
+      pgl_almtpembtgs: data.pgl_almtpembtgs || '',
+      pgl_lokasi: data.pgl_lokasi || '',
+      pgl_telppembtgs: data.pgl_telppembtgs || '',
+      pgl_tglkontrak: data.pgl_tglkontrak
+        ? formatEditDate(new Date(data.pgl_tglkontrak))
+        : '',
+      pgl_tglprogress: data.pgl_tglprogress
+        ? formatEditDate(new Date(data.pgl_tglprogress))
+        : '',
+      pgl_slskontrak: data.pgl_slskontrak
+        ? formatEditDate(new Date(data.pgl_slskontrak))
+        : '',
+      pgl_id_attachment: data.pgl_id_attachment || '',
+      pgl_persenprogress: data.pgl_persenprogress || '',
+    });
+  }, [data]);
+
+  return loading ? (
+    <div className="flex items-center justify-center h-[70vh]">
+      <Spinner />
+    </div>
+  ) : (
     <>
       <form onSubmit={formik.handleSubmit}>
         <InputForm
@@ -196,7 +272,7 @@ const FormPengalaman = () => {
             type="submit"
             disabled={formik.isSubmitting}
           >
-            {formik.isSubmitting ? <Spinner /> : 'submit'}
+            {formik.isSubmitting ? <Spinner /> : isEdit ? 'Update' : 'Submit'}
           </Button>
           <Button
             cN={`btn bg-slate-300 text-black hover:bg-slate-400 ease-in duration-200 ${
@@ -210,7 +286,12 @@ const FormPengalaman = () => {
           </Button>
         </div>
       </form>
-      {showModal && <FileUpload close={handleCloseModal} Id={pglId} />}
+      {showModal && (
+        <FileUpload
+          close={handleCloseModal}
+          Id={isEdit ? data.pgl_id_attachment : pglId}
+        />
+      )}
     </>
   );
 };

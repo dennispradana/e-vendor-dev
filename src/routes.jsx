@@ -40,6 +40,7 @@ import AddPeralatan from './pages/penyedia/addPeralatan';
 import Pajak from './pages/penyedia/dataPenyedia/pajak';
 import AddPajak from './pages/penyedia/addPajak';
 import UpdatePajak from './pages/penyedia/updatePajak';
+import UpdatePengalaman from './pages/penyedia/updatePengalaman';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -99,6 +100,10 @@ const AppRoute = () => {
               element={<AddTenagaAhli />}
             />
             <Route path="/tambah-pengalaman" element={<AddPengalaman />} />
+            <Route
+              path="/edit-pengalaman/:penyediaPenId"
+              element={<UpdatePengalaman />}
+            />
             <Route path="/tambah-peralatan" element={<AddPeralatan />} />
             <Route path="/tambah-pajak" element={<AddPajak />} />
             <Route
