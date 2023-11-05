@@ -126,7 +126,6 @@ const FormManajerial = () => {
       mjr_alamat: data.mjr_alamat || '',
     });
   }, [data]);
-  console.log(data);
 
   return loading ? (
     <div className="flex items-center justify-center h-[70vh]">

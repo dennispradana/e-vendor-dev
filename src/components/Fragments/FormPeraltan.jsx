@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { InputForm, SelectForm } from '../Elements/Input';
 import Button from '../Elements/Button';
 import Spinner from '../Elements/Spinner';
+import { peralatanService } from '../../services/peralatan.service';
+import { toasterror, toastsuccess } from '../../utils/ToastMessage';
 
 const options = [
   { value: 0, label: 'Baik' },
@@ -14,6 +16,30 @@ const options = [
 
 const FormPeraltan = () => {
   const { user } = useAuthContext();
+  const { postPeralatan, editPeralatan, updatePeralatan } = peralatanService();
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { penyediaPrlId } = useParams();
+  const isEdit = penyediaPrlId !== undefined;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isEdit) {
+        try {
+          const response = await editPeralatan(penyediaPrlId);
+          const peralatanData = response.data;
+          setData(peralatanData);
+          setLoading(false);
+        } catch (error) {
+          toasterror(error.message);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const initialValues = {
     alt_jenis: '',
@@ -36,19 +62,57 @@ const FormPeraltan = () => {
     alt_kepemilikan: Yup.string().required('Status Kepemilikan harus diisi'),
   });
 
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      let response;
+      let message;
+      if (isEdit) {
+        response = await updatePeralatan(penyediaPrlId, values);
+        message = 'Update Sukses';
+      } else {
+        response = await postPeralatan(user.user_id, values);
+        message = 'data Peralatan ditambahakan';
+      }
+      if (response.success) {
+        formik.resetForm();
+        toastsuccess(message);
+        navigate('/data-penyedia/peralatan');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validation,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: handleSubmit,
   });
 
   const handleBack = () => {
     history.back();
   };
 
-  return (
+  useEffect(() => {
+    formik.setValues({
+      alt_jenis: data.alt_jenis || '',
+      alt_jumlah: data.alt_jumlah || '',
+      alt_kapasitas: data.alt_kapasitas || '',
+      alt_merktipe: data.alt_merktipe || '',
+      alt_thpembuatan: data.alt_thpembuatan || '',
+      alt_kondisi: data.alt_kondisi || '',
+      alt_lokasi: data.alt_lokasi || '',
+      alt_kepemilikan: data.alt_kepemilikan || '',
+    });
+  }, [data]);
+
+  return loading ? (
+    <div className="flex items-center justify-center h-[70vh]">
+      <Spinner />
+    </div>
+  ) : (
     <form onSubmit={formik.handleSubmit}>
       <div className="grid md:grid-cols-2 md:gap-6">
         <InputForm
@@ -113,7 +177,7 @@ const FormPeraltan = () => {
           type="submit"
           disabled={formik.isSubmitting}
         >
-          {formik.isSubmitting ? <Spinner /> : 'submit'}
+          {formik.isSubmitting ? <Spinner /> : isEdit ? 'Update' : 'Submit'}
         </Button>
         <Button
           cN={`btn bg-slate-300 text-black hover:bg-slate-400 ease-in duration-200 ${
