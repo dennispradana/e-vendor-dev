@@ -97,8 +97,6 @@ const TabPajak = () => {
     }));
   };
 
-  console.log(datas);
-
   const TablePajak = () => {
     return (
       <>

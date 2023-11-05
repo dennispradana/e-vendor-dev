@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FileUpload } from '../Elements/Modal/fileUpload';
 import { InputForm, SelectForm, TextAreaForm } from '../Elements/Input';
 import Button from '../Elements/Button';
 import Spinner from '../Elements/Spinner';
+import { sdmService } from '../../services/sdm.service';
+import { toasterror, toastsuccess } from '../../utils/ToastMessage';
+import { formatEditDate } from '../../utils/formatDate';
 
 const jnsKelamin = [
   { value: 'laki-laki', label: 'Laki-Laki' },
@@ -14,8 +17,8 @@ const jnsKelamin = [
 ];
 
 const kewarganegaraan = [
-  { value: 'wni', label: 'WNI' },
-  { value: 'wna', label: 'WNA' },
+  { value: 'Individu WNI', label: 'Individu WNI' },
+  { value: 'Individu WNA', label: 'Individu WNA' },
 ];
 
 const status = [
@@ -25,9 +28,32 @@ const status = [
 
 const FormTenagaAhli = () => {
   const { user } = useAuthContext();
+  const { postSdm, editSdm, updateSdm } = sdmService();
+  const [data, setData] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [staId, setStaId] = useState('');
   const navigate = useNavigate();
+  const { penyediaStpId } = useParams();
+  const isEdit = penyediaStpId !== undefined;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isEdit) {
+        try {
+          const response = await editSdm(penyediaStpId);
+          const pajakData = response.data;
+          setData(pajakData);
+          setLoading(false);
+        } catch (error) {
+          toasterror(error.message);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const initialValues = {
     sta_nama: '',
@@ -40,7 +66,7 @@ const FormTenagaAhli = () => {
     sta_jabatan: '',
     sta_keahlian: '',
     sta_pendidikan: '',
-    sta_kewarganearaan: '',
+    sta_kewarganegaraan: '',
     sta_pengalaman: '',
     sta_status: '',
     sta_id_attachment: '',
@@ -64,18 +90,40 @@ const FormTenagaAhli = () => {
     sta_jabatan: Yup.string().required('Jabatan harus diisi'),
     sta_keahlian: Yup.string().required('Keahlian harus diisi'),
     sta_pendidikan: Yup.string().required('Pendidikan harus diisi'),
-    sta_kewarganearaan: Yup.string().required('Pilih Salah Satu'),
+    sta_kewarganegaraan: Yup.string().required('Pilih Salah Satu'),
     sta_pengalaman: Yup.string().required('Pengalaman harus diisi'),
     sta_status: Yup.string().required('Pilih Salah Satu'),
     sta_id_attachment: Yup.string().required('belum ada file yang ter-upload'),
   });
 
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      let response;
+      let message;
+      if (isEdit) {
+        response = await updateSdm(penyediaStpId, values);
+        message = 'Update Sukses';
+      } else {
+        response = await postSdm(user.user_id, values);
+        message = 'data Staf ditambahakan';
+      }
+      if (response.success) {
+        localStorage.removeItem('idContent');
+        formik.resetForm();
+        toastsuccess(message);
+        navigate('/data-penyedia/sdm');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validation,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: handleSubmit,
   });
 
   const handleOpenModal = () => {
@@ -90,6 +138,7 @@ const FormTenagaAhli = () => {
 
   const handleBack = () => {
     history.back();
+    localStorage.removeItem('idContent');
   };
 
   const formatNpwp = (value) => {
@@ -108,7 +157,32 @@ const FormTenagaAhli = () => {
     formik.setFieldValue('sta_npwp', formattedValue);
   };
 
-  return (
+  useEffect(() => {
+    formik.setValues({
+      sta_nama: data.sta_nama || '',
+      sta_npwp: data.sta_npwp || '',
+      sta_tgllahir: data.sta_tgllahir
+        ? formatEditDate(new Date(data.sta_tgllahir))
+        : '',
+      sta_jenis_kelamin: data.sta_jenis_kelamin || '',
+      sta_telepon: data.sta_telepon || '',
+      sta_email: data.sta_email || '',
+      sta_alamat: data.sta_alamat || '',
+      sta_jabatan: data.sta_jabatan || '',
+      sta_keahlian: data.sta_keahlian || '',
+      sta_pendidikan: data.sta_pendidikan || '',
+      sta_kewarganegaraan: data.sta_kewarganegaraan || '',
+      sta_pengalaman: data.sta_pengalaman || '',
+      sta_status: data.sta_status || '',
+      sta_id_attachment: data.sta_id_attachment || '',
+    });
+  }, [data]);
+
+  return loading ? (
+    <div className="flex items-center justify-center h-[70vh]">
+      <Spinner />
+    </div>
+  ) : (
     <>
       <form onSubmit={formik.handleSubmit}>
         <InputForm
@@ -185,15 +259,15 @@ const FormTenagaAhli = () => {
         <div className="grid md:grid-cols-3 md:gap-6">
           <SelectForm
             label="Kewarganegaraan"
-            {...formik.getFieldProps('sta_kewarganearaan')}
+            {...formik.getFieldProps('sta_kewarganegaraan')}
             options={kewarganegaraan}
             error={
-              formik.touched.sta_kewarganearaan &&
-              formik.errors.sta_kewarganearaan
+              formik.touched.sta_kewarganegaraan &&
+              formik.errors.sta_kewarganegaraan
             }
           />
           <InputForm
-            label="Pengalaman"
+            label="Pengalaman (Tahun)"
             type="text"
             {...formik.getFieldProps('sta_pengalaman')}
             error={
@@ -230,7 +304,7 @@ const FormTenagaAhli = () => {
             type="submit"
             disabled={formik.isSubmitting}
           >
-            {formik.isSubmitting ? <Spinner /> : 'submit'}
+            {formik.isSubmitting ? <Spinner /> : isEdit ? 'Update' : 'Submit'}
           </Button>
           <Button
             cN={`btn bg-slate-300 text-black hover:bg-slate-400 ease-in duration-200 ${
@@ -244,7 +318,12 @@ const FormTenagaAhli = () => {
           </Button>
         </div>
       </form>
-      {showModal && <FileUpload close={handleCloseModal} Id={staId} />}
+      {showModal && (
+        <FileUpload
+          close={handleCloseModal}
+          Id={isEdit ? data.sta_id_attachment : staId}
+        />
+      )}
     </>
   );
 };
