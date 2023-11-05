@@ -207,8 +207,8 @@ const TableListsPegawai = () => {
               value={showItem}
               onChange={handleShowData}
             >
-              {dataLength === 0 ? (
-                <option value={0}>0</option>
+              {dataLength <= 10 ? (
+                <option value={dataLength}>{dataLength}</option>
               ) : (
                 <>
                   <option value={10}>10</option>
@@ -223,7 +223,7 @@ const TableListsPegawai = () => {
               dari {dataLength} data
             </p>
           </div>
-          {dataLength !== 0 && (
+          {dataLength > 10 && (
             <Pagination
               currentPage={currentPage}
               onPageChange={handlePageChange}
