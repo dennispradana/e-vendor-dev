@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthContext } from '../../contexts/AuthContext';
-import { iusService } from '../../services/ius.service';
-import { SkeletonItem } from '../Elements/Skelekton';
-import { formatDate, getColorClass } from '../../utils/formatDate';
-import { useDebounce } from 'use-debounce';
-import Pagination from '../Elements/Pagination';
-import { toasterror } from '../../utils/ToastMessage';
 import DataEmpty from '../Elements/DataEmpty';
-import { FaFileSignature } from 'react-icons/fa6';
+import { SkeletonItem } from '../Elements/Skelekton';
+import { FaFileInvoiceDollar } from 'react-icons/fa';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { pajakService } from '../../services/pajak.service';
+import { useDebounce } from 'use-debounce';
+import { toasterror } from '../../utils/ToastMessage';
+import { Tooltip } from '../Elements/Tooltip';
 import { FiEdit } from 'react-icons/fi';
 import { MdDeleteOutline } from 'react-icons/md';
-import { Tooltip } from '../Elements/Tooltip';
+import Pagination from '../Elements/Pagination';
+import { formatDate } from '../../utils/formatDate';
 
 const initialState = {
   datas: [],
@@ -24,7 +24,7 @@ const initialState = {
   showItem: 10,
 };
 
-const TabIzinUsaha = () => {
+const TabPajak = () => {
   const [state, setState] = useState(initialState);
   const {
     datas,
@@ -37,7 +37,7 @@ const TabIzinUsaha = () => {
     totalPages,
   } = state;
   const { user } = useAuthContext();
-  const { getIzinUsaha } = iusService();
+  const { getPajak } = pajakService();
   const [loading, setLoading] = useState(true);
   const [debaouceSearch] = useDebounce(search, 2000);
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const TabIzinUsaha = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getIzinUsaha(
+        const response = await getPajak(
           user.user_id,
           showItem,
           currentPage,
@@ -68,8 +68,8 @@ const TabIzinUsaha = () => {
     fetchData();
   }, [showItem, currentPage, debaouceSearch]);
 
-  const handleEdit = (penyediaIusId) => {
-    navigate(`/edit-izin-usaha/${penyediaIusId}`);
+  const handleEdit = (penyediaPjkId) => {
+    navigate(`/edit-pajak/${penyediaPjkId}`);
   };
 
   const handleShowData = (e) => {
@@ -97,7 +97,7 @@ const TabIzinUsaha = () => {
     }));
   };
 
-  const TableIzinUsaha = () => {
+  const TablePajak = () => {
     return (
       <>
         <div className="flex items-center justify-between pb-4 ">
@@ -127,7 +127,7 @@ const TabIzinUsaha = () => {
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-50 md:w-80 bg-gray-50 focus:outline-violet-300"
-                placeholder="Cari Data Izin Usaha"
+                placeholder="Cari Data Pajak"
                 value={search}
                 onChange={handleSearch}
                 autoFocus
@@ -136,7 +136,7 @@ const TabIzinUsaha = () => {
           </div>
           <div>
             <Link
-              to="/tambah-izin-usaha"
+              to="/tambah-pajak"
               className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
             >
               tambah data
@@ -149,20 +149,12 @@ const TabIzinUsaha = () => {
               <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
                 <tr role="row" className="text-center border border-gray-200">
                   <th className="px-4 py-3 border border-gray-200">No</th>
+                  <th className="px-4 py-3 border border-gray-200">Pajak</th>
                   <th className="px-4 py-3 border border-gray-200">
-                    Izin Usaha
+                    Tanggal Terima Bukti
                   </th>
                   <th className="px-4 py-3 border border-gray-200">
-                    Nomor Surat
-                  </th>
-                  <th className="px-4 py-3 border border-gray-200">
-                    Berlaku Sampai
-                  </th>
-                  <th className="px-4 py-3 border border-gray-200">
-                    Instansi Pemberi
-                  </th>
-                  <th className="px-4 py-3 border border-gray-200">
-                    Kualfikasi
+                    Nomor Bukti
                   </th>
                   <th className="px-4 py-3 border border-gray-200">Aksi</th>
                 </tr>
@@ -171,7 +163,7 @@ const TabIzinUsaha = () => {
                 {dataLength === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
-                      colSpan="7"
+                      colSpan="5"
                       className="px-6 py-4 italic font-semibold text-center"
                     >
                       Data Izin tidak ditemukan
@@ -180,7 +172,7 @@ const TabIzinUsaha = () => {
                 ) : (
                   datas.map((item, index) => (
                     <tr
-                      key={item.ius_id}
+                      key={item.pjk_id}
                       className="duration-150 ease-out bg-white border-b hover:bg-gray-200"
                     >
                       <th
@@ -189,31 +181,17 @@ const TabIzinUsaha = () => {
                       >
                         {entryNumber + index}
                       </th>
-                      <td className="px-3 py-4 capitalize">{item.jni_nama}</td>
-                      <td className="px-3 py-4">{item.ius_no}</td>
-                      <td
-                        className={`px-3 py-4 text-center ${getColorClass(
-                          item.ius_berlaku
-                        )}`}
-                      >
-                        {item.ius_berlaku !== null
-                          ? formatDate(new Date(item.ius_berlaku))
-                          : 'Seumur Hidup'}
-                      </td>
+                      <td className="px-3 py-4 capitalize">{item.pjk_jenis}</td>
                       <td className="px-3 py-4 text-center">
-                        {item.ius_instansi}
+                        {formatDate(new Date(item.pjk_tanggal))}
                       </td>
-                      <td className="px-3 py-4 text-center">
-                        {item.ius_klasifikasi === null
-                          ? '-'
-                          : item.ius_klasifikasi}
-                      </td>
+                      <td className="px-3 py-4">{item.pjk_no}</td>
                       <td className="px-6 py-4 text-center">
                         <div className="flex items-center justify-center gap-2">
                           <Tooltip text="Edit">
                             <button
                               className="mr-2 text-blue-500 hover:text-blue-700"
-                              onClick={() => handleEdit(item.ius_id)}
+                              onClick={() => handleEdit(item.pjk_id)}
                             >
                               <FiEdit size="1.2rem" />
                             </button>
@@ -281,22 +259,24 @@ const TabIzinUsaha = () => {
     ) : dataTotal === 0 ? (
       <div className="flex items-center flex-col justify-center h-[50vh]">
         <DataEmpty
-          title="Izin Usaha"
-          icon={<FaFileSignature size="12rem" className="mb-4 text-gray-400" />}
+          title="Akta"
+          icon={
+            <FaFileInvoiceDollar size="12rem" className="mb-4 text-gray-400" />
+          }
         />
         <Link
-          to="/tambah-izin-usaha"
+          to="/tambah-akta"
           className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
         >
           tambah data
         </Link>
       </div>
     ) : (
-      <TableIzinUsaha />
+      <TablePajak />
     );
   };
 
   return <RenderContent />;
 };
 
-export default TabIzinUsaha;
+export default TabPajak;

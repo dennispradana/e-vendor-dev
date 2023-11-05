@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from 'react';
+import { useAuthContext } from '../../contexts/AuthContext';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useNavigate, useParams } from 'react-router-dom';
+import { FileUpload } from '../Elements/Modal/fileUpload';
+import { InputForm } from '../Elements/Input';
 import Button from '../Elements/Button';
 import Spinner from '../Elements/Spinner';
-import { InputForm } from '../Elements/Input';
-import { FileUpload } from '../Elements/Modal/fileUpload';
-import { useAuthContext } from '../../contexts/AuthContext';
-import { aktaService } from '../../services/akta.service';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toasterror, toastsuccess } from '../../utils/ToastMessage';
+import { pajakService } from '../../services/pajak.service';
 import { formatEditDate } from '../../utils/formatDate';
+import { toasterror, toastsuccess } from '../../utils/ToastMessage';
 
-const FormAkta = () => {
+const FormPajak = () => {
   const { user } = useAuthContext();
-  const { postAkta, editAkta, updateAkta } = aktaService();
+  const { editPajak, postPajak, updatePajak } = pajakService();
   const [data, setData] = useState({});
-  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [lhkpId, setLhkpId] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [pjkId, setPjkId] = useState('');
   const navigate = useNavigate();
-  const { penyediaLhkpId } = useParams();
-  const isEdit = penyediaLhkpId !== undefined;
+  const { penyediaPjkId } = useParams();
+  const isEdit = penyediaPjkId !== undefined;
 
   useEffect(() => {
     const fetchData = async () => {
       if (isEdit) {
         try {
-          const response = await editAkta(penyediaLhkpId);
-          const aktaData = response.data;
-          setData(aktaData);
+          const response = await editPajak(penyediaPjkId);
+          const pajakData = response.data;
+          setData(pajakData);
           setLoading(false);
         } catch (error) {
           toasterror(error.message);
@@ -41,17 +41,23 @@ const FormAkta = () => {
   }, []);
 
   const initialValues = {
-    lhkp_no: '',
-    lhkp_tanggal: '',
-    lhkp_notaris: '',
-    lhkp_id_attachment: '',
+    pjk_jenis: '',
+    pjk_no: '',
+    pjk_tahun: '',
+    pjk_tanggal: '',
+    pjk_id_attachment: '',
   };
 
   const validation = Yup.object({
-    lhkp_no: Yup.string().required('Nomor Akta harus diisi'),
-    lhkp_id_attachment: Yup.string().required('belum ada file yang ter-upload'),
-    lhkp_notaris: Yup.string().required('Nama Notaris harus diisi'),
-    lhkp_tanggal: Yup.date().required('Tanggal harus diisi'),
+    pjk_jenis: Yup.string().required('Jenis Laporan Pajak harus diisi'),
+    pjk_no: Yup.string().required(
+      'Nomor Bukti Penerimaan Pajak Pajak harus diisi'
+    ),
+    pjk_tahun: Yup.string().required('Tahun Masa Pajak Pajak harus diisi'),
+    pjk_tanggal: Yup.date().required(
+      'Tanggal Bukti Penerimaan Pajak harus diisi'
+    ),
+    pjk_id_attachment: Yup.string().required('belum ada file yang ter-upload'),
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -59,17 +65,17 @@ const FormAkta = () => {
       let response;
       let message;
       if (isEdit) {
-        response = await updateAkta(penyediaLhkpId, values);
+        response = await updatePajak(penyediaPjkId, values);
         message = 'Update Sukses';
       } else {
-        response = await postAkta(user.user_id, values);
-        message = 'Izin Usaha ditambahakan';
+        response = await postPajak(user.user_id, values);
+        message = 'data Pajak ditambahakan';
       }
       if (response.success) {
         localStorage.removeItem('idContent');
         formik.resetForm();
         toastsuccess(message);
-        navigate('/data-penyedia/akta');
+        navigate('/data-penyedia/pajak');
       }
     } catch (error) {
       toasterror(error.message);
@@ -88,10 +94,10 @@ const FormAkta = () => {
     setShowModal(true);
   };
 
-  const handleCloseModal = (lhkpIdAttachment) => {
+  const handleCloseModal = (pjkIdAttachment) => {
     setShowModal(false);
-    setLhkpId(lhkpIdAttachment);
-    formik.setFieldValue('lhkp_id_attachment', lhkpIdAttachment);
+    setPjkId(pjkIdAttachment);
+    formik.setFieldValue('pjk_id_attachment', pjkIdAttachment);
   };
 
   const handleBack = () => {
@@ -101,20 +107,15 @@ const FormAkta = () => {
 
   useEffect(() => {
     formik.setValues({
-      lhkp_no: data.lhkp_no || '',
-      lhkp_notaris: data.lhkp_notaris || '',
-      lhkp_tanggal: data.lhkp_tanggal
-        ? formatEditDate(new Date(data.lhkp_tanggal))
+      pjk_jenis: data.pjk_jenis || '',
+      pjk_no: data.pjk_no || '',
+      pjk_tahun: data.pjk_tahun || '',
+      pjk_tanggal: data.pjk_tanggal
+        ? formatEditDate(new Date(data.pjk_tanggal))
         : '',
-      lhkp_id_attachment: data.lhkp_id_attachment || '',
+      pjk_id_attachment: data.pjk_id_attachment || '',
     });
   }, [data]);
-
-  useEffect(() => {
-    return () => {
-      localStorage.removeItem('idContent');
-    };
-  }, []);
 
   return loading ? (
     <div className="flex items-center justify-center h-[70vh]">
@@ -123,27 +124,32 @@ const FormAkta = () => {
   ) : (
     <>
       <form onSubmit={formik.handleSubmit}>
+        <InputForm
+          label="Jenis Laporan Pajak"
+          type="text"
+          {...formik.getFieldProps('pjk_jenis')}
+          error={formik.touched.pjk_jenis && formik.errors.pjk_jenis}
+        />
+        <InputForm
+          label="Nomor Bukti Penerimaan Pajak"
+          type="text"
+          {...formik.getFieldProps('pjk_no')}
+          error={formik.touched.pjk_no && formik.errors.pjk_no}
+        />
         <div className="grid md:grid-cols-2 md:gap-6">
           <InputForm
-            label="No Akta"
+            label="Tahun Masa Pajak"
             type="text"
-            {...formik.getFieldProps('lhkp_no')}
-            error={formik.touched.lhkp_no && formik.errors.lhkp_no}
+            {...formik.getFieldProps('pjk_tahun')}
+            error={formik.touched.pjk_tahun && formik.errors.pjk_tahun}
           />
-
           <InputForm
-            label="Tanggal Akta"
+            label="Tanggal Bukti Penerimaan Pajak"
             type="date"
-            {...formik.getFieldProps('lhkp_tanggal')}
-            error={formik.touched.lhkp_tanggal && formik.errors.lhkp_tanggal}
+            {...formik.getFieldProps('pjk_tanggal')}
+            error={formik.touched.pjk_tanggal && formik.errors.pjk_tanggal}
           />
         </div>
-        <InputForm
-          label="Nama Notaris"
-          type="text"
-          {...formik.getFieldProps('lhkp_notaris')}
-          error={formik.touched.lhkp_notaris && formik.errors.lhkp_notaris}
-        />
         <div className="my-10">
           <button
             type="button"
@@ -152,10 +158,10 @@ const FormAkta = () => {
           >
             Upload File
           </button>
-          {formik.touched.lhkp_id_attachment &&
-            formik.errors.lhkp_id_attachment && (
+          {formik.touched.pjk_id_attachment &&
+            formik.errors.pjk_id_attachment && (
               <p className="mt-2 text-sm text-center text-red-500 ">
-                {formik.errors.lhkp_id_attachment}
+                {formik.errors.pjk_id_attachment}
               </p>
             )}
         </div>
@@ -184,11 +190,11 @@ const FormAkta = () => {
       {showModal && (
         <FileUpload
           close={handleCloseModal}
-          Id={isEdit ? data.lhkp_id_attachment : lhkpId}
+          Id={isEdit ? data.pjk_id_attachment : pjkId}
         />
       )}
     </>
   );
 };
 
-export default FormAkta;
+export default FormPajak;

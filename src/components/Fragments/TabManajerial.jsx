@@ -5,7 +5,7 @@ import { useDebounce } from 'use-debounce';
 import { Link, useNavigate } from 'react-router-dom';
 import { SkeletonItem } from '../Elements/Skelekton';
 import Pagination from '../Elements/Pagination';
-import { FaPersonDigging } from 'react-icons/fa6';
+import { FaUserTie } from 'react-icons/fa';
 import DataEmpty from '../Elements/DataEmpty';
 import { Tooltip } from '../Elements/Tooltip';
 import { FiEdit } from 'react-icons/fi';
@@ -160,7 +160,7 @@ const TabManajerial = () => {
                 {dataLength === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
-                      colSpan="7"
+                      colSpan="6"
                       className="px-6 py-4 italic font-semibold text-center"
                     >
                       Data Izin tidak ditemukan
@@ -220,8 +220,8 @@ const TabManajerial = () => {
               value={showItem}
               onChange={handleShowData}
             >
-              {dataLength === 0 ? (
-                <option value={0}>0</option>
+              {dataLength <= 10 ? (
+                <option value={dataLength}>{dataLength}</option>
               ) : (
                 <>
                   <option value={10}>10</option>
@@ -236,7 +236,7 @@ const TabManajerial = () => {
               dari {dataLength} data
             </p>
           </div>
-          {dataLength !== 0 && (
+          {dataLength > 10 && (
             <Pagination
               currentPage={currentPage}
               onPageChange={handlePageChange}
@@ -260,7 +260,7 @@ const TabManajerial = () => {
       <div className="flex items-center flex-col justify-center h-[50vh]">
         <DataEmpty
           title="Akta"
-          icon={<FaPersonDigging size="12rem" className="mb-4 text-gray-400" />}
+          icon={<FaUserTie size="12rem" className="mb-4 text-gray-400" />}
         />
         <Link
           to="/tambah-akta"

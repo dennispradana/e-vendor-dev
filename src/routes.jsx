@@ -31,6 +31,17 @@ import UpdateAkta from './pages/penyedia/updateAkta';
 import Manajerial from './pages/penyedia/dataPenyedia/manajerial';
 import AddManajerial from './pages/penyedia/addManajerial';
 import UpdateManajerial from './pages/penyedia/updateManajerial';
+import TenagaAhli from './pages/penyedia/dataPenyedia/tenagaAhli';
+import AddTenagaAhli from './pages/penyedia/addTenagaAhli';
+import Pengalaman from './pages/penyedia/dataPenyedia/pengalaman';
+import AddPengalaman from './pages/penyedia/addPengalaman';
+import Peralatan from './pages/penyedia/dataPenyedia/peralatan';
+import AddPeralatan from './pages/penyedia/addPeralatan';
+import Pajak from './pages/penyedia/dataPenyedia/pajak';
+import AddPajak from './pages/penyedia/addPajak';
+import UpdatePajak from './pages/penyedia/updatePajak';
+import UpdatePengalaman from './pages/penyedia/updatePengalaman';
+import UpdatePeralatan from './pages/penyedia/updatePeralatan';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -67,6 +78,10 @@ const AppRoute = () => {
 
               <Route path="akta" element={<Akta />} />
               <Route path="manajerial" element={<Manajerial />} />
+              <Route path="sdm" element={<TenagaAhli />} />
+              <Route path="pengalaman" element={<Pengalaman />} />
+              <Route path="peralatan" element={<Peralatan />} />
+              <Route path="pajak" element={<Pajak />} />
             </Route>
             <Route path="/tambah-izin-usaha" element={<AddIzinUsaha />} />
             <Route
@@ -79,6 +94,26 @@ const AppRoute = () => {
             <Route
               path="/edit-manajerial/:penyediaManajerId"
               element={<UpdateManajerial />}
+            />
+            <Route path="/tambah-sdm" element={<AddTenagaAhli />} />
+            <Route
+              path="/edit-sdm/:penyediaStpId"
+              element={<AddTenagaAhli />}
+            />
+            <Route path="/tambah-pengalaman" element={<AddPengalaman />} />
+            <Route
+              path="/edit-pengalaman/:penyediaPenId"
+              element={<UpdatePengalaman />}
+            />
+            <Route path="/tambah-peralatan" element={<AddPeralatan />} />
+            <Route
+              path="/edit-peralatan/:penyediaPrlId"
+              element={<UpdatePeralatan />}
+            />
+            <Route path="/tambah-pajak" element={<AddPajak />} />
+            <Route
+              path="/edit-pajak/:penyediaPjkId"
+              element={<UpdatePajak />}
             />
           </Route>
         </Route>
