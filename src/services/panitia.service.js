@@ -31,6 +31,7 @@ export const panitiaService = () => {
       throw new Error('Gagal Menambah Data anggota');
     }
   };
+  
   const deleteAnggotaPanitia = async (pegawaiId, panitiaId) => {
     try {
       const response = await api.get(
