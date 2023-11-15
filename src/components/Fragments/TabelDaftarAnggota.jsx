@@ -16,6 +16,7 @@ const initialState = {
   showItem: 10,
 };
 
+
 const TabelDaftarAnggota = ({ close, pntId, onUpdate, selectedAnggota }) => {
   const [state, setState] = useState(initialState);
   const { datas, search, dataLength, currentPage, showItem, totalPages } =
@@ -58,6 +59,7 @@ const TabelDaftarAnggota = ({ close, pntId, onUpdate, selectedAnggota }) => {
     };
     fetchData();
   }, [showItem, currentPage, debaouceSearch, selectedAnggota]);
+
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value;

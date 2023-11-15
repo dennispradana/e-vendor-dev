@@ -59,6 +59,7 @@ const Panitia = () => {
     setShowModal(!showModal);
   };
 
+
   const PanitiaData = () => {
     return (
       <>
