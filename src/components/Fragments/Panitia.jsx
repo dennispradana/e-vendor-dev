@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { panitiaService } from '../../services/panitia.service';
 import { Link, useParams } from 'react-router-dom';
-import { toasterror } from '../../utils/ToastMessage';
+import { toasterror, toastsuccess } from '../../utils/ToastMessage';
 import { SkeletonItem } from '../Elements/Skelekton';
 import { HiOutlinePencilSquare } from 'react-icons/hi2';
 import TabelDaftarAnggota from './TabelDaftarAnggota';
+import { BsFillTrashFill } from 'react-icons/bs';
 
 const Panitia = () => {
   const [data, setData] = useState('');
-  const { editPanitia } = panitiaService();
+  const { editPanitia, deleteAnggotaPanitia } = panitiaService();
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { panitiaId } = useParams();
 
@@ -27,6 +29,20 @@ const Panitia = () => {
 
   const handleDataUpadate = async () => {
     await fetchData();
+  };
+
+  const handleDelete = async (pegId, pntId) => {
+    try {
+      const response = await deleteAnggotaPanitia(pegId, pntId);
+      if (response.status === 201) {
+        toastsuccess(response.data.data);
+        handleDataUpadate();
+      } else {
+        toasterror(response.data.data);
+      }
+    } catch (error) {
+      toasterror(error.message);
+    }
   };
 
   useEffect(() => {
@@ -134,13 +150,14 @@ const Panitia = () => {
                   <th className="px-4 py-3 border border-gray-200">No</th>
                   <th className="px-4 py-3 border border-gray-200">Nama</th>
                   <th className="px-4 py-3 border border-gray-200">User ID</th>
+                  <th className="px-4 py-3 border border-gray-200">Aksi</th>
                 </tr>
               </thead>
               <tbody className="overflow-y-auto ">
                 {data.pegawai.length === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
-                      colSpan="3"
+                      colSpan="4"
                       className="px-6 py-4 italic font-semibold text-center"
                     >
                       belum ada anggota
@@ -161,6 +178,24 @@ const Panitia = () => {
                       <td className="px-3 py-4 capitalize">{item.peg_nama}</td>
                       <td className="px-3 py-4 capitalize">
                         {item.peg_namauser}
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <button
+                          onClick={() => {
+                            if (!deleting) {
+                              setDeleting(true);
+                              handleDelete(item.peg_id, data.pnt_id).then(() =>
+                                setDeleting(false)
+                              );
+                            }
+                          }}
+                          className={`mr-2 font-semibold text-blue-500 hover:text-red-500 ${
+                            deleting ? 'cursor-not-allowed' : ''
+                          }`}
+                          disabled={deleting}
+                        >
+                          <BsFillTrashFill size="1.2rem" />
+                        </button>
                       </td>
                     </tr>
                   ))

@@ -14,20 +14,12 @@ const initialState = {
   currentPage: 1,
   totalPages: 1,
   showItem: 10,
-  userGruop: 'PP',
 };
 
 const TabelDaftarAnggota = ({ close, pntId, onUpdate }) => {
   const [state, setState] = useState(initialState);
-  const {
-    datas,
-    search,
-    dataLength,
-    currentPage,
-    showItem,
-    totalPages,
-    userGruop,
-  } = state;
+  const { datas, search, dataLength, currentPage, showItem, totalPages } =
+    state;
   const [loading, setLoading] = useState(true);
   const { getAnggotaPanitia, postAnggotaPanitia } = panitiaService();
   const [debaouceSearch] = useDebounce(search, 2000);
@@ -37,7 +29,6 @@ const TabelDaftarAnggota = ({ close, pntId, onUpdate }) => {
     const fetchData = async () => {
       try {
         const response = await getAnggotaPanitia(
-          userGruop,
           showItem,
           currentPage,
           debaouceSearch
@@ -55,7 +46,7 @@ const TabelDaftarAnggota = ({ close, pntId, onUpdate }) => {
       }
     };
     fetchData();
-  }, [userGruop, showItem, currentPage, debaouceSearch]);
+  }, [showItem, currentPage, debaouceSearch]);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
@@ -63,14 +54,6 @@ const TabelDaftarAnggota = ({ close, pntId, onUpdate }) => {
       ...prev,
       search: searchTerm,
       currentPage: 1,
-    }));
-  };
-
-  const handleUserGroup = (e) => {
-    const user = e.target.value;
-    setState((prev) => ({
-      ...prev,
-      userGruop: user,
     }));
   };
 
@@ -188,22 +171,6 @@ const TabelDaftarAnggota = ({ close, pntId, onUpdate }) => {
                 autoFocus
               />
             </div>
-          </div>
-          <div>
-            <label className="mr-2 text-sm italic font-semibold capitalize">
-              User ditampilkan
-            </label>
-            <select
-              className="px-3 py-1 cursor-pointer"
-              value={userGruop}
-              onChange={handleUserGroup}
-            >
-              <option value="PP">Pejabat Pengadaan</option>
-              <option value="KIPBJ">
-                Kepala Instansi Pejabat Pembuat Komitmen
-              </option>
-              <option value="PPK">Pejabat Pembuat Komitmen</option>
-            </select>
           </div>
         </div>
         <div className="relative flex flex-col overflow-x-auto rounded-lg">
