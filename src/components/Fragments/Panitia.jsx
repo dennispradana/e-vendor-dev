@@ -9,6 +9,7 @@ import { BsFillTrashFill } from 'react-icons/bs';
 
 const Panitia = () => {
   const [data, setData] = useState('');
+  const [anggota, setAnggota] = useState([]);
   const { editPanitia, deleteAnggotaPanitia } = panitiaService();
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
@@ -20,6 +21,11 @@ const Panitia = () => {
       const response = await editPanitia(panitiaId);
       const dataPanitia = response.data;
       setData(dataPanitia);
+      setAnggota(
+        dataPanitia.pegawai.map((item) => ({
+          peg_id: item.peg_id,
+        }))
+      );
     } catch (error) {
       toasterror(error.message);
     } finally {
@@ -52,8 +58,6 @@ const Panitia = () => {
   const handleModal = () => {
     setShowModal(!showModal);
   };
-
-  console.log(data);
 
   const PanitiaData = () => {
     return (
@@ -237,6 +241,7 @@ const Panitia = () => {
           close={handleModal}
           pntId={data.pnt_id}
           onUpdate={handleDataUpadate}
+          selectedAnggota={anggota}
         />
       )}
     </>

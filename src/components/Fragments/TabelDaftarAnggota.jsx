@@ -16,12 +16,12 @@ const initialState = {
   showItem: 10,
 };
 
-const TabelDaftarAnggota = ({ close, pntId, onUpdate }) => {
+const TabelDaftarAnggota = ({ close, pntId, onUpdate, selectedAnggota }) => {
   const [state, setState] = useState(initialState);
   const { datas, search, dataLength, currentPage, showItem, totalPages } =
     state;
   const [loading, setLoading] = useState(true);
-  const { getAnggotaPanitia, postAnggotaPanitia } = panitiaService();
+  const { getAnggotaPanitia, updateAnggotaPanitia } = panitiaService();
   const [debaouceSearch] = useDebounce(search, 2000);
   const navigate = useNavigate();
 
@@ -39,6 +39,17 @@ const TabelDaftarAnggota = ({ close, pntId, onUpdate }) => {
           dataLength: response.data.total,
           totalPages: Math.ceil(response.data.total / state.showItem),
         }));
+        const selectedData = response.data.data
+          .filter((item) =>
+            selectedAnggota.some(
+              (selectedItem) => selectedItem.peg_id === item.peg_id
+            )
+          )
+          .map((item) => ({
+            peg_id: item.peg_id,
+          }));
+
+        formik.setFieldValue('anggota', selectedData);
       } catch (error) {
         toasterror(error.message);
       } finally {
@@ -46,7 +57,7 @@ const TabelDaftarAnggota = ({ close, pntId, onUpdate }) => {
       }
     };
     fetchData();
-  }, [showItem, currentPage, debaouceSearch]);
+  }, [showItem, currentPage, debaouceSearch, selectedAnggota]);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
@@ -75,16 +86,13 @@ const TabelDaftarAnggota = ({ close, pntId, onUpdate }) => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      let response;
-      let message;
-
-      response = await postAnggotaPanitia(pntId, values);
-      message = 'Berhasil menambah Anggota';
+      const response = await updateAnggotaPanitia(pntId, values);
+      const message = 'Berhasil menambah Anggota';
       if (response) {
         toastsuccess(message);
-        navigate(`/daftar-panitia/detail/${pntId}`);
         onUpdate();
         close();
+        navigate(`/daftar-panitia/detail/${pntId}`);
       } else {
         toasterror('Terjadi kesalahan saat menyimpan data.');
       }
