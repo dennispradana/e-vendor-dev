@@ -13,7 +13,11 @@ const SideBar = () => {
       { label: 'daftar pegawai', link: '/daftar-pegawai' },
       { label: 'daftar penyedia', link: '/daftar-penyedia' },
     ],
-    KIPBJ: [{ label: 'dashboard', link: '/dashboard' }],
+    KIPBJ: [
+      { label: 'dashboard', link: '/dashboard' },
+      { label: 'daftar panitia', link: '/daftar-panitia' },
+      { label: 'daftar pejabat pengadaan', link: '/daftar-pp' },
+    ],
     PP: [{ label: 'dashboard', link: '/dashboard' }],
     PPK: [{ label: 'dashboard', link: '/dashboard' }],
     RKN: [
