@@ -23,21 +23,20 @@ export const panitiaService = () => {
     }
   };
 
-  const postAnggotaPanitia = async (panitiaId, dataPanitia) => {
+  const updateAnggotaPanitia = async (panitiaId, dataPanitia) => {
     try {
-      const response = await api.post(`/v1/anggota/${panitiaId}`, dataPanitia);
+      const response = await api.put(`/v1/anggota/${panitiaId}`, dataPanitia);
       return response.data;
     } catch (error) {
       throw new Error('Gagal Menambah Data anggota');
     }
   };
-  
+
   const deleteAnggotaPanitia = async (pegawaiId, panitiaId) => {
     try {
       const response = await api.get(
         `/v1/anggota?peg_id=${pegawaiId}&pnt_id=${panitiaId}`
       );
-      console.log(response);
       return response;
     } catch (error) {
       throw new Error('Gagal Menambah Data anggota');
@@ -77,7 +76,7 @@ export const panitiaService = () => {
     editPanitia,
     updatePanitia,
     getAnggotaPanitia,
-    postAnggotaPanitia,
+    updateAnggotaPanitia,
     deleteAnggotaPanitia,
   };
 };
