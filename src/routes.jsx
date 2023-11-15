@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuthContext } from './contexts/AuthContext';
 import {
   AdminAcces,
+  KipbjAccess,
   PenyediaAcces,
   ProtectedRoute,
 } from './utils/PrivateRoute';
@@ -42,6 +43,10 @@ import AddPajak from './pages/penyedia/addPajak';
 import UpdatePajak from './pages/penyedia/updatePajak';
 import UpdatePengalaman from './pages/penyedia/updatePengalaman';
 import UpdatePeralatan from './pages/penyedia/updatePeralatan';
+import ListPanitia from './pages/pegawai/kipbj/listPanitia';
+import UpdatePanitia from './pages/pegawai/kipbj/updatePanita';
+import AddPanitia from './pages/pegawai/kipbj/addPanitia';
+import DetailPanitia from './pages/pegawai/kipbj/detailPanitia';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -115,6 +120,18 @@ const AppRoute = () => {
               path="/edit-pajak/:penyediaPjkId"
               element={<UpdatePajak />}
             />
+          </Route>
+          <Route element={<KipbjAccess />}>
+            <Route path="/daftar-panitia" element={<ListPanitia />} />
+            <Route
+              path="/daftar-panitia/detail/:panitiaId"
+              element={<DetailPanitia />}
+            />
+            <Route
+              path="/daftar-panitia/edit/:panitiaId"
+              element={<UpdatePanitia />}
+            />
+            <Route path="/tambah-panitia" element={<AddPanitia />} />
           </Route>
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
