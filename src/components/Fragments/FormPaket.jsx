@@ -48,16 +48,6 @@ const FormPaket = () => {
     },
     {
       paket: {
-        lls_kontrak_pekerjaan: '',
-      },
-      dok_persiapan: {
-        dp_spek: '',
-        dp_sskk: '',
-        dp_lainya: '',
-      },
-    },
-    {
-      paket: {
         pkt_hps: '',
       },
       dok_persiapan: {
@@ -72,6 +62,16 @@ const FormPaket = () => {
             keterangan: '',
           },
         ],
+      },
+    },
+    {
+      paket: {
+        lls_kontrak_pekerjaan: '',
+      },
+      dok_persiapan: {
+        dp_spek: '',
+        dp_sskk: '',
+        dp_lainya: '',
       },
     },
   ];
@@ -91,14 +91,6 @@ const FormPaket = () => {
     }),
     Yup.object({
       paket: Yup.object({
-        lls_kontrak_pekerjaan: Yup.string().required('harus diisi'),
-      }),
-      dok_persiapan: Yup.object({
-        dp_spek: Yup.string().required('harus diisi'),
-      }),
-    }),
-    Yup.object({
-      paket: Yup.object({
         pkt_hps: Yup.string()
           .test(
             'data tidak boleh kosong',
@@ -108,6 +100,14 @@ const FormPaket = () => {
             }
           )
           .required('data tidak boleh kosong'),
+      }),
+    }),
+    Yup.object({
+      paket: Yup.object({
+        lls_kontrak_pekerjaan: Yup.string().required('harus diisi'),
+      }),
+      dok_persiapan: Yup.object({
+        dp_spek: Yup.string().required('harus diisi'),
       }),
     }),
   ];
@@ -256,6 +256,8 @@ const FormPaket = () => {
           />
         );
       case 2:
+        return <FormHPS formik={formik} dataPaket={dataPaket} />;
+      case 3:
         return (
           <FormDokumenPengadaan
             formik={formik}
@@ -264,8 +266,7 @@ const FormPaket = () => {
             handleModalIL={handleOpenModaIL}
           />
         );
-      case 3:
-        return <FormHPS formik={formik} dataPaket={dataPaket} />;
+
       default:
         return null;
     }

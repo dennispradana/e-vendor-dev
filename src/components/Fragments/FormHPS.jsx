@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { formatRp } from '../../utils/formatRupiah';
 import * as XLSX from 'xlsx';
+import { fileService } from '../../services/file.service';
+import { toasterror, toastsuccess } from '../../utils/ToastMessage';
 
 const FormHPS = ({ formik, dataPaket }) => {
   const initialData = Array.from({ length: 5 }, () => ({
@@ -14,6 +16,7 @@ const FormHPS = ({ formik, dataPaket }) => {
   }));
   const [data, setData] = useState(initialData);
   const fileInputRef = useRef(null);
+  const { downloadTemplate } = fileService();
 
   useEffect(() => {
     if (
@@ -105,17 +108,45 @@ const FormHPS = ({ formik, dataPaket }) => {
     reader.readAsArrayBuffer(file);
   };
 
+  const handleDownload = async () => {
+    try {
+      const response = await downloadTemplate();
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'template-rincian.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      if (response.status === 200) {
+        toastsuccess('File Berhasil Diunduh');
+      } else {
+        toasterror('Gagal mengunduh file');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    }
+  };
+
   return (
     <>
-      <button className="py-6" type="button">
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".xlsx, .xls"
-          onChange={handleExcelImport}
-          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-slate-50 hover:file:bg-blue-700 bg-gray-50"
-        />
-      </button>
+      <div className="flex items-center gap-4">
+        <button
+          className="px-4 py-2 text-sm font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+          onClick={handleDownload}
+          type="button"
+        >
+          Download File
+        </button>
+        <button className="py-6" type="button">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".xlsx, .xls"
+            onChange={handleExcelImport}
+            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-slate-50 hover:file:bg-blue-700 bg-gray-50"
+          />
+        </button>
+      </div>
       <div className="relative overflow-x-auto">
         <table className="w-full text-xs text-left border border-collapse rounded-lg">
           <thead>
