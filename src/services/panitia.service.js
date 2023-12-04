@@ -15,7 +15,7 @@ export const panitiaService = () => {
   const getAnggotaPanitia = async (lenght, page, search) => {
     try {
       const response = await api.get(
-        `/v1/pegawai/PP?length=${lenght}&page=${page}&q=${search}`
+        `/v1/list_pegawai/PP?length=${lenght}&page=${page}&q=${search}`
       );
       return response.data;
     } catch (error) {
