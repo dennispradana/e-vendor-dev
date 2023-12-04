@@ -30,7 +30,7 @@ const FormPaket = () => {
   const [dpSpekId, setDpSpekId] = useState('');
   const [dpSskkId, setDpSskkId] = useState('');
   const [dpLainId, setLainId] = useState('');
-  const steps = ['Data Paket', 'Dokumen Persiapan', 'HPS'];
+  const steps = ['Data Paket', 'HPS', 'Dokumen Persiapan'];
   const navigate = useNavigate();
 
   const initialStepValues = [
