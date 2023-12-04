@@ -37,6 +37,17 @@ export const fileService = () => {
     }
   };
 
+  const downloadTemplate = async () => {
+    try {
+      const response = await api.get('/template', {
+        responseType: 'blob',
+      });
+      return response;
+    } catch (error) {
+      throw new Error('terjadi kesalahaan saat mengunduh File');
+    }
+  };
+
   const deleteFile = async (idContent, versi) => {
     try {
       const response = await api.get(
@@ -48,5 +59,5 @@ export const fileService = () => {
     }
   };
 
-  return { postFile, getFile, downloadFile, deleteFile };
+  return { postFile, getFile, downloadFile, deleteFile, downloadTemplate };
 };

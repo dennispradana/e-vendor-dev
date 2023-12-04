@@ -19,7 +19,10 @@ const SideBar = () => {
       { label: 'daftar pejabat pengadaan', link: '/daftar-pp' },
     ],
     PP: [{ label: 'dashboard', link: '/dashboard' }],
-    PPK: [{ label: 'dashboard', link: '/dashboard' }],
+    PPK: [
+      { label: 'dashboard', link: '/dashboard' },
+      { label: 'daftar paket', link: '/daftar-paket' },
+    ],
     RKN: [
       { label: 'dashboard', link: '/dashboard' },
       { label: 'data penyedia', link: '/data-penyedia' },
