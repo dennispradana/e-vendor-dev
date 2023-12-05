@@ -6,6 +6,7 @@ import {
   AdminAcces,
   KipbjAccess,
   PenyediaAcces,
+  PpkAccess,
   ProtectedRoute,
 } from './utils/PrivateRoute';
 import { ToastContainer } from 'react-toastify';
@@ -47,6 +48,8 @@ import ListPanitia from './pages/pegawai/kipbj/listPanitia';
 import UpdatePanitia from './pages/pegawai/kipbj/updatePanita';
 import AddPanitia from './pages/pegawai/kipbj/addPanitia';
 import DetailPanitia from './pages/pegawai/kipbj/detailPanitia';
+import ListPaket from './pages/pegawai/ppk/listPaket';
+import UpdatePaket from './pages/pegawai/ppk/updatePaket';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -132,6 +135,10 @@ const AppRoute = () => {
               element={<UpdatePanitia />}
             />
             <Route path="/tambah-panitia" element={<AddPanitia />} />
+          </Route>
+          <Route element={<PpkAccess />}>
+            <Route path="/daftar-paket" element={<ListPaket />} />
+            <Route path="/daftar-paket/:paketId" element={<UpdatePaket />} />
           </Route>
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />

@@ -67,3 +67,22 @@ export const KipbjAccess = ({ redirectPath = '/unauthorized' }) => {
 
   return <Outlet />;
 };
+
+export const PpkAccess = ({ redirectPath = '/unauthorized' }) => {
+  const { user, loading } = useAuthContext();
+
+  if (loading) {
+    return (
+      <MainLayouts>
+        <div className="flex items-center justify-center h-[80vh]">
+          <Spinner />
+        </div>
+      </MainLayouts>
+    );
+  }
+  if (!user || user.role !== 'PPK') {
+    return <Navigate to={redirectPath} replace />;
+  }
+
+  return <Outlet />;
+};

@@ -61,7 +61,6 @@ const FormPegawai = () => {
       if (isEdit) {
         response = await updatePegawai(pegawaiId, mappedValues);
         message = 'Update Sukses';
-        navigate('/daftar-pegawai');
       } else {
         response = await postPegawai(mappedValues);
         message = 'Submit Sukses';
@@ -70,6 +69,7 @@ const FormPegawai = () => {
 
       if (response) {
         toastsuccess(message);
+        navigate('/daftar-pegawai');
       } else {
         toasterror('Terjadi kesalahan saat menyimpan data.');
       }
