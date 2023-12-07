@@ -60,6 +60,8 @@ const FormPaketPJB = () => {
     fetchDataPaket();
   }, []);
 
+  console.log(dataPaket);
+
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       await updateDataPaket(paketId, values);
@@ -220,16 +222,12 @@ const FormPaketPJB = () => {
               <button
                 type="button"
                 className={`px-4 py-2 font-semibold text-white capitalize transition duration-200 ease-in-out bg-blue-500 cursor-pointer rounded-xl hover:bg-blue-700 hover:text-white ${
-                  dataPaket.paket.pnt_id === null &&
-                  dataPaket.paket.pp_id === null
+                  dataPaket.pp === null && dataPaket.panitia === null
                     ? 'opacity-50'
                     : ''
                 }`}
                 onClick={handleLelang}
-                disabled={
-                  dataPaket.paket.pnt_id === null &&
-                  dataPaket.paket.pp_id === null
-                }
+                disabled={dataPaket.pp === null && dataPaket.panitia === null}
               >
                 Selesai
               </button>

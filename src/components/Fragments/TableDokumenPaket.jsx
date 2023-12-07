@@ -34,32 +34,7 @@ const TableDokumenPaket = ({
     const mtdPemilihan = data.paket.mtd_pemilihan;
     switch (mtdPemilihan) {
       case '0':
-        if (data.paket.pnt_id === null) {
-          return (
-            <button
-              type="button"
-              className="w-full px-4 py-1 font-bold text-white duration-200 ease-in bg-green-500 rounded-lg hover:bg-green-600"
-              onClick={handlePilihPanitia}
-            >
-              Pilih Panitia
-            </button>
-          );
-        } else {
-          return (
-            <div className="flex items-center justify-center gap-4">
-              <p className="text-sm uppercase">{data.panitia.pnt_nama}</p>
-              <button
-                type="button"
-                className="px-2 py-1 text-white duration-200 ease-in bg-gray-500 rounded-md hover:bg-gray-600"
-                onClick={handlePilihPanitia}
-              >
-                Ganti
-              </button>
-            </div>
-          );
-        }
-      case '1':
-        if (data.paket.pp_id === null) {
+        if (data.pp === null) {
           return (
             <button
               type="button"
@@ -77,6 +52,31 @@ const TableDokumenPaket = ({
                 type="button"
                 className="px-2 py-1 text-white duration-200 ease-in bg-gray-500 rounded-md hover:bg-gray-600"
                 onClick={handlePilihPegawai}
+              >
+                Ganti
+              </button>
+            </div>
+          );
+        }
+      case '1':
+        if (data.panitia === null) {
+          return (
+            <button
+              type="button"
+              className="w-full px-4 py-1 font-bold text-white duration-200 ease-in bg-green-500 rounded-lg hover:bg-green-600"
+              onClick={handlePilihPanitia}
+            >
+              Pilih Panitia
+            </button>
+          );
+        } else {
+          return (
+            <div className="flex items-center justify-center gap-4">
+              <p className="text-sm uppercase">{data.panitia.pnt_nama}</p>
+              <button
+                type="button"
+                className="px-2 py-1 text-white duration-200 ease-in bg-gray-500 rounded-md hover:bg-gray-600"
+                onClick={handlePilihPanitia}
               >
                 Ganti
               </button>
