@@ -60,8 +60,6 @@ const FormPaketPJB = () => {
     fetchDataPaket();
   }, []);
 
-  console.log(dataPaket);
-
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       await updateDataPaket(paketId, values);
