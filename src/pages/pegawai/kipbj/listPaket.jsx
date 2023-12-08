@@ -1,15 +1,15 @@
 import React from 'react';
+import TableListPaketPJB from '../../../components/Fragments/TableListPaketPJB';
 import MainLayouts from '../../../components/Layouts/MainLayouts';
-import TableListPP from '../../../components/Fragments/TableListPP';
 
-const ListPejabatPengadaan = () => {
+const ListPaketPJB = () => {
   return (
     <MainLayouts>
       <div className="relative">
-        <TableListPP />
+        <TableListPaketPJB />
       </div>
     </MainLayouts>
   );
 };
 
-export default ListPejabatPengadaan;
+export default ListPaketPJB;

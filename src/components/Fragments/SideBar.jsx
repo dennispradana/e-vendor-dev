@@ -15,8 +15,9 @@ const SideBar = () => {
     ],
     KIPBJ: [
       { label: 'dashboard', link: '/dashboard' },
+      { label: 'daftar paket', link: '/paket' },
       { label: 'daftar panitia', link: '/daftar-panitia' },
-      { label: 'daftar pejabat pengadaan', link: '/daftar-pp' },
+      // { label: 'daftar pejabat pengadaan', link: '/daftar-pp' },
     ],
     PP: [{ label: 'dashboard', link: '/dashboard' }],
     PPK: [
