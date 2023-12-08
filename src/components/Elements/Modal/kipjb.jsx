@@ -901,7 +901,7 @@ export const ModalPegawai = ({ close, paket, updateData }) => {
                             close();
                           }}
                         >
-                          Pilih Panitia
+                          Pilih Pegawai
                         </button>
                       </td>
                     </tr>
