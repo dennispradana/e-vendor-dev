@@ -44,6 +44,12 @@ const FormDokumenPengadaan = ({
       <div className="flex items-center justify-between mb-6 text-sm">
         <div>
           <label>Rancangan Kontrak</label>
+          {formik.touched.dok_persiapan?.dp_sskk_attachment &&
+            formik.errors.dok_persiapan?.dp_sskk_attachment && (
+              <p className="mt-2 text-sm italic text-red-500">
+                {formik.errors.dok_persiapan?.dp_sskk_attachment}
+              </p>
+            )}
         </div>
         <div className="px-10">
           <button

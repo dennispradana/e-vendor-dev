@@ -33,6 +33,18 @@ const FormPaket = () => {
   const steps = ['Data Paket', 'HPS', 'Dokumen Persiapan'];
   const navigate = useNavigate();
 
+  const fetchDataPaket = async () => {
+    try {
+      const response = await getDataPaket(paketId);
+      const paket = response.data;
+      setDataPaket(paket);
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const initialStepValues = [
     {
       paket: {
@@ -70,7 +82,7 @@ const FormPaket = () => {
       },
       dok_persiapan: {
         dp_spek: '',
-        dp_sskk: '',
+        dp_sskk_attachment: '',
         dp_lainya: '',
       },
     },
@@ -93,12 +105,19 @@ const FormPaket = () => {
       paket: Yup.object({
         pkt_hps: Yup.string()
           .test(
-            'data tidak boleh kosong',
-            'data tidak boleh kosong',
-            (value) => {
-              return value !== '' && parseFloat(value) !== 0;
+            'validasi-hps',
+            'hps tidak boleh lebih besar dari pagu',
+            async function (value) {
+              const response = await getDataPaket(paketId);
+              const dataPaket = response.data;
+              const pkt_pagu = parseFloat(dataPaket.paket.pkt_pagu);
+
+              return !value || parseFloat(value) <= pkt_pagu;
             }
           )
+          .test('validasi-data-kosong', 'data tidak boleh kosong', (value) => {
+            return value !== '' && parseFloat(value) !== 0;
+          })
           .required('data tidak boleh kosong'),
       }),
     }),
@@ -108,21 +127,10 @@ const FormPaket = () => {
       }),
       dok_persiapan: Yup.object({
         dp_spek: Yup.string().required('harus diisi'),
+        dp_sskk_attachment: Yup.string().required('harus diisi'),
       }),
     }),
   ];
-
-  const fetchDataPaket = async () => {
-    try {
-      const response = await getDataPaket(paketId);
-      const paket = response.data;
-      setDataPaket(paket);
-    } catch (error) {
-      toasterror(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -154,7 +162,7 @@ const FormPaket = () => {
       })),
       dok_persiapan: {
         dp_spek: dataPaket.dok_persiapan?.dp_spek || '',
-        dp_sskk: dataPaket.dok_persiapan?.dp_sskk || '',
+        dp_sskk_attachment: dataPaket.dok_persiapan?.dp_sskk_attachment || '',
         dp_lainya: dataPaket.dok_persiapan?.dp_lainya || '',
         dp_dkh: dataPaket.dok_persiapan?.dp_dkh?.map((item) => ({
           item: item.item || '',
@@ -231,7 +239,10 @@ const FormPaket = () => {
   const handleCloseModalRK = (dpSskkIdAttachment) => {
     setShowModalRK(false);
     setDpSskkId(dpSskkIdAttachment);
-    formik.setFieldValue('dok_persiapan.dp_sskk', dpSskkIdAttachment);
+    formik.setFieldValue(
+      'dok_persiapan.dp_sskk_attachment',
+      dpSskkIdAttachment
+    );
   };
 
   const handleOpenModaIL = () => {
@@ -347,8 +358,8 @@ const FormPaket = () => {
         <FileUploadRK
           close={handleCloseModalRK}
           Id={
-            dataPaket.dok_persiapan?.dp_sskk !== null
-              ? dataPaket.dok_persiapan?.dp_sskk
+            dataPaket.dok_persiapan?.dp_sskk_attachment !== null
+              ? dataPaket.dok_persiapan?.dp_sskk_attachment
               : dpSskkId
           }
         />
