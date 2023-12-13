@@ -166,7 +166,7 @@ export const ModalRK = ({ close, data }) => {
   useEffect(() => {
     const getTableFile = async () => {
       try {
-        const response = await getFile(data.dok_persiapan.dp_sskk);
+        const response = await getFile(data.dok_persiapan.dp_sskk_attachment);
         setFiles(response);
       } catch (error) {
         setError('Belum ada file yang diunggah');
@@ -175,7 +175,7 @@ export const ModalRK = ({ close, data }) => {
       }
     };
     getTableFile();
-  }, [data.dok_persiapan.dp_sskk]);
+  }, [data.dok_persiapan.dp_sskk_attachment]);
 
   const handleDownload = async (idContent, versi, fileName) => {
     try {
