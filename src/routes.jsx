@@ -146,6 +146,10 @@ const AppRoute = () => {
             <Route path="/daftar-paket" element={<ListPaket />} />
             <Route path="/daftar-paket/:paketId" element={<UpdatePaket />} />
           </Route>
+          <Route element={<PpkAccess />}>
+            <Route path="/daftar-paket" element={<ListPaket />} />
+            <Route path="/daftar-paket/:paketId" element={<UpdatePaket />} />
+          </Route>
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<NotFound />} />
