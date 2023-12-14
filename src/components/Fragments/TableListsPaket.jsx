@@ -15,6 +15,7 @@ import Button from '../Elements/Button';
 import PaketInisiasi from './PaketInisiasi';
 import Spinner from '../Elements/Spinner';
 import { IoIosClose } from 'react-icons/io';
+import { BsFillTrashFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
 const initialState = {
@@ -133,6 +134,72 @@ const TableListsPaket = () => {
     onSubmit: handleSubmit,
   });
 
+  const renderStatus = (item) => {
+    const statusConfig = {
+      draft: {
+        condition: item.pkt_status === '0',
+        render: (
+          <div className="w-1/2 p-1 bg-yellow-400 rounded-md">
+            <p className="text-center ">Draft</p>
+          </div>
+        ),
+      },
+      process: {
+        condition: item.pkt_status === '1',
+        render: (
+          <div className="w-1/2 p-1 bg-green-400 rounded-md">
+            <p className="text-center ">Proses</p>
+          </div>
+        ),
+      },
+      batal: {
+        condition: item.pkt_status === '2',
+        render: (
+          <div className="w-1/2 p-1 bg-red-400 rounded-md">
+            <p className="text-center ">non-aktif</p>
+          </div>
+        ),
+      },
+    };
+
+    const status = Object.keys(statusConfig).find(
+      (key) => statusConfig[key].condition
+    );
+
+    return status ? statusConfig[status].render : null;
+  };
+
+  const renderButton = (item) => {
+    const statusConfig = {
+      delete: {
+        condition: item.pkt_status === '0',
+        render: (
+          <Tooltip text="delete">
+            <button className="mr-2 text-blue-500 hover:text-red-500">
+              <BsFillTrashFill size="1.2rem" />
+            </button>
+          </Tooltip>
+        ),
+      },
+      addendum: {
+        condition: item.pkt_status === '1',
+        render: (
+          <Tooltip text="Edit">
+            <button className="mr-2 text-blue-500 hover:text-blue-700">
+              <FiEdit size="1.2rem" />
+            </button>
+          </Tooltip>
+        ),
+      },
+    };
+
+    const status = Object.keys(statusConfig).find(
+      (key) => statusConfig[key].condition
+    );
+
+    return status ? statusConfig[status].render : null;
+  };
+
   const TablePaket = () => {
     return (
       <>
@@ -181,16 +248,14 @@ const TableListsPaket = () => {
                           {item.pkt_nama}
                         </Link>
                       </td>
-                      <td className="px-3 py-4 text-center capitalize">-</td>
+                      <td className="flex items-center justify-center px-3 py-4 capitalize">
+                        {renderStatus(item)}
+                      </td>
                       <td className="px-3 py-4 text-center">
                         {formatDate(new Date(item.pkt_tgl_buat))}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <Tooltip text="Edit">
-                          <button className="mr-2 text-blue-500 hover:text-blue-700">
-                            <FiEdit size="1.2rem" />
-                          </button>
-                        </Tooltip>
+                        {renderButton(item)}
                       </td>
                     </tr>
                   ))
