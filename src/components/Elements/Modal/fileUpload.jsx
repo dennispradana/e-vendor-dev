@@ -565,9 +565,7 @@ export const FileUploadKAK = ({ close, Id }) => {
 export const FileUploadRK = ({ close, Id }) => {
   const { postFile, getFile, deleteFile, downloadFile } = fileService();
   const [files, setFiles] = useState([]);
-  const [idContent, setIdContent] = useState(
-    localStorage.getItem('dp_sskk') || Id
-  );
+  const [idContent, setIdContent] = useState(Id);
   const [uploadCount, setUploadCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
@@ -577,9 +575,6 @@ export const FileUploadRK = ({ close, Id }) => {
   const initialValues = {
     file: null,
   };
-  useEffect(() => {
-    localStorage.setItem('dp_sskk', idContent);
-  }, [idContent]);
 
   const validationSchema = Yup.object({
     file: Yup.mixed()
@@ -634,7 +629,6 @@ export const FileUploadRK = ({ close, Id }) => {
         setFiles(response);
         if (response.length === 0) {
           setIdContent('');
-          localStorage.removeItem('dp_sskk');
         }
       } catch (error) {
         toasterror(error.message);
@@ -646,9 +640,6 @@ export const FileUploadRK = ({ close, Id }) => {
   }, [uploadCount, idContent]);
 
   const handleClose = () => {
-    if (files.length === 0) {
-      localStorage.removeItem('dp_sskk');
-    }
     close(files.length > 0 ? idContent : '');
   };
 
@@ -847,9 +838,7 @@ export const FileUploadRK = ({ close, Id }) => {
 export const FileUploadIL = ({ close, Id }) => {
   const { postFile, getFile, deleteFile, downloadFile } = fileService();
   const [files, setFiles] = useState([]);
-  const [idContent, setIdContent] = useState(
-    localStorage.getItem('dp_lainya') || Id
-  );
+  const [idContent, setIdContent] = useState(Id);
   const [uploadCount, setUploadCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
@@ -859,9 +848,6 @@ export const FileUploadIL = ({ close, Id }) => {
   const initialValues = {
     file: null,
   };
-  useEffect(() => {
-    localStorage.setItem('dp_lainya', idContent);
-  }, [idContent]);
 
   const validationSchema = Yup.object({
     file: Yup.mixed()
@@ -916,7 +902,6 @@ export const FileUploadIL = ({ close, Id }) => {
         setFiles(response);
         if (response.length === 0) {
           setIdContent('');
-          localStorage.removeItem('dp_lainya');
         }
       } catch (error) {
         toasterror(error.message);
@@ -928,9 +913,6 @@ export const FileUploadIL = ({ close, Id }) => {
   }, [uploadCount, idContent]);
 
   const handleClose = () => {
-    if (files.length === 0) {
-      localStorage.removeItem('dp_lainya');
-    }
     close(files.length > 0 ? idContent : '');
   };
 

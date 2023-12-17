@@ -87,6 +87,62 @@ const TableListPaketPJB = () => {
     }));
   };
 
+  const renderStatus = (item) => {
+    const statusConfig = {
+      draft: {
+        condition: item.pkt_status === '0',
+        render: (
+          <div className="w-1/2 p-1 bg-yellow-400 rounded-md">
+            <p className="text-center ">Draft</p>
+          </div>
+        ),
+      },
+      process: {
+        condition: item.pkt_status === '1',
+        render: (
+          <div className="w-1/2 p-1 bg-green-400 rounded-md">
+            <p className="text-center ">Proses</p>
+          </div>
+        ),
+      },
+      batal: {
+        condition: item.pkt_status === '2',
+        render: (
+          <div className="w-1/2 p-1 bg-red-400 rounded-md">
+            <p className="text-center ">non-aktif</p>
+          </div>
+        ),
+      },
+    };
+
+    const status = Object.keys(statusConfig).find(
+      (key) => statusConfig[key].condition
+    );
+
+    return status ? statusConfig[status].render : null;
+  };
+
+  const renderDirect = (item) => {
+    const statusConfig = {
+      edit: {
+        condition: item.pkt_status !== '1',
+        render: <Link to={`/paket/${item.pkt_id}`}>{item.pkt_nama}</Link>,
+      },
+      readOnly: {
+        condition: item.pkt_status === '1',
+        render: (
+          <Link to={`/paket/detail/${item.pkt_id}`}>{item.pkt_nama}</Link>
+        ),
+      },
+    };
+
+    const status = Object.keys(statusConfig).find(
+      (key) => statusConfig[key].condition
+    );
+
+    return status ? statusConfig[status].render : null;
+  };
+
   const TablePaket = () => {
     return (
       <>
@@ -166,11 +222,11 @@ const TableListPaketPJB = () => {
                         {entryNumber + index}
                       </th>
                       <td className="px-3 py-4 capitalize hover:text-blue-500">
-                        <Link to={`/paket/${item.pkt_id}`}>
-                          {item.pkt_nama}
-                        </Link>
+                        {renderDirect(item)}
                       </td>
-                      <td className="px-3 py-4 text-center capitalize">-</td>
+                      <td className="flex items-center justify-center px-3 py-4 capitalize">
+                        {renderStatus(item)}
+                      </td>
                       <td className="px-3 py-4 text-center">
                         {formatDate(new Date(item.pkt_tgl_buat))}
                       </td>
