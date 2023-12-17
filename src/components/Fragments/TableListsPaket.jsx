@@ -184,7 +184,7 @@ const TableListsPaket = () => {
       addendum: {
         condition: item.pkt_status === '1',
         render: (
-          <Tooltip text="Edit">
+          <Tooltip text="addendum">
             <button className="mr-2 text-blue-500 hover:text-blue-700">
               <FiEdit size="1.2rem" />
             </button>
