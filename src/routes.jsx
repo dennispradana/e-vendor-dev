@@ -54,6 +54,7 @@ import ListPejabatPengadaan from './pages/pegawai/kipbj/listPejabatPengadaan';
 import ListPaketPJB from './pages/pegawai/kipbj/listPaket';
 import UpdatePaketPJB from './pages/pegawai/kipbj/updatePaketPJB';
 import DetailPaketPjb from './pages/pegawai/kipbj/detailPaket';
+import DetailPaketPpk from './pages/pegawai/ppk/detailPaket';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -147,10 +148,10 @@ const AppRoute = () => {
           <Route element={<PpkAccess />}>
             <Route path="/daftar-paket" element={<ListPaket />} />
             <Route path="/daftar-paket/:paketId" element={<UpdatePaket />} />
-          </Route>
-          <Route element={<PpkAccess />}>
-            <Route path="/daftar-paket" element={<ListPaket />} />
-            <Route path="/daftar-paket/:paketId" element={<UpdatePaket />} />
+            <Route
+              path="/daftar-paket/detail/:paketId"
+              element={<DetailPaketPpk />}
+            />
           </Route>
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />

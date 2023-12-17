@@ -8,14 +8,11 @@ import { useDebounce } from 'use-debounce';
 import { toasterror } from '../../utils/ToastMessage';
 import DataEmpty from '../Elements/DataEmpty';
 import { FaRegFolderOpen } from 'react-icons/fa6';
-import { Tooltip } from '../Elements/Tooltip';
-import { FiEdit } from 'react-icons/fi';
 import { formatDate } from '../../utils/formatDate';
 import Button from '../Elements/Button';
 import PaketInisiasi from './PaketInisiasi';
 import Spinner from '../Elements/Spinner';
 import { IoIosClose } from 'react-icons/io';
-import { BsFillTrashFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 
 const initialState = {
@@ -169,26 +166,36 @@ const TableListsPaket = () => {
     return status ? statusConfig[status].render : null;
   };
 
-  const renderButton = (item) => {
+  const renderDirect = (item) => {
     const statusConfig = {
-      delete: {
-        condition: item.pkt_status === '0',
+      edit: {
+        condition: item.pkt_status !== '1',
         render: (
-          <Tooltip text="delete">
-            <button className="mr-2 text-blue-500 hover:text-red-500">
-              <BsFillTrashFill size="1.2rem" />
+          <div className="flex items-center justify-center gap-4">
+            <Link to={`/daftar-paket/${item.pkt_id}`}>
+              <button className="px-4 py-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
+                Edit
+              </button>
+            </Link>
+            <button className="px-4 py-1 text-red-500 border border-red-400 rounded-md hover:text-white hover:bg-red-400">
+              Hapus
             </button>
-          </Tooltip>
+          </div>
         ),
       },
-      addendum: {
+      readOnly: {
         condition: item.pkt_status === '1',
         render: (
-          <Tooltip text="addendum">
-            <button className="mr-2 text-blue-500 hover:text-blue-700">
-              <FiEdit size="1.2rem" />
+          <div className="flex items-center justify-center gap-4">
+            <Link to={`/daftar-paket/detail/${item.pkt_id}`}>
+              <button className="px-4 py-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
+                Lihat
+              </button>
+            </Link>
+            <button className="px-4 py-1 text-red-500 border border-red-400 rounded-md hover:text-white hover:bg-red-400">
+              Hapus
             </button>
-          </Tooltip>
+          </div>
         ),
       },
     };
@@ -255,7 +262,7 @@ const TableListsPaket = () => {
                         {formatDate(new Date(item.pkt_tgl_buat))}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        {renderButton(item)}
+                        {renderDirect(item)}
                       </td>
                     </tr>
                   ))
@@ -413,7 +420,6 @@ const TableListsPaket = () => {
                         placeholder="Tarik RUP"
                         {...formik.getFieldProps('rup')}
                       />
-
                       <div>
                         <Button
                           cN={`btn text-sm bg-sky-500 text-white hover:bg-blue-600 ease-in duration-200 ${
