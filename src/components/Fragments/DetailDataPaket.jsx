@@ -2,12 +2,7 @@ import React from 'react';
 import Spinner from '../Elements/Spinner';
 import { formatRp } from '../../utils/formatRupiah';
 
-const options = [
-  { value: 0, label: 'Dibawah 200 Juta' },
-  { value: 1, label: 'Diatas 200 Juta' },
-];
-
-const TableDataPaket = ({ datas, loading, formik }) => {
+const DetailDataPaket = ({ datas, loading }) => {
   return loading ? (
     <div className="h-[60vh] flex justify-center items-center">
       <Spinner />
@@ -82,31 +77,10 @@ const TableDataPaket = ({ datas, loading, formik }) => {
           </tr>
           <tr>
             <th className="px-4 py-2 border-b border-r">Metode Pemilihan</th>
-            <td className="px-4 py-4 text-sm border-b">
-              <select
-                className={`w-full py-1 px-3 text-gray-700 bg-white border ${
-                  formik.touched.paket?.mtd_pemilihan &&
-                  formik.errors.paket?.mtd_pemilihan
-                    ? 'border-red-500 focus:ring-red-600'
-                    : 'border-gray-300  focus:ring-sky-600'
-                } rounded-md shadow-sm focus:outline-none focus:ring-2  focus:border-transparent`}
-                {...formik.getFieldProps('paket.mtd_pemilihan')}
-              >
-                <option value="" disabled hidden>
-                  Pilih Salah Satu
-                </option>
-                {options.map((option, index) => (
-                  <option key={index} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              {formik.touched.paket?.mtd_pemilihan &&
-                formik.errors.paket?.mtd_pemilihan && (
-                  <p className="mt-2 text-sm italic text-red-500">
-                    {formik.errors.paket?.mtd_pemilihan}
-                  </p>
-                )}
+            <td className="px-4 py-4 text-gray-500 border-b">
+              {datas.paket?.mtd_pemilihan === '0'
+                ? 'Dibawah 200 Juta'
+                : 'Diatas 200 Juta'}
             </td>
           </tr>
           <tr>
@@ -146,4 +120,4 @@ const TableDataPaket = ({ datas, loading, formik }) => {
   );
 };
 
-export default TableDataPaket;
+export default DetailDataPaket;
