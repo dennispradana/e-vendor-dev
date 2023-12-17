@@ -1,11 +1,10 @@
 import React from 'react';
 import Spinner from '../Elements/Spinner';
 import { formatRp } from '../../utils/formatRupiah';
-import { SelectForm } from '../Elements/Input';
 
 const options = [
-  { value: 0, label: 'Pengadaan Langsung' },
-  { value: 1, label: 'Penunjukan Langsung' },
+  { value: 0, label: 'Dibawah 200 Juta' },
+  { value: 1, label: 'Diatas 200 Juta' },
 ];
 
 const TableDataPaket = ({ datas, loading, formik }) => {
