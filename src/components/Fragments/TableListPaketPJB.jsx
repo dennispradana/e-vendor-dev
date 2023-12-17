@@ -126,12 +126,22 @@ const TableListPaketPJB = () => {
     const statusConfig = {
       edit: {
         condition: item.pkt_status !== '1',
-        render: <Link to={`/paket/${item.pkt_id}`}>{item.pkt_nama}</Link>,
+        render: (
+          <Link to={`/paket/${item.pkt_id}`}>
+            <button className="w-1/2 p-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
+              Inisiasi Paket
+            </button>
+          </Link>
+        ),
       },
       readOnly: {
         condition: item.pkt_status === '1',
         render: (
-          <Link to={`/paket/detail/${item.pkt_id}`}>{item.pkt_nama}</Link>
+          <Link to={`/paket/detail/${item.pkt_id}`}>
+            <button className="w-1/2 p-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
+              Lihat
+            </button>
+          </Link>
         ),
       },
     };
@@ -222,7 +232,7 @@ const TableListPaketPJB = () => {
                         {entryNumber + index}
                       </th>
                       <td className="px-3 py-4 capitalize hover:text-blue-500">
-                        {renderDirect(item)}
+                        {item.pkt_nama}
                       </td>
                       <td className="flex items-center justify-center px-3 py-4 capitalize">
                         {renderStatus(item)}
@@ -231,11 +241,7 @@ const TableListPaketPJB = () => {
                         {formatDate(new Date(item.pkt_tgl_buat))}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <Tooltip text="Edit">
-                          <button className="mr-2 text-blue-500 hover:text-blue-700">
-                            <FiEdit size="1.2rem" />
-                          </button>
-                        </Tooltip>
+                        {renderDirect(item)}
                       </td>
                     </tr>
                   ))
