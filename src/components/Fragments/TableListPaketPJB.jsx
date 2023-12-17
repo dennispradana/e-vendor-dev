@@ -8,8 +8,6 @@ import DataEmpty from '../Elements/DataEmpty';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../utils/formatDate';
-import { FiEdit } from 'react-icons/fi';
-import { Tooltip } from '../Elements/Tooltip';
 
 const initialState = {
   datas: [],
