@@ -165,6 +165,7 @@ const TableListsPaket = () => {
 
     return status ? statusConfig[status].render : null;
   };
+  
   const renderDirectName = (item) => {
     const statusConfig = {
       edit: {
@@ -182,7 +183,7 @@ const TableListsPaket = () => {
         ),
       },
     };
-
+    
     const status = Object.keys(statusConfig).find(
       (key) => statusConfig[key].condition
     );
