@@ -165,15 +165,39 @@ const TableListsPaket = () => {
 
     return status ? statusConfig[status].render : null;
   };
+  const renderDirectName = (item) => {
+    const statusConfig = {
+      edit: {
+        condition: item.pkt_status !== '1',
+        render: (
+          <Link to={`/daftar-paket/${item.pkt_id}`}>{item.pkt_nama}</Link>
+        ),
+      },
+      readOnly: {
+        condition: item.pkt_status === '1',
+        render: (
+          <Link to={`/daftar-paket/detail/${item.pkt_id}`}>
+            {item.pkt_nama}
+          </Link>
+        ),
+      },
+    };
 
-  const renderDirect = (item) => {
+    const status = Object.keys(statusConfig).find(
+      (key) => statusConfig[key].condition
+    );
+
+    return status ? statusConfig[status].render : null;
+  };
+
+  const renderDirectButton = (item) => {
     const statusConfig = {
       edit: {
         condition: item.pkt_status !== '1',
         render: (
           <div className="flex items-center justify-center gap-4">
             <Link to={`/daftar-paket/${item.pkt_id}`}>
-              <button className="px-4 py-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
+              <button className="px-4 w-[7rem] py-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
                 Edit
               </button>
             </Link>
@@ -187,11 +211,9 @@ const TableListsPaket = () => {
         condition: item.pkt_status === '1',
         render: (
           <div className="flex items-center justify-center gap-4">
-            <Link to={`/daftar-paket/detail/${item.pkt_id}`}>
-              <button className="px-4 py-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
-                Lihat
-              </button>
-            </Link>
+            <button className="px-4 py-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
+              Addendum
+            </button>
             <button className="px-4 py-1 text-red-500 border border-red-400 rounded-md hover:text-white hover:bg-red-400">
               Hapus
             </button>
@@ -251,9 +273,7 @@ const TableListsPaket = () => {
                         {entryNumber + index}
                       </th>
                       <td className="px-3 py-4 capitalize hover:text-blue-500">
-                        <Link to={`/daftar-paket/${item.pkt_id}`}>
-                          {item.pkt_nama}
-                        </Link>
+                        {renderDirectName(item)}
                       </td>
                       <td className="flex items-center justify-center px-3 py-4 capitalize">
                         {renderStatus(item)}
@@ -262,7 +282,7 @@ const TableListsPaket = () => {
                         {formatDate(new Date(item.pkt_tgl_buat))}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        {renderDirect(item)}
+                        {renderDirectButton(item)}
                       </td>
                     </tr>
                   ))
