@@ -8,8 +8,6 @@ import { useDebounce } from 'use-debounce';
 import { toasterror } from '../../utils/ToastMessage';
 import DataEmpty from '../Elements/DataEmpty';
 import { FaRegFolderOpen } from 'react-icons/fa6';
-import { Tooltip } from '../Elements/Tooltip';
-import { FiEdit } from 'react-icons/fi';
 import { formatDate } from '../../utils/formatDate';
 import Button from '../Elements/Button';
 import PaketInisiasi from './PaketInisiasi';
@@ -133,6 +131,105 @@ const TableListsPaket = () => {
     onSubmit: handleSubmit,
   });
 
+  const renderStatus = (item) => {
+    const statusConfig = {
+      draft: {
+        condition: item.pkt_status === '0',
+        render: (
+          <div className="w-1/2 p-1 bg-yellow-400 rounded-md">
+            <p className="text-center ">Draft</p>
+          </div>
+        ),
+      },
+      process: {
+        condition: item.pkt_status === '1',
+        render: (
+          <div className="w-1/2 p-1 bg-green-400 rounded-md">
+            <p className="text-center ">Proses</p>
+          </div>
+        ),
+      },
+      batal: {
+        condition: item.pkt_status === '2',
+        render: (
+          <div className="w-1/2 p-1 bg-red-400 rounded-md">
+            <p className="text-center ">non-aktif</p>
+          </div>
+        ),
+      },
+    };
+
+    const status = Object.keys(statusConfig).find(
+      (key) => statusConfig[key].condition
+    );
+
+    return status ? statusConfig[status].render : null;
+  };
+  
+  const renderDirectName = (item) => {
+    const statusConfig = {
+      edit: {
+        condition: item.pkt_status !== '1',
+        render: (
+          <Link to={`/daftar-paket/${item.pkt_id}`}>{item.pkt_nama}</Link>
+        ),
+      },
+      readOnly: {
+        condition: item.pkt_status === '1',
+        render: (
+          <Link to={`/daftar-paket/detail/${item.pkt_id}`}>
+            {item.pkt_nama}
+          </Link>
+        ),
+      },
+    };
+    
+    const status = Object.keys(statusConfig).find(
+      (key) => statusConfig[key].condition
+    );
+
+    return status ? statusConfig[status].render : null;
+  };
+
+  const renderDirectButton = (item) => {
+    const statusConfig = {
+      edit: {
+        condition: item.pkt_status !== '1',
+        render: (
+          <div className="flex items-center justify-center gap-4">
+            <Link to={`/daftar-paket/${item.pkt_id}`}>
+              <button className="px-4 w-[7rem] py-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
+                Edit
+              </button>
+            </Link>
+            <button className="px-4 py-1 text-red-500 border border-red-400 rounded-md hover:text-white hover:bg-red-400">
+              Hapus
+            </button>
+          </div>
+        ),
+      },
+      readOnly: {
+        condition: item.pkt_status === '1',
+        render: (
+          <div className="flex items-center justify-center gap-4">
+            <button className="px-4 py-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
+              Addendum
+            </button>
+            <button className="px-4 py-1 text-red-500 border border-red-400 rounded-md hover:text-white hover:bg-red-400">
+              Hapus
+            </button>
+          </div>
+        ),
+      },
+    };
+
+    const status = Object.keys(statusConfig).find(
+      (key) => statusConfig[key].condition
+    );
+
+    return status ? statusConfig[status].render : null;
+  };
+
   const TablePaket = () => {
     return (
       <>
@@ -177,20 +274,16 @@ const TableListsPaket = () => {
                         {entryNumber + index}
                       </th>
                       <td className="px-3 py-4 capitalize hover:text-blue-500">
-                        <Link to={`/daftar-paket/${item.pkt_id}`}>
-                          {item.pkt_nama}
-                        </Link>
+                        {renderDirectName(item)}
                       </td>
-                      <td className="px-3 py-4 text-center capitalize">-</td>
+                      <td className="flex items-center justify-center px-3 py-4 capitalize">
+                        {renderStatus(item)}
+                      </td>
                       <td className="px-3 py-4 text-center">
                         {formatDate(new Date(item.pkt_tgl_buat))}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <Tooltip text="Edit">
-                          <button className="mr-2 text-blue-500 hover:text-blue-700">
-                            <FiEdit size="1.2rem" />
-                          </button>
-                        </Tooltip>
+                        {renderDirectButton(item)}
                       </td>
                     </tr>
                   ))
@@ -348,7 +441,6 @@ const TableListsPaket = () => {
                         placeholder="Tarik RUP"
                         {...formik.getFieldProps('rup')}
                       />
-
                       <div>
                         <Button
                           cN={`btn text-sm bg-sky-500 text-white hover:bg-blue-600 ease-in duration-200 ${
