@@ -135,7 +135,7 @@ const FormHPS = ({ formik, dataPaket }) => {
           onClick={handleDownload}
           type="button"
         >
-          Download File
+          Download Template
         </button>
         <button className="py-6" type="button">
           <input

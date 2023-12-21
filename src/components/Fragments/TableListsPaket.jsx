@@ -183,7 +183,7 @@ const TableListsPaket = () => {
         ),
       },
     };
-    
+
     const status = Object.keys(statusConfig).find(
       (key) => statusConfig[key].condition
     );

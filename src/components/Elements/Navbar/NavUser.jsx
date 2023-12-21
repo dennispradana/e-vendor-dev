@@ -3,16 +3,17 @@ import { GrLogout, GrUserSettings } from 'react-icons/gr';
 import { UserAvatar } from '../UserAvatar';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
+import Logo from '../../../assets/logo.png';
 
 const NavUser = () => {
   const { logout, user } = useAuthContext();
 
   return (
-    <nav className="container fixed top-0 z-10 p-4 h-14 bg-slate-600">
+    <nav className="container fixed top-0 z-10 h-20 p-4 bg-slate-600">
       <div className="flex items-center justify-between w-full px-4">
         <Link to="/dashboard">
-          <div className="px-8 text-xl font-bold text-white uppercase">
-            Logo
+          <div className="p-1 bg-white rounded-sm">
+            <img src={Logo} alt="logo" className="h-10" />
           </div>
         </Link>
         <UserAvatar
