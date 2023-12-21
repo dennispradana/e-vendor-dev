@@ -1,14 +1,15 @@
 import { Menu, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../../../assets/logo.png';
 
 const NavAuth = () => {
   return (
     <nav className="container fixed top-0 z-10 p-4 shadow-xl h-18 bg-slate-600">
       <div className="flex items-center justify-between w-full px-4">
         <Link to="/">
-          <div className="px-8 text-xl font-bold text-white uppercase">
-            Logo
+          <div className="p-1 bg-white rounded-sm">
+            <img src={Logo} alt="logo" className="h-10" />
           </div>
         </Link>
         <Menu as="div" className="relative text-left rounded-lg bg-violet-500">
