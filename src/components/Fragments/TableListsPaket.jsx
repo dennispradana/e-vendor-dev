@@ -165,6 +165,7 @@ const TableListsPaket = () => {
 
     return status ? statusConfig[status].render : null;
   };
+  
   const renderDirectName = (item) => {
     const statusConfig = {
       edit: {
