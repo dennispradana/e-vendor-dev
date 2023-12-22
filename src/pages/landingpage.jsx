@@ -3,7 +3,7 @@ import LandingPageLayout from '../components/Layouts/LandingPageLayout';
 import Button from '../components/Elements/Button';
 import Gambiran from '../assets/img3.png';
 import Kediri from '../assets/img2.png';
-import Harmoni from '../assets/img1.png';
+import Lembaga from '../assets/lembaga.png';
 import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
@@ -17,7 +17,7 @@ const LandingPage = () => {
           <img src={Kediri} alt="PemKot Kediri" />
         </div>
         <div className="p-3 bg-white rounded-lg">
-          <img src={Harmoni} alt="Harmoni Kediri" />
+          <img src={Lembaga} alt="Lembaga Akreditasi" className="py-2" />
         </div>
       </div>
       <div className="w-full px-2 py-3 bg-blue-100 rounded-lg">

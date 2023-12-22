@@ -4,7 +4,9 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuthContext } from './contexts/AuthContext';
 import {
   AdminAcces,
+  KipbjAccess,
   PenyediaAcces,
+  PpkAccess,
   ProtectedRoute,
 } from './utils/PrivateRoute';
 import { ToastContainer } from 'react-toastify';
@@ -42,6 +44,17 @@ import AddPajak from './pages/penyedia/addPajak';
 import UpdatePajak from './pages/penyedia/updatePajak';
 import UpdatePengalaman from './pages/penyedia/updatePengalaman';
 import UpdatePeralatan from './pages/penyedia/updatePeralatan';
+import ListPanitia from './pages/pegawai/kipbj/listPanitia';
+import UpdatePanitia from './pages/pegawai/kipbj/updatePanita';
+import AddPanitia from './pages/pegawai/kipbj/addPanitia';
+import DetailPanitia from './pages/pegawai/kipbj/detailPanitia';
+import ListPaket from './pages/pegawai/ppk/listPaket';
+import UpdatePaket from './pages/pegawai/ppk/updatePaket';
+import ListPejabatPengadaan from './pages/pegawai/kipbj/listPejabatPengadaan';
+import ListPaketPJB from './pages/pegawai/kipbj/listPaket';
+import UpdatePaketPJB from './pages/pegawai/kipbj/updatePaketPJB';
+import DetailPaketPjb from './pages/pegawai/kipbj/detailPaket';
+import DetailPaketPpk from './pages/pegawai/ppk/detailPaket';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -114,6 +127,30 @@ const AppRoute = () => {
             <Route
               path="/edit-pajak/:penyediaPjkId"
               element={<UpdatePajak />}
+            />
+          </Route>
+          <Route element={<KipbjAccess />}>
+            <Route path="/daftar-panitia" element={<ListPanitia />} />
+            <Route
+              path="/daftar-panitia/detail/:panitiaId"
+              element={<DetailPanitia />}
+            />
+            <Route
+              path="/daftar-panitia/edit/:panitiaId"
+              element={<UpdatePanitia />}
+            />
+            <Route path="/tambah-panitia" element={<AddPanitia />} />
+            <Route path="/daftar-pp" element={<ListPejabatPengadaan />} />
+            <Route path="/paket" element={<ListPaketPJB />} />
+            <Route path="/paket/:paketId" element={<UpdatePaketPJB />} />
+            <Route path="/paket/detail/:paketId" element={<DetailPaketPjb />} />
+          </Route>
+          <Route element={<PpkAccess />}>
+            <Route path="/daftar-paket" element={<ListPaket />} />
+            <Route path="/daftar-paket/:paketId" element={<UpdatePaket />} />
+            <Route
+              path="/daftar-paket/detail/:paketId"
+              element={<DetailPaketPpk />}
             />
           </Route>
         </Route>

@@ -7,7 +7,7 @@ export const pegawaiService = () => {
   const getPegawai = async (show, page, search) => {
     try {
       const response = await api.get(
-        `/v1/pegawai?length=${show}&page=${page}&q=${search}`,
+        `/v1/list_pegawai?length=${show}&page=${page}&q=${search}`,
         {
           headers: {
             Authorization: `Bearer ${userToken.access_token}`,

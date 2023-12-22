@@ -33,6 +33,16 @@ body {
   @apply px-8 w-full font-semibold rounded-lg h-10 capitalize;
 }
 
+.number-input {
+  -moz-appearance: textfield;
+}
+
+.number-input::-webkit-outer-spin-button,
+.number-input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
 .login-bg {
   background-image: url('../src/assets/login.jpg');
   width: 100%;
