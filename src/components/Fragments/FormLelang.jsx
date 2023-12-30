@@ -88,12 +88,8 @@ const FormLelang = () => {
       jadwal: dataPaket.jadwal?.map((item) => ({
         akt_id: item.akt_id || '',
         nama: item.nama || '',
-        dtj_tglawal: item.dtj_tglawal
-          ? formatEditDate(new Date(item.dtj_tglawal))
-          : '',
-        dtj_tglakhir: item.dtj_tglakhir
-          ? formatEditDate(new Date(item.dtj_tglakhir))
-          : '',
+        dtj_tglawal: item.dtj_tglawal,
+        dtj_tglakhir: item.dtj_tglakhir,
         dtj_id: item.dtj_id || '',
       })),
     },
@@ -187,12 +183,8 @@ const FormLelang = () => {
       jadwal: dataPaket.jadwal?.map((item) => ({
         akt_id: item.akt_id || '',
         nama: item.nama || '',
-        dtj_tglawal: item.dtj_tglawal
-          ? formatEditDate(new Date(item.dtj_tglawal))
-          : '',
-        dtj_tglakhir: item.dtj_tglakhir
-          ? formatEditDate(new Date(item.dtj_tglakhir))
-          : '',
+        dtj_tglawal: item.dtj_tglawal,
+        dtj_tglakhir: item.dtj_tglakhir,
         dtj_id: item.dtj_id || '',
       })),
       dokumen: {

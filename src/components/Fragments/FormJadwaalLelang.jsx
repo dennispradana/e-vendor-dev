@@ -1,6 +1,5 @@
 import React from 'react';
 import Spinner from '../Elements/Spinner';
-import { Field } from 'formik';
 
 const FormJadwaalLelang = ({ datas, loading, formik, error }) => {
   return loading ? (
@@ -42,7 +41,7 @@ const FormJadwaalLelang = ({ datas, loading, formik, error }) => {
               <td className="px-6 py-2 border-r">{item.nama}</td>
               <td className="px-6 py-2 border-r">
                 <input
-                  type="date"
+                  type="datetime-local"
                   className={`w-full p-1 px-3 text-gray-700 bg-white border ${
                     error
                       ? 'border-red-500 focus:ring-red-600'
@@ -58,7 +57,7 @@ const FormJadwaalLelang = ({ datas, loading, formik, error }) => {
               </td>
               <td className="px-6 py-2 border-r">
                 <input
-                  type="date"
+                  type="datetime-local"
                   className={`w-full p-1 px-3 text-gray-700 bg-white border ${
                     error
                       ? 'border-red-500 focus:ring-red-600'
