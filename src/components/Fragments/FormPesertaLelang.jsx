@@ -11,6 +11,28 @@ const FormPesertaLelang = ({ handleModalPeserta, data, formik }) => {
       formik.setFieldValue('persetujuan.pst_alasan', '');
     }
   };
+  const renderPeserta = () =>{
+    if (data.peserta === null) {
+      return (<button
+        type="button"
+        onClick={handleModalPeserta}
+        className="px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-800 w-[10rem]"
+      >
+        Pilih Penyedia
+      </button>);
+    }else{
+      return (<div className="flex items-center justify-center gap-4">
+      <p>{data.peserta.rkn_nama}</p>
+      <button
+        type="button"
+        className="px-2 py-1 text-white duration-200 ease-in bg-gray-500 rounded-md hover:bg-gray-600"
+        onClick={handleModalPeserta}
+      >
+        Ganti
+      </button>
+    </div>);
+    }
+  }
   return (
     <>
       <div className="mb-6">
@@ -19,13 +41,7 @@ const FormPesertaLelang = ({ handleModalPeserta, data, formik }) => {
             <tr>
               <th className="px-4 py-2 border-b border-r">Daftar Penyedia</th>
               <td className="px-4 py-2 text-sm border-b">
-                <button
-                  type="button"
-                  onClick={handleModalPeserta}
-                  className="px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-800 w-[10rem]"
-                >
-                  Pilih Penyedia
-                </button>
+                {renderPeserta()}
               </td>
             </tr>
           </tbody>
