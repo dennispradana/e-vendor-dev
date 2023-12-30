@@ -108,6 +108,133 @@ export const paketService = () => {
     }
   };
 
+  const getPaketUp = async (userId, lenght, page, search) => {
+    try {
+      const response = await api.get(
+        `/v1/PP/list_paketUp/${userId}?length=${lenght}&page=${page}&q=${search}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Data Paket Tidak Tersedia');
+    }
+  };
+
+  const getPaketDown = async (userId, lenght, page, search) => {
+    try {
+      const response = await api.get(
+        `/v1/PP/list_paketDown/${userId}?length=${lenght}&page=${page}&q=${search}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Data Paket Tidak Tersedia');
+    }
+  };
+
+  const paketLelang = async (llsId) => {
+    try {
+      const response = await api.get(`/v1/PP/lelang/${llsId}`, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mendapatkan Data');
+    }
+  };
+
+  const updatePaketLelang = async (llsId, dataPaket) => {
+    try {
+      const response = await api.put(`/v1/PP/lelang/${llsId}`, dataPaket, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Memperbarui Data Paket');
+    }
+  };
+
+  const getKualifikasi = async (llsId, dataKulifikasi) => {
+    try {
+      const response = await api.get(
+        `/v1/PP/kualifikasi/${llsId}`,
+        dataKulifikasi
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mendapatkan Data');
+    }
+  };
+
+  const updateKualifikasi = async (dllId, dataKulifikasi) => {
+    try {
+      const response = await api.put(
+        `/v1/PP/chk_kualifikasi/${dllId}`,
+        dataKulifikasi,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Memperbarui Data Paket');
+    }
+  };
+
+  const getPenawaran = async (llsId, dataKulifikasi) => {
+    try {
+      const response = await api.get(
+        `/v1/PP/penawaran/${llsId}`,
+        dataKulifikasi
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mendapatkan Data');
+    }
+  };
+
+  const updatePenawaran = async (dllId, dataKulifikasi) => {
+    try {
+      const response = await api.put(
+        `/v1/PP/chk_penawaran/${dllId}`,
+        dataKulifikasi,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Memperbarui Data Paket');
+    }
+  };
+
+  const getPenyediaLelang = async (llsId, dataPenyedia) => {
+    try {
+      const response = await api.get(`/v1/PP/penyedia/${llsId}`, dataPenyedia);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mendapatkan Data');
+    }
+  };
+
+  const getPilihPenyediaLelang = async (llsId, rknId, dataPenyedia) => {
+    try {
+      const response = await api.get(
+        `/v1/PP/tambah_peserta/${llsId}?rkn_id=${rknId}`,
+        dataPenyedia
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mendapatkan Data');
+    }
+  };
+
   return {
     getListPaket,
     getDataPaket,
@@ -119,5 +246,15 @@ export const paketService = () => {
     getPilihPanitia,
     getPilihPegawai,
     paketInisiasi,
+    getPaketUp,
+    getPaketDown,
+    paketLelang,
+    updatePaketLelang,
+    getKualifikasi,
+    updateKualifikasi,
+    getPenawaran,
+    updatePenawaran,
+    getPenyediaLelang,
+    getPilihPenyediaLelang,
   };
 };
