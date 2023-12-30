@@ -145,7 +145,6 @@ const FormDataPaketLelang = ({
     return status ? statusConfig[status].render : null;
   };
 
-
   return loading ? (
     <div className="h-[60vh] flex justify-center items-center">
       <Spinner />

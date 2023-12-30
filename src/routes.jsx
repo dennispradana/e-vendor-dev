@@ -6,7 +6,6 @@ import {
   AdminAcces,
   KipbjAccess,
   PenyediaAcces,
-  PpAccess,
   PpkAccess,
   ProtectedRoute,
 } from './utils/PrivateRoute';
@@ -56,15 +55,6 @@ import ListPaketPJB from './pages/pegawai/kipbj/listPaket';
 import UpdatePaketPJB from './pages/pegawai/kipbj/updatePaketPJB';
 import DetailPaketPjb from './pages/pegawai/kipbj/detailPaket';
 import DetailPaketPpk from './pages/pegawai/ppk/detailPaket';
-import DataPaket from './pages/pegawai/pp/dataPaket';
-import Down from './pages/pegawai/pp/dataPaket/down';
-import Up from './pages/pegawai/pp/dataPaket/up';
-import UpdateLelang from './pages/pegawai/pp/updateLelang';
-import DaftarPaketBaru from './pages/penyedia/daftarPaketBaru';
-import Penawaran from './pages/penyedia/penawaran';
-import DokRKN from './pages/penyedia/dokRkn';
-import AddDataKualifikasi from './pages/penyedia/addDataKualifikasi';
-import SendPenawaran from './pages/penyedia/sendPenawaran';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -171,14 +161,6 @@ const AppRoute = () => {
               element={<DetailPaketPpk />}
             />
           </Route>
-          <Route element={<PpAccess />}>
-            <Route path="data-paket" element={<DataPaket />}>
-              <Route path="/data-paket" element={<Navigate to="down" />} />
-              <Route path="down" element={<Down />} />
-              <Route path="up" element={<Up />} />
-            </Route>
-          </Route>
-          <Route path="/data-paket/:llsId" element={<UpdateLelang />} />
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<NotFound />} />
