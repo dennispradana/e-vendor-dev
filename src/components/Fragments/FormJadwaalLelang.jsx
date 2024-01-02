@@ -1,6 +1,7 @@
 import React from 'react';
 import Spinner from '../Elements/Spinner';
-import { format } from 'date-fns';
+import moment from 'moment';
+import 'moment/locale/id';
 
 const FormJadwaalLelang = ({ datas, loading, formik, error }) => {
   return loading ? (
@@ -49,10 +50,7 @@ const FormJadwaalLelang = ({ datas, loading, formik, error }) => {
                       : 'border-gray-300  focus:ring-sky-600'
                   } rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2 focus:border-transparent`}
                   {...formik.getFieldProps(`jadwal[${index}].dtj_tglawal`, {
-                    value: format(
-                      new Date(item.dtj_tglawal),
-                      'yyyy-MM-ddTHH:mm'
-                    ),
+                    value: moment(item.dtj_tglawal).format('YYYY-MM-DDTHH:mm'),
                   })}
                 />
                 {formik.errors.jadwal?.[index]?.dtj_tglawal && (
@@ -70,10 +68,7 @@ const FormJadwaalLelang = ({ datas, loading, formik, error }) => {
                       : 'border-gray-300  focus:ring-sky-600'
                   } rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2 focus:border-transparent`}
                   {...formik.getFieldProps(`jadwal[${index}].dtj_tglakhir`, {
-                    value: format(
-                      new Date(item.dtj_tglakhir),
-                      'yyyy-MM-ddTHH:mm'
-                    ),
+                    value: moment(item.dtj_tglakhir).format('YYYY-MM-DDTHH:mm'),
                   })}
                 />
                 {formik.errors.jadwal?.[index]?.dtj_tglakhir && (
