@@ -11,6 +11,32 @@ const FormPesertaLelang = ({ handleModalPeserta, data, formik }) => {
       formik.setFieldValue('persetujuan.pst_alasan', '');
     }
   };
+
+  const renderPeserta = () => {
+    return data.peserta !== null ? (
+      <>
+        <div className="flex items-center justify-between">
+          <p className="font-bold capitalize">{data.peserta.rkn_nama}</p>
+          <button
+            type="button"
+            onClick={handleModalPeserta}
+            className="px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-800 w-[7rem]"
+          >
+            Ganti Penyedia
+          </button>
+        </div>
+      </>
+    ) : (
+      <button
+        type="button"
+        onClick={handleModalPeserta}
+        className="px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-800 w-[10rem]"
+      >
+        Pilih Penyedia
+      </button>
+    );
+  };
+
   return (
     <>
       <div className="mb-6">
@@ -18,15 +44,7 @@ const FormPesertaLelang = ({ handleModalPeserta, data, formik }) => {
           <tbody>
             <tr>
               <th className="px-4 py-2 border-b border-r">Daftar Penyedia</th>
-              <td className="px-4 py-2 text-sm border-b">
-                <button
-                  type="button"
-                  onClick={handleModalPeserta}
-                  className="px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-800 w-[10rem]"
-                >
-                  Pilih Penyedia
-                </button>
-              </td>
+              <td className="px-4 py-2 text-sm border-b">{renderPeserta()}</td>
             </tr>
           </tbody>
         </table>

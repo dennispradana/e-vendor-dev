@@ -34,7 +34,7 @@ const FormLelang = () => {
     'HPS',
     'Jadwal',
     'Dokumen Pengadaan',
-    'persyratan',
+    'persyratan Penawaran',
     'Peserta',
   ];
   const [showModalKAK, setShowModalKAK] = useState(false);
@@ -187,12 +187,8 @@ const FormLelang = () => {
       jadwal: dataPaket.jadwal?.map((item) => ({
         akt_id: item.akt_id || '',
         nama: item.nama || '',
-        dtj_tglawal: item.dtj_tglawal
-          ? formatEditDate(new Date(item.dtj_tglawal))
-          : '',
-        dtj_tglakhir: item.dtj_tglakhir
-          ? formatEditDate(new Date(item.dtj_tglakhir))
-          : '',
+        dtj_tglawal: item.dtj_tglawal || '',
+        dtj_tglakhir: item.dtj_tglakhir || '',
         dtj_id: item.dtj_id || '',
       })),
       dokumen: {
@@ -360,7 +356,7 @@ const FormLelang = () => {
                 Kembali
               </button>
             )}
-            {currentStep <= 5 && (
+            {currentStep <= 6 && (
               <button
                 type="submit"
                 className={`px-4 py-2 font-semibold text-white capitalize transition duration-200 ease-in-out bg-blue-500 cursor-pointer rounded-xl hover:bg-blue-700 hover:text-white ${
@@ -371,7 +367,7 @@ const FormLelang = () => {
               >
                 {formik.isSubmitting ? (
                   <Spinner />
-                ) : currentStep === 5 ? (
+                ) : currentStep === 6 ? (
                   'Simpan'
                 ) : (
                   'Selanjutnya'

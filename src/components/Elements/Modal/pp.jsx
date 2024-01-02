@@ -979,7 +979,7 @@ export const LelangPenyedia = ({ close, llsId, onUpdate }) => {
                 ) : (
                   data.map((item, index) => (
                     <tr
-                      key={item.ckm_id}
+                      key={item.rkn_id}
                       className="duration-150 ease-out bg-white border-b hover:bg-gray-200"
                     >
                       <th
@@ -1018,6 +1018,9 @@ export const LelangPenyedia = ({ close, llsId, onUpdate }) => {
       <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
         <div className="relative w-[80vw] mx-auto my-6 max-h-screen">
           <div className="relative flex flex-col w-full px-4 py-6 bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+            <div className="flex justify-center mb-4">
+              <p className="font-bold">Daftar Penyedia</p>
+            </div>
             <RenderTabel />
             <button
               onClick={close}
