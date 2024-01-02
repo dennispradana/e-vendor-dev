@@ -34,7 +34,7 @@ const FormLelang = () => {
     'HPS',
     'Jadwal',
     'Dokumen Pengadaan',
-    'persyratan Penawaran',
+    'persyratan Pengadaan',
     'Peserta',
   ];
   const [showModalKAK, setShowModalKAK] = useState(false);

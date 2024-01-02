@@ -1,5 +1,6 @@
 import React from 'react';
 import Spinner from '../Elements/Spinner';
+import { format } from 'date-fns';
 
 const FormJadwaalLelang = ({ datas, loading, formik, error }) => {
   return loading ? (
@@ -47,7 +48,12 @@ const FormJadwaalLelang = ({ datas, loading, formik, error }) => {
                       ? 'border-red-500 focus:ring-red-600'
                       : 'border-gray-300  focus:ring-sky-600'
                   } rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2 focus:border-transparent`}
-                  {...formik.getFieldProps(`jadwal[${index}].dtj_tglawal`)}
+                  {...formik.getFieldProps(`jadwal[${index}].dtj_tglawal`, {
+                    value: format(
+                      new Date(item.dtj_tglawal),
+                      'yyyy-MM-ddTHH:mm'
+                    ),
+                  })}
                 />
                 {formik.errors.jadwal?.[index]?.dtj_tglawal && (
                   <p className="mt-2 text-sm italic text-red-500 ">
@@ -63,7 +69,12 @@ const FormJadwaalLelang = ({ datas, loading, formik, error }) => {
                       ? 'border-red-500 focus:ring-red-600'
                       : 'border-gray-300  focus:ring-sky-600'
                   } rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2 focus:border-transparent`}
-                  {...formik.getFieldProps(`jadwal[${index}].dtj_tglakhir`)}
+                  {...formik.getFieldProps(`jadwal[${index}].dtj_tglakhir`, {
+                    value: format(
+                      new Date(item.dtj_tglakhir),
+                      'yyyy-MM-ddTHH:mm'
+                    ),
+                  })}
                 />
                 {formik.errors.jadwal?.[index]?.dtj_tglakhir && (
                   <p className="mt-2 text-sm italic text-red-500 ">
