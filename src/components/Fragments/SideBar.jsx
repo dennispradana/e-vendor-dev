@@ -19,7 +19,10 @@ const SideBar = () => {
       { label: 'daftar panitia', link: '/daftar-panitia' },
       // { label: 'daftar pejabat pengadaan', link: '/daftar-pp' },
     ],
-    PP: [{ label: 'dashboard', link: '/dashboard' }],
+    PP: [
+      { label: 'dashboard', link: '/dashboard' },
+      { label: 'daftar paket', link: '/data-paket' },
+    ],
     PPK: [
       { label: 'dashboard', link: '/dashboard' },
       { label: 'daftar paket', link: '/daftar-paket' },

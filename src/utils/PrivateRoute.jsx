@@ -86,3 +86,22 @@ export const PpkAccess = ({ redirectPath = '/unauthorized' }) => {
 
   return <Outlet />;
 };
+
+export const PpAccess = ({ redirectPath = '/unauthorized' }) => {
+  const { user, loading } = useAuthContext();
+
+  if (loading) {
+    return (
+      <MainLayouts>
+        <div className="flex items-center justify-center h-[80vh]">
+          <Spinner />
+        </div>
+      </MainLayouts>
+    );
+  }
+  if (!user || user.role !== 'PP') {
+    return <Navigate to={redirectPath} replace />;
+  }
+
+  return <Outlet />;
+};
