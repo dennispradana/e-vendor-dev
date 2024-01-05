@@ -69,6 +69,26 @@ export const penyediaService = () => {
     }
   };
 
+  const getAllPaketBaru = async (userId, lenght, page, search) => {
+    try {
+      const response = await api.get(
+        `v1/RKN/paket_baru/${userId}?length=${lenght}&page=${page}&q=${search}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
+  const getPaketBaru = async (llsId, dataPaket) => {
+    try {
+      const response = await api.get(`v1/RKN/paket/${llsId}`, dataPaket);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
   return {
     btkUsaha,
     jenisIzin,
@@ -77,5 +97,7 @@ export const penyediaService = () => {
     editPenyedia,
     updatePenyedia,
     getIzinUsaha,
+    getAllPaketBaru,
+    getPaketBaru,
   };
 };
