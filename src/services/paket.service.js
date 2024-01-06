@@ -223,11 +223,15 @@ export const paketService = () => {
     }
   };
 
-  const getPilihPenyediaLelang = async (llsId, rknId, dataPenyedia) => {
+  const getPilihPenyediaLelang = async (llsId, rknId) => {
     try {
       const response = await api.get(
         `/v1/PP/tambah_peserta/${llsId}?rkn_id=${rknId}`,
-        dataPenyedia
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
