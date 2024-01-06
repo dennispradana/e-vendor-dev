@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
-import { toasterror } from '../../../utils/ToastMessage';
+import { toasterror, toastsuccess } from '../../../utils/ToastMessage';
 import Spinner from '../Spinner';
 import { penyediaService } from '../../../services/penyedia.service';
 import { formatRp } from '../../../utils/formatRupiah';
 import { IoIosCloseCircle } from 'react-icons/io';
 import { SkeletonItem } from '../Skelekton';
+import { useNavigate } from 'react-router-dom';
 
 export const ModalPaketBaru = ({ close, llsId }) => {
-  const { getPaketBaru } = penyediaService();
+  const { getPaketBaru, getIkutLelang } = penyediaService();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,6 +26,22 @@ export const ModalPaketBaru = ({ close, llsId }) => {
     };
     fetchData();
   }, []);
+
+  const buttonIkutiLelang = async () => {
+    try {
+      const response = await getIkutLelang(llsId);
+      if (response) {
+        toastsuccess('Berhasil Mengikuti Lelang');
+        navigate('/dashboard');
+      } else {
+        toasterror('Gagal Mengikuti Lelang');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const renderKategori = () => {
     const kategori = data.lelang?.kgr_id;
@@ -209,6 +227,7 @@ export const ModalPaketBaru = ({ close, llsId }) => {
               <button
                 className="px-3 py-2 font-bold text-white bg-green-600 border-b border-solid rounded-md rounded-t hover:bg-green-700 border-slate-200"
                 type="button"
+                onClick={() => buttonIkutiLelang()}
               >
                 Setuju dan Ikuti Paket
               </button>

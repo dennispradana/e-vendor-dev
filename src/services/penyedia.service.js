@@ -1,6 +1,8 @@
 import api from '../config/api';
+import { useAuthContext } from '../contexts/AuthContext';
 
 export const penyediaService = () => {
+  const { userToken } = useAuthContext();
   const btkUsaha = async () => {
     try {
       const response = await api.get('v1/b_usaha');
@@ -89,6 +91,19 @@ export const penyediaService = () => {
     }
   };
 
+  const getIkutLelang = async (llsId) => {
+    try {
+      const response = await api.get(`v1/RKN/ikut_lelang/${llsId}`, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Terjadi Kesalahan');
+    }
+  };
+
   return {
     btkUsaha,
     jenisIzin,
@@ -99,5 +114,6 @@ export const penyediaService = () => {
     getIzinUsaha,
     getAllPaketBaru,
     getPaketBaru,
+    getIkutLelang,
   };
 };
