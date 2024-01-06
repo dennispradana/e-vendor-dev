@@ -12,11 +12,41 @@ const FormPesertaLelang = ({ handleModalPeserta, data, formik }) => {
     }
   };
 
+  const renderNamaPenyedia = () => {
+    const namaPenyedia = data.peserta?.psr_black_list;
+    switch (namaPenyedia) {
+      case '0':
+        return <p className="font-bold capitalize">{data.peserta.rkn_nama}</p>;
+      case '1':
+        return (
+          <div className="flex items-center gap-2">
+            <p className="font-bold capitalize">{data.peserta.rkn_nama}</p>
+            <p className="px-2 text-gray-100 capitalize bg-red-500 rounded-md">
+              Blacklist
+            </p>
+          </div>
+        );
+      default:
+        return <p>Loading...</p>;
+    }
+  };
+
+  const renderStatusPersetujuan = (item) => {
+    switch (item) {
+      case 0:
+        return <p className="capitalize">tidak setuju</p>;
+      case 1:
+        return <p className="capitalize">setuju</p>;
+      default:
+        return null;
+    }
+  };
+
   const renderPeserta = () => {
     return data.peserta !== null ? (
       <>
         <div className="flex items-center justify-between">
-          <p className="font-bold capitalize">{data.peserta.rkn_nama}</p>
+          <>{renderNamaPenyedia()}</>
           <button
             type="button"
             onClick={handleModalPeserta}
@@ -92,7 +122,9 @@ const FormPesertaLelang = ({ handleModalPeserta, data, formik }) => {
                     <td className="px-2 py-2 border">
                       {item.pegawai?.peg_nama}
                     </td>
-                    <td className="px-2 py-2 border">{item.pst_status}</td>
+                    <td className="px-2 py-2 border">
+                      {renderStatusPersetujuan(item.pst_status)}
+                    </td>
                     <td className="px-2 py-2 border">{item.pst_tgl_setuju}</td>
                     <td className="px-2 py-2 border">{item.pst_alasan}</td>
                   </tr>
