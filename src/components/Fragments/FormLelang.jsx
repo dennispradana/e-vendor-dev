@@ -72,6 +72,8 @@ const FormLelang = () => {
     }
   };
 
+  console.log(dataPaket);
+
   const initialStepValues = [
     {
       nonLel: {
