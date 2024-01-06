@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { toasterror, toastsuccess } from '../../../utils/ToastMessage';
-import Spinner from '../Spinner';
 import { penyediaService } from '../../../services/penyedia.service';
 import { formatRp } from '../../../utils/formatRupiah';
 import { IoIosCloseCircle } from 'react-icons/io';

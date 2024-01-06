@@ -104,6 +104,17 @@ export const penyediaService = () => {
     }
   };
 
+  const getDataDahsboard = async (userId, lenght, page, search) => {
+    try {
+      const response = await api.get(
+        `v1/RKN/lelang/${userId}?length=${lenght}&page=${page}&q=${search}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
   return {
     btkUsaha,
     jenisIzin,
@@ -115,5 +126,6 @@ export const penyediaService = () => {
     getAllPaketBaru,
     getPaketBaru,
     getIkutLelang,
+    getDataDahsboard,
   };
 };
