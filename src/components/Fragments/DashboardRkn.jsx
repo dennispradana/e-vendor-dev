@@ -7,6 +7,7 @@ import { useDebounce } from 'use-debounce';
 import { toasterror } from '../../utils/ToastMessage';
 import DataEmpty from '../Elements/DataEmpty';
 import { FaRegFolderOpen } from 'react-icons/fa6';
+import { useNavigate } from 'react-router-dom';
 
 const initialState = {
   datas: [],
@@ -21,7 +22,7 @@ const initialState = {
 
 const DashboardRkn = () => {
   const { user } = useAuthContext();
-  const { getDataDahsboard } = penyediaService();
+  const { getDataDahsboardRKN } = penyediaService();
   const [state, setState] = useState(initialState);
   const {
     datas,
@@ -35,11 +36,12 @@ const DashboardRkn = () => {
   } = state;
   const [loading, setLoading] = useState(true);
   const [debaouceSearch] = useDebounce(search, 2000);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getDataDahsboard(
+        const response = await getDataDahsboardRKN(
           user.user_id,
           showItem,
           currentPage,
@@ -86,6 +88,10 @@ const DashboardRkn = () => {
     }));
   };
 
+  const handleDirect = (llsId) => {
+    navigate(`/penawaran/${llsId}`);
+  };
+
   const TableDashboard = () => {
     return (
       <>
@@ -116,7 +122,7 @@ const DashboardRkn = () => {
                 type="text"
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-50 md:w-80 bg-gray-50 focus:outline-violet-300"
-                placeholder="Cari Data Pegawai"
+                placeholder="Cari Data Paket"
                 value={search}
                 onChange={handleSearch}
                 autoFocus
@@ -164,7 +170,10 @@ const DashboardRkn = () => {
                       <td className="px-3 py-4 text-center capitalize">
                         {item.lls_id}
                       </td>
-                      <td className="px-3 py-4 text-center capitalize">
+                      <td
+                        className="px-3 py-4 text-center cursor-pointer capitaliz hover:text-blue-700"
+                        onClick={() => handleDirect(item.lls_id)}
+                      >
                         {item.pkt_nama}
                       </td>
                       <td className="px-3 py-4">{item.tahapan}</td>

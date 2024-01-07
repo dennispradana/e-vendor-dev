@@ -21,6 +21,31 @@ export const formatDate = (date) => {
   return `${day} ${monthName} ${year}`;
 };
 
+export const formatDateTime = (date) => {
+  const day = date.getDate().toString();
+  const monthIndex = date.getMonth();
+  const year = date.getFullYear();
+  const monthNames = [
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Augustus',
+    'September',
+    'Oktober',
+    'Nopember',
+    'Desember',
+  ];
+  const monthName = monthNames[monthIndex];
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+
+  return `${day} ${monthName} ${year} - ${hours}:${minutes}`;
+};
+
 export const formatEditDate = (date) => {
   const year = date.getFullYear(); // Mendapatkan tahun (yyyy)
   const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Mendapatkan bulan (mm)

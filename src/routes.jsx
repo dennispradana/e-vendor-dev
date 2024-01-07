@@ -61,6 +61,8 @@ import Down from './pages/pegawai/pp/dataPaket/down';
 import Up from './pages/pegawai/pp/dataPaket/up';
 import UpdateLelang from './pages/pegawai/pp/updateLelang';
 import DaftarPaketBaru from './pages/penyedia/daftarPaketBaru';
+import Penawaran from './pages/penyedia/penawaran';
+import DokRKN from './pages/penyedia/dokRkn';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -135,6 +137,8 @@ const AppRoute = () => {
               element={<UpdatePajak />}
             />
             <Route path="/paket-baru" element={<DaftarPaketBaru />} />
+            <Route path="/penawaran/:llsId" element={<Penawaran />} />
+            <Route path="/dokumen-penawaran/:llsId" element={<DokRKN />} />
           </Route>
           <Route element={<KipbjAccess />}>
             <Route path="/daftar-panitia" element={<ListPanitia />} />

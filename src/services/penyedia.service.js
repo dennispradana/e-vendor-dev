@@ -104,11 +104,33 @@ export const penyediaService = () => {
     }
   };
 
-  const getDataDahsboard = async (userId, lenght, page, search) => {
+  const getDataDahsboardRKN = async (userId, lenght, page, search) => {
     try {
       const response = await api.get(
         `v1/RKN/lelang/${userId}?length=${lenght}&page=${page}&q=${search}`
       );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
+  const getPenawaran = async (llsId) => {
+    try {
+      const response = await api.get(`v1/RKN/penawaran/${llsId}`, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
+  const getDokPenawaran = async (llsId, dataDokumen) => {
+    try {
+      const response = await api.get(`v1/RKN/dokumen/${llsId}`, dataDokumen);
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data');
@@ -126,6 +148,8 @@ export const penyediaService = () => {
     getAllPaketBaru,
     getPaketBaru,
     getIkutLelang,
-    getDataDahsboard,
+    getDataDahsboardRKN,
+    getPenawaran,
+    getDokPenawaran,
   };
 };
