@@ -79,8 +79,6 @@ const DokumenRKN = () => {
     }
   };
 
-  console.log(data);
-
   const RenderContent = () => {
     return (
       <>
