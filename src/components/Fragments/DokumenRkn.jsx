@@ -131,7 +131,7 @@ const DokumenRKN = () => {
           <h1 className="font-bold">Persyaratan Kualifikasi</h1>
           <div className="py-1 ">
             <table className="w-full text-xl text-left text-gray-600 md:text-base">
-              <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
+              <thead className="text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
                 <tr role="row" className="text-center border border-gray-200">
                   <th className="px-2 py-2 border border-gray-200">No</th>
                   <th className="px-2 py-2 border border-gray-200">
@@ -173,7 +173,7 @@ const DokumenRKN = () => {
           <h1 className="font-bold">Dokumen Penawaran</h1>
           <div className="py-1 ">
             <table className="w-full text-xl text-left text-gray-600 md:text-base">
-              <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
+              <thead className="text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
                 <tr role="row" className="text-center border border-gray-200">
                   <th className="px-2 py-2 border border-gray-200">No</th>
                   <th className="px-2 py-2 border border-gray-200">
@@ -271,7 +271,7 @@ const DokumenRKN = () => {
           <h1 className="font-bold">Daftar Kuantitas dan Harga / Biaya</h1>
           <div className="py-1 ">
             <table className="w-full text-xl text-left text-gray-600 md:text-base">
-              <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
+              <thead className="text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
                 <tr role="row" className="text-center border border-gray-200">
                   <th className="px-2 py-2 border border-gray-200">
                     Jenis Barang/Jasa
