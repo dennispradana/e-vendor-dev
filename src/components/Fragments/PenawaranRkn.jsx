@@ -114,16 +114,21 @@ const PenawaranRkn = () => {
           </div>
         </div>
         <div className="mt-2">
-          <p className="py-2 italic font-semibold">
-            Total Penawaran:
-            <span className="mx-1">
-              {data.penawaran?.Total !== null && (
-                <span className="px-2 py-1 not-italic font-normal text-white bg-blue-500 rounded">
-                  {formatRp(data.penawaran?.Total)}
-                </span>
-              )}
-            </span>
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="py-2 italic font-semibold">
+              Total Penawaran:
+              <span className="mx-1">
+                {data.penawaran?.Total !== null && (
+                  <span className="px-2 py-1 not-italic font-normal text-white bg-blue-500 rounded">
+                    {formatRp(data.penawaran?.Total)}
+                  </span>
+                )}
+              </span>
+            </p>
+            <button className="px-2 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">
+              Kirim Penawaran
+            </button>
+          </div>
         </div>
       </div>
     );

@@ -259,11 +259,11 @@ const TabManajerial = () => {
     ) : dataTotal === 0 ? (
       <div className="flex items-center flex-col justify-center h-[50vh]">
         <DataEmpty
-          title="Akta"
+          title="Manajerial"
           icon={<FaUserTie size="12rem" className="mb-4 text-gray-400" />}
         />
         <Link
-          to="/tambah-akta"
+          to="/tambah-manajerial"
           className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
         >
           tambah data
