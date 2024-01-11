@@ -25,7 +25,7 @@ const initialState = {
   showItem: 10,
 };
 
-const TabPengalaman = () => {
+const TabPengalaman = ({ type, formik }) => {
   const [state, setState] = useState(initialState);
   const {
     datas,
@@ -98,6 +98,28 @@ const TabPengalaman = () => {
     }));
   };
 
+  const handleDataSelect = (item) => {
+    const isDataSelected = formik.values.pengalaman.some(
+      (selectedItem) => selectedItem.pen_id === item.pen_id
+    );
+
+    if (isDataSelected) {
+      formik.setFieldValue(
+        'pengalaman',
+        formik.values.pengalaman.filter(
+          (selectedItem) => selectedItem.pen_id !== item.pen_id
+        )
+      );
+    } else {
+      formik.setFieldValue('pengalaman', [
+        ...formik.values.pengalaman,
+        {
+          pen_id: item.pen_id,
+        },
+      ]);
+    }
+  };
+
   const TablePengalaman = () => {
     return (
       <>
@@ -135,14 +157,51 @@ const TabPengalaman = () => {
               />
             </div>
           </div>
-          <div>
-            <Link
-              to="/tambah-pengalaman"
-              className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
-            >
-              tambah data
-            </Link>
-          </div>
+          {type === 'form' ? (
+            <div className="flex justify-between my-2 max-md:flex-col">
+              <div className="flex items-center ">
+                <label className="mr-2 text-sm italic font-semibold capitalize">
+                  data ditampilkan
+                </label>
+                <select
+                  className="px-3 py-1 cursor-pointer"
+                  value={showItem}
+                  onChange={handleShowData}
+                >
+                  {dataLength <= 10 ? (
+                    <option value={dataLength}>{dataLength}</option>
+                  ) : (
+                    <>
+                      <option value={10}>10</option>
+                      <option value={20}>20</option>
+                      <option value={30}>30</option>
+                      <option value={40}>40</option>
+                      <option value={50}>50</option>
+                    </>
+                  )}
+                </select>
+                <p className="ml-2 text-sm italic font-semibold capitalize">
+                  dari {dataLength} data
+                </p>
+              </div>
+              {dataLength > 10 && (
+                <Pagination
+                  currentPage={currentPage}
+                  onPageChange={handlePageChange}
+                  totalPages={totalPages}
+                />
+              )}
+            </div>
+          ) : (
+            <div>
+              <Link
+                to="/tambah-pengalaman"
+                className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
+              >
+                tambah data
+              </Link>
+            </div>
+          )}
         </div>
         <div className="relative flex flex-col h-[50vh] overflow-x-auto rounded-lg">
           <div className="flex-grow">
@@ -208,21 +267,34 @@ const TabPengalaman = () => {
                         {formatRp(item.pgl_nilai)}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <div className="flex items-center justify-center gap-2">
-                          <Tooltip text="Edit">
-                            <button
-                              className="mr-2 text-blue-500 hover:text-blue-700"
-                              onClick={() => handleEdit(item.pen_id)}
-                            >
-                              <FiEdit size="1.2rem" />
-                            </button>
-                          </Tooltip>
-                          <Tooltip text="delete">
-                            <button className="mr-2 text-red-500 hover:text-red-700">
-                              <MdDeleteOutline size="1.4rem" />
-                            </button>
-                          </Tooltip>
-                        </div>
+                        {type === 'form' ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={formik.values.pengalaman.some(
+                                (selectedItem) =>
+                                  selectedItem.pen_id === item.pen_id
+                              )}
+                              onChange={() => handleDataSelect(item)}
+                            />
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center gap-2">
+                            <Tooltip text="Edit">
+                              <button
+                                className="mr-2 text-blue-500 hover:text-blue-700"
+                                onClick={() => handleEdit(item.pen_id)}
+                              >
+                                <FiEdit size="1.2rem" />
+                              </button>
+                            </Tooltip>
+                            <Tooltip text="delete">
+                              <button className="mr-2 text-red-500 hover:text-red-700">
+                                <MdDeleteOutline size="1.4rem" />
+                              </button>
+                            </Tooltip>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))
@@ -231,40 +303,42 @@ const TabPengalaman = () => {
             </table>
           </div>
         </div>
-        <div className="flex justify-between my-2 max-md:flex-col">
-          <div className="flex items-center ">
-            <label className="mr-2 text-sm italic font-semibold capitalize">
-              data ditampilkan
-            </label>
-            <select
-              className="px-3 py-1 cursor-pointer"
-              value={showItem}
-              onChange={handleShowData}
-            >
-              {dataLength <= 10 ? (
-                <option value={dataLength}>{dataLength}</option>
-              ) : (
-                <>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={30}>30</option>
-                  <option value={40}>40</option>
-                  <option value={50}>50</option>
-                </>
-              )}
-            </select>
-            <p className="ml-2 text-sm italic font-semibold capitalize">
-              dari {dataLength} data
-            </p>
+        {type !== 'form' && (
+          <div className="flex justify-between my-2 max-md:flex-col">
+            <div className="flex items-center ">
+              <label className="mr-2 text-sm italic font-semibold capitalize">
+                data ditampilkan
+              </label>
+              <select
+                className="px-3 py-1 cursor-pointer"
+                value={showItem}
+                onChange={handleShowData}
+              >
+                {dataLength <= 10 ? (
+                  <option value={dataLength}>{dataLength}</option>
+                ) : (
+                  <>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={30}>30</option>
+                    <option value={40}>40</option>
+                    <option value={50}>50</option>
+                  </>
+                )}
+              </select>
+              <p className="ml-2 text-sm italic font-semibold capitalize">
+                dari {dataLength} data
+              </p>
+            </div>
+            {dataLength > 10 && (
+              <Pagination
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+                totalPages={totalPages}
+              />
+            )}
           </div>
-          {dataLength > 10 && (
-            <Pagination
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-              totalPages={totalPages}
-            />
-          )}
-        </div>
+        )}
       </>
     );
   };

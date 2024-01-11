@@ -4,7 +4,7 @@ export const pajakService = () => {
   const getPajak = async (penyediaId, lenght, page, search) => {
     try {
       const response = await api.get(
-        `/penyedia/list_pajak/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
+        `v1/RKN/list_pajak/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
       );
       return response.data;
     } catch (error) {

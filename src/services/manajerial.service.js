@@ -4,7 +4,7 @@ export const manajerialService = () => {
   const getManajer = async (penyediaId, lenght, page, search) => {
     try {
       const response = await api.get(
-        `/penyedia/list_manajer/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
+        `v1/RKN/list_manajer/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
       );
       return response.data;
     } catch (error) {

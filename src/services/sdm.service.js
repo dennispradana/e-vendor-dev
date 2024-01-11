@@ -4,7 +4,7 @@ export const sdmService = () => {
   const getSdm = async (penyediaId, lenght, page, search) => {
     try {
       const response = await api.get(
-        `/penyedia/list_staf/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
+        `v1/RKN/list_staf/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
       );
       return response.data;
     } catch (error) {

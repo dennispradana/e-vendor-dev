@@ -4,7 +4,7 @@ export const peralatanService = () => {
   const getPeralatan = async (penyediaId, lenght, page, search) => {
     try {
       const response = await api.get(
-        `/penyedia/list_peralatan/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
+        `v1/RKN/list_peralatan/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
       );
       return response.data;
     } catch (error) {

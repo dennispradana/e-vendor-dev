@@ -13,7 +13,7 @@ export const iusService = () => {
   const getIzinUsaha = async (penyediaId, lenght, page, search) => {
     try {
       const response = await api.get(
-        `/penyedia/list_ijin/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
+        `v1/RKN/list_ijin/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
       );
       return response.data;
     } catch (error) {

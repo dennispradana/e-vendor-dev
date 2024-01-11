@@ -27,7 +27,7 @@ const PenawaranRkn = () => {
   }, []);
 
   const renderKualifikasi = () => {
-    return data.kulifikasi !== null ? (
+    return data.kualifikasi !== null ? (
       <div className="flex flex-wrap items-center gap-4">
         <p>Dokumen Kulifikasi</p>
         <p className="p-1 text-white bg-green-600 rounded">
@@ -37,13 +37,24 @@ const PenawaranRkn = () => {
             {formatDateTime(new Date(data.kualifikasi?.dok_tgljam))}
           </span>
         </p>
+        <Link
+          className="px-2 py-1 bg-blue-500 rounded hover:bg-blue-600"
+          to={`/dokumen-kualifikasi/${data.lelang?.lls_id}`}
+        >
+          <p className="text-white">Kirim Data</p>
+        </Link>
       </div>
     ) : (
       <div className="flex flex-wrap items-center gap-4">
-        <p className="p-1 bg-gray-400 rounded-lg">Status : Belum Dikirim</p>
-        <button className="px-2 py-1 bg-blue-500 rounded hover:bg-blue-600">
+        <p className="p-1 text-white bg-gray-400 rounded">
+          Status : Belum Dikirim
+        </p>
+        <Link
+          className="px-2 py-1 bg-blue-500 rounded hover:bg-blue-600"
+          to={`/dokumen-kualifikasi/${data.lelang?.lls_id}`}
+        >
           <p className="text-white">Kirim Data</p>
-        </button>
+        </Link>
       </div>
     );
   };

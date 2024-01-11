@@ -137,6 +137,36 @@ export const penyediaService = () => {
     }
   };
 
+  const getDokKualifikasi = async (llsId) => {
+    try {
+      const response = await api.get(`v1/RKN/kualifikasi/${llsId}`, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
+  const updateDokKualifikasi = async (llsId, dataKulifikasi) => {
+    try {
+      const response = await api.put(
+        `v1/RKN/kualifikasi/${llsId}`,
+        dataKulifikasi,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Memperbarui Data');
+    }
+  };
+
   return {
     btkUsaha,
     jenisIzin,
@@ -151,5 +181,7 @@ export const penyediaService = () => {
     getDataDahsboardRKN,
     getPenawaran,
     getDokPenawaran,
+    getDokKualifikasi,
+    updateDokKualifikasi,
   };
 };
