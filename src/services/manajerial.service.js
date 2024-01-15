@@ -1,6 +1,8 @@
 import api from '../config/api';
+import { useAuthContext } from '../contexts/AuthContext';
 
 export const manajerialService = () => {
+  const { userToken } = useAuthContext();
   const getManajer = async (penyediaId, lenght, page, search) => {
     try {
       const response = await api.get(
@@ -15,8 +17,13 @@ export const manajerialService = () => {
   const postManajer = async (penyediaId, dataPenyedia) => {
     try {
       const response = await api.post(
-        `/penyedia/manajer/${penyediaId}`,
-        dataPenyedia
+        `v1/RKN/manajer/${penyediaId}`,
+        dataPenyedia,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -27,10 +34,9 @@ export const manajerialService = () => {
   const editManajer = async (manajerialId, dataPenyedia) => {
     try {
       const response = await api.get(
-        `/penyedia/manajer/${manajerialId}`,
+        `v1/RKN/manajer/${manajerialId}`,
         dataPenyedia
       );
-      console.log(response);
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data Manajerial');
@@ -40,8 +46,13 @@ export const manajerialService = () => {
   const updateManajer = async (manajerialId, dataPenyedia) => {
     try {
       const response = await api.put(
-        `/penyedia/manajer/${manajerialId}`,
-        dataPenyedia
+        `v1/RKN/manajer/${manajerialId}`,
+        dataPenyedia,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {

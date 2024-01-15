@@ -64,6 +64,7 @@ import DaftarPaketBaru from './pages/penyedia/daftarPaketBaru';
 import Penawaran from './pages/penyedia/penawaran';
 import DokRKN from './pages/penyedia/dokRkn';
 import AddDataKualifikasi from './pages/penyedia/addDataKualifikasi';
+import SendPenawaran from './pages/penyedia/sendPenawaran';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -144,6 +145,7 @@ const AppRoute = () => {
               path="/dokumen-kualifikasi/:llsId"
               element={<AddDataKualifikasi />}
             />
+            <Route path="/kirim-penawaran/:llsId" element={<SendPenawaran />} />
           </Route>
           <Route element={<KipbjAccess />}>
             <Route path="/daftar-panitia" element={<ListPanitia />} />

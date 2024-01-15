@@ -167,6 +167,49 @@ export const penyediaService = () => {
     }
   };
 
+  const getKirimPenawaran = async (llsId) => {
+    try {
+      const response = await api.get(`v1/RKN/penawaran_kirim/${llsId}`, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
+  const putKirimPenawaran = async (llsId, dataPenawaran) => {
+    try {
+      const response = await api.put(
+        `v1/RKN/penawaran_kirim/${llsId}`,
+        dataPenawaran,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
+  const getTemplateHarga = async (llsId) => {
+    try {
+      const response = await api.get(`v1/RKN/template_harga/${llsId}`, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
   return {
     btkUsaha,
     jenisIzin,
@@ -183,5 +226,8 @@ export const penyediaService = () => {
     getDokPenawaran,
     getDokKualifikasi,
     updateDokKualifikasi,
+    getKirimPenawaran,
+    putKirimPenawaran,
+    getTemplateHarga,
   };
 };

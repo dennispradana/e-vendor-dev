@@ -14,7 +14,7 @@ import TabPeralatan from './TabPeralatan';
 import TabPajak from './TabPajak';
 import Spinner from '../Elements/Spinner';
 import { useFormik } from 'formik';
-import { FileUpload } from '../Elements/Modal/fileUpload';
+import { FileUploadDokKualifikasi } from '../Elements/Modal/fileUpload';
 
 const initialState = {
   data: [],
@@ -74,7 +74,7 @@ const FormDokKualifikasiRkn = () => {
     pajak: data.pajak?.map((item) => ({
       pjk_id: item.pjk_id || '',
     })),
-    lainnya: data.lainnya?.dok_id_attachment || '',
+    lainya: data.lainya?.dok_id_attachment || '',
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -115,7 +115,7 @@ const FormDokKualifikasiRkn = () => {
       pajak: data.pajak?.map((item) => ({
         pjk_id: item.pjk_id || '',
       })),
-      lainnya: data.lainnya?.dok_id_attachment || '',
+      lainya: data.lainya?.dok_id_attachment || '',
     });
   }, [data]);
 
@@ -154,7 +154,7 @@ const FormDokKualifikasiRkn = () => {
   const handleCloseModal = (dokIdAttachment) => {
     setShowModal(false);
     setDokIdAttachment(dokIdAttachment);
-    formik.setFieldValue('lainnya.dok_id_attachment', dokIdAttachment);
+    formik.setFieldValue('lainya.dok_id_attachment', dokIdAttachment);
   };
 
   const renderFormContent = () => {
@@ -274,7 +274,7 @@ const FormDokKualifikasiRkn = () => {
                   >
                     {formik.isSubmitting ? (
                       <Spinner />
-                    ) : currentStep === 6 ? (
+                    ) : currentStep === 7 ? (
                       'Simpan'
                     ) : (
                       'Selanjutnya'
@@ -287,11 +287,11 @@ const FormDokKualifikasiRkn = () => {
         </Tabs>
       </form>
       {showModal && (
-        <FileUpload
+        <FileUploadDokKualifikasi
           close={handleCloseModal}
           Id={
-            data.lainnya?.dok_id_attachment
-              ? data.lainnya?.dok_id_attachment
+            data.lainya?.dok_id_attachment
+              ? data.lainya?.dok_id_attachment
               : dokIdAttachment
           }
         />

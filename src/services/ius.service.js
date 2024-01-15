@@ -1,6 +1,8 @@
 import api from '../config/api';
+import { useAuthContext } from '../contexts/AuthContext';
 
 export const iusService = () => {
+  const { userToken } = useAuthContext();
   const jenisIzin = async () => {
     try {
       const response = await api.get('jenis_ijin');
@@ -24,8 +26,13 @@ export const iusService = () => {
   const postIzinUsaha = async (penyediaId, dataPenyedia) => {
     try {
       const response = await api.post(
-        `/penyedia/ijin/${penyediaId}`,
-        dataPenyedia
+        `v1/RKN/ijin/${penyediaId}`,
+        dataPenyedia,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -35,7 +42,7 @@ export const iusService = () => {
 
   const editIzinUsaha = async (iusId, dataPenyedia) => {
     try {
-      const response = await api.get(`/penyedia/ijin/${iusId}`, dataPenyedia);
+      const response = await api.get(`v1/RKN/ijin/${iusId}`, dataPenyedia);
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data Izin Usaha');
@@ -44,7 +51,11 @@ export const iusService = () => {
 
   const updateIzinUsaha = async (iusId, dataPenyedia) => {
     try {
-      const response = await api.put(`/penyedia/ijin/${iusId}`, dataPenyedia);
+      const response = await api.put(`v1/RKN/ijin/${iusId}`, dataPenyedia, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data Izin Usaha');

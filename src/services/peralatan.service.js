@@ -1,6 +1,8 @@
 import api from '../config/api';
+import { useAuthContext } from '../contexts/AuthContext';
 
 export const peralatanService = () => {
+  const { userToken } = useAuthContext();
   const getPeralatan = async (penyediaId, lenght, page, search) => {
     try {
       const response = await api.get(
@@ -15,8 +17,13 @@ export const peralatanService = () => {
   const postPeralatan = async (penyediaId, dataPenyedia) => {
     try {
       const response = await api.post(
-        `/penyedia/peralatan/${penyediaId}`,
-        dataPenyedia
+        `v1/RKN/peralatan/${penyediaId}`,
+        dataPenyedia,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -26,10 +33,7 @@ export const peralatanService = () => {
 
   const editPeralatan = async (prlId, dataPenyedia) => {
     try {
-      const response = await api.get(
-        `/penyedia/peralatan/${prlId}`,
-        dataPenyedia
-      );
+      const response = await api.get(`v1/RKN/peralatan/${prlId}`, dataPenyedia);
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data Peralatan');
@@ -39,8 +43,13 @@ export const peralatanService = () => {
   const updatePeralatan = async (prlId, dataPenyedia) => {
     try {
       const response = await api.put(
-        `/penyedia/peralatan/${prlId}`,
-        dataPenyedia
+        `v1/RKN/peralatan/${prlId}`,
+        dataPenyedia,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {

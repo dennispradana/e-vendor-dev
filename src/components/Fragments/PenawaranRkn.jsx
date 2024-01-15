@@ -136,9 +136,12 @@ const PenawaranRkn = () => {
                 )}
               </span>
             </p>
-            <button className="px-2 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">
+            <Link
+              to={`/kirim-penawaran/${data.lelang?.lls_id}`}
+              className="px-2 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
+            >
               Kirim Penawaran
-            </button>
+            </Link>
           </div>
         </div>
       </div>
