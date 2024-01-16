@@ -35,8 +35,6 @@ const TablePenawaranRkn = () => {
     fetchData();
   }, []);
 
-  console.log(data);
-
   const handleNext = async () => {
     if (currentStep === 2) {
       navigate(`/penawaran/${llsId}`);

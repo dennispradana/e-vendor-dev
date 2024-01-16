@@ -41,8 +41,6 @@ const AddDataKualifikasi = () => {
     );
   };
 
-  console.log(data);
-
   return (
     <MainLayouts type="RKN">
       <Breadcrumb items={breadcrumbItems} />
