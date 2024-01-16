@@ -154,7 +154,7 @@ const TabManajerial = ({ type, formik }) => {
               />
             </div>
           </div>
-          {type === 'form' ? (
+          {type !== 'tab' ? (
             <div className="flex justify-between my-2 max-md:flex-col">
               <div className="flex items-center ">
                 <label className="mr-2 text-sm italic font-semibold capitalize">
@@ -258,6 +258,18 @@ const TabManajerial = ({ type, formik }) => {
                               onChange={() => handleDataSelect(item)}
                             />
                           </div>
+                        ) : type === 'readOnly' ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={formik.values.manajerial.some(
+                                (selectedItem) =>
+                                  selectedItem.id_manajerial ===
+                                  item.id_manajerial
+                              )}
+                              readOnly
+                            />
+                          </div>
                         ) : (
                           <div className="flex items-center justify-center gap-2">
                             <Tooltip text="Edit">
@@ -283,7 +295,7 @@ const TabManajerial = ({ type, formik }) => {
             </table>
           </div>
         </div>
-        {type !== 'form' && (
+        {type === 'tab' && (
           <div className="flex justify-between my-2 max-md:flex-col">
             <div className="flex items-center ">
               <label className="mr-2 text-sm italic font-semibold capitalize">

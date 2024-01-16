@@ -26,6 +26,42 @@ const PenawaranRkn = () => {
     fetchData();
   }, []);
 
+  const RenderButtonKualifikasi = () => {
+    return data.lelang?.tahapan2 === 'PEMASUKAN_PENAWARAN' ? (
+      <Link
+        className="px-2 py-1 bg-green-500 rounded hover:bg-green-600"
+        to={`/dokumen-kualifikasi/${data.lelang?.lls_id}`}
+      >
+        <p className="text-white">Kirim Data</p>
+      </Link>
+    ) : (
+      <Link
+        className="px-2 py-1 bg-blue-500 rounded hover:bg-blue-600"
+        to={`/dokumen-kualifikasi/${data.lelang?.lls_id}`}
+      >
+        <p className="text-white">Lihat Data</p>
+      </Link>
+    );
+  };
+
+  const RenderButtonPenawaran = () => {
+    return data.lelang?.tahapan2 === 'PEMASUKAN_PENAWARAN' ? (
+      <Link
+        to={`/kirim-penawaran/${data.lelang?.lls_id}`}
+        className="px-2 py-1 text-white bg-green-500 rounded hover:bg-green-600"
+      >
+        Kirim Penawaran
+      </Link>
+    ) : (
+      <Link
+        to={`/kirim-penawaran/${data.lelang?.lls_id}`}
+        className="px-2 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
+      >
+        Lihat Penawaran
+      </Link>
+    );
+  };
+
   const renderKualifikasi = () => {
     return data.kualifikasi !== null ? (
       <div className="flex flex-wrap items-center gap-4">
@@ -37,24 +73,14 @@ const PenawaranRkn = () => {
             {formatDateTime(new Date(data.kualifikasi?.dok_tgljam))}
           </span>
         </p>
-        <Link
-          className="px-2 py-1 bg-blue-500 rounded hover:bg-blue-600"
-          to={`/dokumen-kualifikasi/${data.lelang?.lls_id}`}
-        >
-          <p className="text-white">Kirim Data</p>
-        </Link>
+        <RenderButtonKualifikasi />
       </div>
     ) : (
       <div className="flex flex-wrap items-center gap-4">
         <p className="p-1 text-white bg-gray-400 rounded">
           Status : Belum Dikirim
         </p>
-        <Link
-          className="px-2 py-1 bg-blue-500 rounded hover:bg-blue-600"
-          to={`/dokumen-kualifikasi/${data.lelang?.lls_id}`}
-        >
-          <p className="text-white">Kirim Data</p>
-        </Link>
+        <RenderButtonKualifikasi />
       </div>
     );
   };
@@ -136,12 +162,7 @@ const PenawaranRkn = () => {
                 )}
               </span>
             </p>
-            <Link
-              to={`/kirim-penawaran/${data.lelang?.lls_id}`}
-              className="px-2 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
-            >
-              Kirim Penawaran
-            </Link>
+            {data.kualifikasi !== null && <RenderButtonPenawaran />}
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ import Spinner from '../Spinner';
 import { fileService } from '../../../services/file.service';
 import { toasterror, toastsuccess } from '../../../utils/ToastMessage';
 import { BsFillTrashFill } from 'react-icons/bs';
+import { IoCloseSharp } from 'react-icons/io5';
 
 export const FileUpload = ({ close, Id }) => {
   const { postFile, getFile, deleteFile, downloadFile } = fileService();
@@ -1654,7 +1655,7 @@ export const FileUploadDokKualifikasi = ({ close, Id }) => {
   );
 };
 
-export const FileUploadDokKirimPenawaran = ({ close, Id }) => {
+export const FileUploadDokKirimPenawaran = ({ save, Id, close }) => {
   const { postFile, getFile, deleteFile, downloadFile } = fileService();
   const [files, setFiles] = useState([]);
   const [idContent, setIdContent] = useState(Id);
@@ -1737,8 +1738,8 @@ export const FileUploadDokKirimPenawaran = ({ close, Id }) => {
     getTableFile();
   }, [uploadCount, idContent]);
 
-  const handleClose = () => {
-    close(idContent);
+  const handleSave = () => {
+    save(idContent);
   };
 
   const handleDownload = async (idContent, versi, fileName) => {
@@ -1885,6 +1886,12 @@ export const FileUploadDokKirimPenawaran = ({ close, Id }) => {
       <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
         <div className="relative w-[70vw] mx-auto my-6 ">
           <div className="relative flex flex-col w-full px-3 py-6 bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+            <div
+              className="flex justify-end mb-6 cursor-pointer"
+              onClick={close}
+            >
+              <IoCloseSharp className="text-2xl hover:text-red-500" />
+            </div>
             <form onSubmit={formik.handleSubmit} className="px-4">
               <div className="mb-4">
                 <input
@@ -1919,11 +1926,11 @@ export const FileUploadDokKirimPenawaran = ({ close, Id }) => {
             <RenderTable />
 
             <button
-              onClick={handleClose}
-              className="p-3 font-bold text-red-500 border-b border-solid rounded-md rounded-t hover:text-red-600 border-slate-200"
+              onClick={handleSave}
+              className="p-3 font-bold text-green-500 border-b border-solid rounded-md rounded-t hover:text-green-600 border-slate-200"
               type="button"
             >
-              Tutup
+              Simpan
             </button>
           </div>
         </div>

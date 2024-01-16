@@ -1,6 +1,9 @@
 import React from 'react';
 
-const FormPenawaranTeknis = ({ data, modal }) => {
+const FormPenawaranTeknis = ({ data, modal, type }) => {
+  const renderTextButton = () => {
+    return type === 'readOnly' ? 'Lihat dokumen' : 'Upload Dokumen';
+  };
   return (
     <>
       {data.checklist?.teknis?.map((item, index) => (
@@ -14,7 +17,7 @@ const FormPenawaranTeknis = ({ data, modal }) => {
               onClick={() => modal(index)}
               className="w-[10rem] px-3 py-2 font-bold text-white duration-200 ease-in rounded bg-violet-400 hover:bg-violet-500"
             >
-              Upload dokumen
+              {renderTextButton()}
             </button>
           </div>
         </div>

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { penyediaService } from '../../services/penyedia.service';
-import { toasterror, toastsuccess } from '../../utils/ToastMessage';
+import { toasterror } from '../../utils/ToastMessage';
 import { useNavigate, useParams } from 'react-router-dom';
 import { formatRp } from '../../utils/formatRupiah';
+import { useFormik } from 'formik';
 import TabIzinUsaha from './TabIzinUsaha';
 import TabAkta from './TabAkta';
 import TabManajerial from './TabManajerial';
@@ -13,38 +14,21 @@ import TabPengalaman from './TabPengalaman';
 import TabPeralatan from './TabPeralatan';
 import TabPajak from './TabPajak';
 import Spinner from '../Elements/Spinner';
-import { useFormik } from 'formik';
-import { FileUploadDokKualifikasi } from '../Elements/Modal/fileUpload';
+import { ModalUploadFile } from '../Elements/Modal/penyedia';
 
-const initialState = {
-  data: [],
-  izinUsaha: [],
-  landasanHukum: [],
-  manajerial: [],
-  pajak: [],
-  pengalaman: [],
-  peralatan: [],
-  lainya: '',
-};
-
-const FormDokKualifikasiRkn = () => {
+const TableDokKualifikasiRkn = () => {
   const { llsId } = useParams();
   const [currentStep, setCurrentStep] = useState(0);
-  const { getDokKualifikasi, updateDokKualifikasi } = penyediaService();
+  const { getDokKualifikasi } = penyediaService();
   const [loading, setLoading] = useState(true);
-  const [state, setState] = useState(initialState);
-  const { data } = state;
+  const [data, setData] = useState('');
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [dokIdAttachment, setDokIdAttachment] = useState('');
 
   const fetchData = async () => {
     try {
       const response = await getDokKualifikasi(llsId);
-      setState((prev) => ({
-        ...prev,
-        data: response.data,
-      }));
+      setData(response.data);
     } catch (error) {
       toasterror(error.message);
     } finally {
@@ -78,24 +62,11 @@ const FormDokKualifikasiRkn = () => {
     pajak: data.pajak?.map((item) => ({
       pjk_id: item.pjk_id || '',
     })),
-    lainya: {
-      dok_id_attachment: '',
-    },
-  };
-
-  const handleSubmit = async (values, { setSubmitting }) => {
-    try {
-      await updateDokKualifikasi(llsId, values);
-    } catch (error) {
-      toasterror(error.message);
-    } finally {
-      setSubmitting(false);
-    }
+    lainya: data.lainya?.dok_id_attachment || '',
   };
 
   const formik = useFormik({
     initialValues: initialValues,
-    onSubmit: handleSubmit,
   });
 
   useEffect(() => {
@@ -121,29 +92,15 @@ const FormDokKualifikasiRkn = () => {
       pajak: data.pajak?.map((item) => ({
         pjk_id: item.pjk_id || '',
       })),
-      lainya: {
-        dok_id_attachment: data.lainya?.dok_id_attachment || '',
-      },
+      lainya: data.lainya?.dok_id_attachment || '',
     });
   }, [data]);
 
   const handleNext = async () => {
-    if (formik.isValid) {
-      try {
-        formik.setSubmitting(true);
-        await formik.submitForm();
-        if (currentStep === 7) {
-          navigate(`/penawaran/${llsId}`);
-          toastsuccess('Berhasil Menyimpan Data');
-        } else {
-          await fetchData();
-          setCurrentStep((prevStep) => prevStep + 1);
-        }
-      } catch (error) {
-        toasterror(error.message);
-      } finally {
-        formik.setSubmitting(false);
-      }
+    if (currentStep === 7) {
+      navigate(`/penawaran/${llsId}`);
+    } else {
+      setCurrentStep((prevStep) => prevStep + 1);
     }
   };
 
@@ -151,48 +108,8 @@ const FormDokKualifikasiRkn = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleOpenModal = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = (dokIdAttachment) => {
-    setShowModal(false);
-    setDokIdAttachment(dokIdAttachment);
-    formik.setFieldValue('lainya.dok_id_attachment', dokIdAttachment);
-  };
-
-  const renderFormContent = () => {
-    switch (currentStep) {
-      case 0:
-        return <TabIzinUsaha type="form" formik={formik} />;
-      case 1:
-        return <TabAkta type="form" formik={formik} />;
-      case 2:
-        return <TabManajerial type="form" formik={formik} />;
-      case 3:
-        return <TabTenagaAhli type="form" formik={formik} />;
-      case 4:
-        return <TabPengalaman type="form" formik={formik} />;
-      case 5:
-        return <TabPeralatan type="form" formik={formik} />;
-      case 6:
-        return <TabPajak type="form" formik={formik} />;
-      case 7:
-        return (
-          <div className="my-10 min-h-[40vh]">
-            <button
-              type="button"
-              onClick={handleOpenModal}
-              className="w-full py-2 font-bold text-white duration-200 ease-in rounded-lg bg-violet-400 hover:bg-violet-500"
-            >
-              Upload File
-            </button>
-          </div>
-        );
-
-      default:
-        return null;
-    }
+  const handleModal = () => {
+    setShowModal(!showModal);
   };
 
   const RenderDataLelang = () => {
@@ -218,13 +135,47 @@ const FormDokKualifikasiRkn = () => {
     );
   };
 
+  const renderContent = () => {
+    switch (currentStep) {
+      case 0:
+        return <TabIzinUsaha type="readOnly" formik={formik} />;
+      case 1:
+        return <TabAkta type="readOnly" formik={formik} />;
+      case 2:
+        return <TabManajerial type="readOnly" formik={formik} />;
+      case 3:
+        return <TabTenagaAhli type="readOnly" formik={formik} />;
+      case 4:
+        return <TabPengalaman type="readOnly" formik={formik} />;
+      case 5:
+        return <TabPeralatan type="readOnly" formik={formik} />;
+      case 6:
+        return <TabPajak type="readOnly" formik={formik} />;
+      case 7:
+        return (
+          <div className="my-10 min-h-[40vh]">
+            <button
+              type="button"
+              onClick={handleModal}
+              className="w-full py-2 font-bold text-white duration-200 ease-in rounded-lg bg-violet-400 hover:bg-violet-500"
+            >
+              Lihat File
+            </button>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   return loading ? (
     <div className="flex items-center justify-center h-[70vh]">
       <Spinner />
     </div>
   ) : (
     <>
-      <form onSubmit={formik.handleSubmit} className="mb-10">
+      <div className="mb-10">
         <RenderDataLelang />
         <Tabs
           selectedIndex={currentStep}
@@ -247,7 +198,7 @@ const FormDokKualifikasiRkn = () => {
           </TabList>
           {Array.from({ length: 8 }, (_, index) => (
             <TabPanel key={index}>
-              <div className="mb-6">{renderFormContent()}</div>
+              <div className="mb-6">{renderContent()}</div>
               <div className="flex items-center justify-between px-6">
                 {currentStep === 0 && (
                   <button
@@ -270,38 +221,20 @@ const FormDokKualifikasiRkn = () => {
                 {currentStep <= 7 && (
                   <button
                     type="submit"
-                    className={`px-4 py-2 font-semibold text-white capitalize transition duration-200 ease-in-out bg-blue-500 cursor-pointer rounded hover:bg-blue-700 hover:text-white ${
-                      formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
+                    className={`px-4 py-2 font-semibold text-white capitalize transition duration-200 ease-in-out bg-blue-500 cursor-pointer rounded hover:bg-blue-700 hover:text-white `}
                     onClick={handleNext}
-                    disabled={formik.isSubmitting}
                   >
-                    {formik.isSubmitting ? (
-                      <Spinner />
-                    ) : currentStep === 7 ? (
-                      'Simpan'
-                    ) : (
-                      'Selanjutnya'
-                    )}
+                    {currentStep === 7 ? 'Selesai' : 'Selanjutnya'}
                   </button>
                 )}
               </div>
             </TabPanel>
           ))}
         </Tabs>
-      </form>
-      {showModal && (
-        <FileUploadDokKualifikasi
-          close={handleCloseModal}
-          Id={
-            data.lainya?.dok_id_attachment
-              ? data.lainya?.dok_id_attachment
-              : dokIdAttachment
-          }
-        />
-      )}
+      </div>
+      {showModal && <ModalUploadFile close={handleModal} data={data} />}
     </>
   );
 };
 
-export default FormDokKualifikasiRkn;
+export default TableDokKualifikasiRkn;

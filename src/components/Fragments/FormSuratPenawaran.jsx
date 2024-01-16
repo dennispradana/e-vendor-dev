@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatDate } from '../../utils/formatDate';
 
-const FormSuratPenawaran = ({ data, formik }) => {
+const FormSuratPenawaran = ({ data, formik, type }) => {
   const renderStatus = () => {
     const status = data.peserta?.tgl_surat_penawaran;
     return status === null ? (
@@ -22,7 +22,14 @@ const FormSuratPenawaran = ({ data, formik }) => {
   };
 
   const renderMasaBerlaku = () => {
-    return (
+    return type === 'readOnly' ? (
+      <input
+        type="text"
+        className="w-10 text-center border border-collapse border-black"
+        value={data.peserta?.masa_berlaku_penawaran}
+        readOnly
+      />
+    ) : (
       <input
         type="text"
         className="w-10 text-center border border-collapse border-black"

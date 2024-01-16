@@ -145,7 +145,7 @@ const FormKirimPenawaran = () => {
     setShowModal(true);
   };
 
-  const handleCloseModal = async (dokIdAttachment) => {
+  const handleSaveModal = async (dokIdAttachment) => {
     const updatedTeknis = [...formik.values.checklist.teknis];
     if (selectedTeknisIndex !== null) {
       updatedTeknis[selectedTeknisIndex].dok_id_attachment =
@@ -172,12 +172,16 @@ const FormKirimPenawaran = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   const handleOpenModalHarga = (index) => {
     setSelectedHargaIndex(index);
     setShowModalHarga(true);
   };
 
-  const handleCloseModalHarga = async (dokIdAttachment) => {
+  const handleSaveModalHarga = async (dokIdAttachment) => {
     const updatedHarga = [...formik.values.checklist.harga];
     if (selectedHargaIndex !== null) {
       updatedHarga[selectedHargaIndex].dok_id_attachment =
@@ -202,6 +206,10 @@ const FormKirimPenawaran = () => {
     } finally {
       formik.setSubmitting(false);
     }
+  };
+
+  const handleCloseModalHarga = () => {
+    setShowModalHarga(false);
   };
 
   const renderFormContent = () => {
@@ -294,14 +302,16 @@ const FormKirimPenawaran = () => {
       </form>
       {showModal && (
         <FileUploadDokKirimPenawaran
-          close={handleCloseModal}
+          save={handleSaveModal}
           Id={data.checklist?.teknis?.[selectedTeknisIndex]?.dok_id_attachment}
+          close={handleCloseModal}
         />
       )}
       {showModalHarga && (
         <FileUploadDokKirimPenawaran
-          close={handleCloseModalHarga}
+          save={handleSaveModalHarga}
           Id={data.checklist?.harga?.[selectedHargaIndex]?.dok_id_attachment}
+          close={handleCloseModalHarga}
         />
       )}
     </>
