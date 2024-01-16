@@ -1,10 +1,12 @@
 import api from '../config/api';
+import { useAuthContext } from '../contexts/AuthContext';
 
 export const pajakService = () => {
+  const { userToken } = useAuthContext();
   const getPajak = async (penyediaId, lenght, page, search) => {
     try {
       const response = await api.get(
-        `/penyedia/list_pajak/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
+        `v1/RKN/list_pajak/${penyediaId}?length=${lenght}&page=${page}&q=${search}`
       );
       return response.data;
     } catch (error) {
@@ -15,8 +17,13 @@ export const pajakService = () => {
   const postPajak = async (penyediaId, dataPenyedia) => {
     try {
       const response = await api.post(
-        `/penyedia/pajak/${penyediaId}`,
-        dataPenyedia
+        `v1/RKN/pajak/${penyediaId}`,
+        dataPenyedia,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -26,7 +33,7 @@ export const pajakService = () => {
 
   const editPajak = async (pjkId, dataPenyedia) => {
     try {
-      const response = await api.get(`/penyedia/pajak/${pjkId}`, dataPenyedia);
+      const response = await api.get(`v1/RKN/pajak/${pjkId}`, dataPenyedia);
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data Pajak');
@@ -35,7 +42,11 @@ export const pajakService = () => {
 
   const updatePajak = async (pjkId, dataPenyedia) => {
     try {
-      const response = await api.put(`/penyedia/pajak/${pjkId}`, dataPenyedia);
+      const response = await api.put(`v1/RKN/pajak/${pjkId}`, dataPenyedia, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error('Gagal Update Data Pajak');

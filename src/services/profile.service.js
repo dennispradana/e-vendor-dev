@@ -18,7 +18,7 @@ export const userProfile = () => {
 
   const getProfilePenyedia = async (userId) => {
     try {
-      const response = await api.get(`/v1/penyedia/${userId}`, {
+      const response = await api.get(`/v1/RKN/penyedia/${userId}`, {
         headers: {
           Authorization: `Bearer ${userToken.access_token}`,
         },
@@ -44,7 +44,7 @@ export const userProfile = () => {
 
   const updateProfilePenyedia = async (userId, userData) => {
     try {
-      const response = await api.put(`/v1/penyedia/${userId}`, userData, {
+      const response = await api.put(`/v1/RKN/penyedia/${userId}`, userData, {
         headers: {
           Authorization: `Bearer ${userToken.access_token}`,
         },

@@ -24,7 +24,7 @@ const initialState = {
   showItem: 10,
 };
 
-const TabPajak = () => {
+const TabPajak = ({ type, formik }) => {
   const [state, setState] = useState(initialState);
   const {
     datas,
@@ -97,6 +97,28 @@ const TabPajak = () => {
     }));
   };
 
+  const handleDataSelect = (item) => {
+    const isDataSelected = formik.values.pajak.some(
+      (selectedItem) => selectedItem.pjk_id === item.pjk_id
+    );
+
+    if (isDataSelected) {
+      formik.setFieldValue(
+        'pajak',
+        formik.values.pajak.filter(
+          (selectedItem) => selectedItem.pjk_id !== item.pjk_id
+        )
+      );
+    } else {
+      formik.setFieldValue('pajak', [
+        ...formik.values.pajak,
+        {
+          pjk_id: item.pjk_id,
+        },
+      ]);
+    }
+  };
+
   const TablePajak = () => {
     return (
       <>
@@ -134,14 +156,51 @@ const TabPajak = () => {
               />
             </div>
           </div>
-          <div>
-            <Link
-              to="/tambah-pajak"
-              className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
-            >
-              tambah data
-            </Link>
-          </div>
+          {type !== 'tab' ? (
+            <div className="flex justify-between my-2 max-md:flex-col">
+              <div className="flex items-center ">
+                <label className="mr-2 text-sm italic font-semibold capitalize">
+                  data ditampilkan
+                </label>
+                <select
+                  className="px-3 py-1 cursor-pointer"
+                  value={showItem}
+                  onChange={handleShowData}
+                >
+                  {dataLength <= 10 ? (
+                    <option value={dataLength}>{dataLength}</option>
+                  ) : (
+                    <>
+                      <option value={10}>10</option>
+                      <option value={20}>20</option>
+                      <option value={30}>30</option>
+                      <option value={40}>40</option>
+                      <option value={50}>50</option>
+                    </>
+                  )}
+                </select>
+                <p className="ml-2 text-sm italic font-semibold capitalize">
+                  dari {dataLength} data
+                </p>
+              </div>
+              {dataLength > 10 && (
+                <Pagination
+                  currentPage={currentPage}
+                  onPageChange={handlePageChange}
+                  totalPages={totalPages}
+                />
+              )}
+            </div>
+          ) : (
+            <div>
+              <Link
+                to="/tambah-pajak"
+                className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
+              >
+                tambah data
+              </Link>
+            </div>
+          )}
         </div>
         <div className="relative flex flex-col h-[50vh] overflow-x-auto rounded-lg">
           <div className="flex-grow">
@@ -187,21 +246,45 @@ const TabPajak = () => {
                       </td>
                       <td className="px-3 py-4">{item.pjk_no}</td>
                       <td className="px-6 py-4 text-center">
-                        <div className="flex items-center justify-center gap-2">
-                          <Tooltip text="Edit">
-                            <button
-                              className="mr-2 text-blue-500 hover:text-blue-700"
-                              onClick={() => handleEdit(item.pjk_id)}
-                            >
-                              <FiEdit size="1.2rem" />
-                            </button>
-                          </Tooltip>
-                          <Tooltip text="delete">
-                            <button className="mr-2 text-red-500 hover:text-red-700">
-                              <MdDeleteOutline size="1.4rem" />
-                            </button>
-                          </Tooltip>
-                        </div>
+                        {type === 'form' ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={formik.values.pajak.some(
+                                (selectedItem) =>
+                                  selectedItem.pjk_id === item.pjk_id
+                              )}
+                              onChange={() => handleDataSelect(item)}
+                            />
+                          </div>
+                        ) : type === 'readOnly' ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={formik.values.pajak.some(
+                                (selectedItem) =>
+                                  selectedItem.pjk_id === item.pjk_id
+                              )}
+                              onChange={() => handleDataSelect(item)}
+                            />
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center gap-2">
+                            <Tooltip text="Edit">
+                              <button
+                                className="mr-2 text-blue-500 hover:text-blue-700"
+                                onClick={() => handleEdit(item.pjk_id)}
+                              >
+                                <FiEdit size="1.2rem" />
+                              </button>
+                            </Tooltip>
+                            <Tooltip text="delete">
+                              <button className="mr-2 text-red-500 hover:text-red-700">
+                                <MdDeleteOutline size="1.4rem" />
+                              </button>
+                            </Tooltip>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))
@@ -210,40 +293,42 @@ const TabPajak = () => {
             </table>
           </div>
         </div>
-        <div className="flex justify-between my-2 max-md:flex-col">
-          <div className="flex items-center ">
-            <label className="mr-2 text-sm italic font-semibold capitalize">
-              data ditampilkan
-            </label>
-            <select
-              className="px-3 py-1 cursor-pointer"
-              value={showItem}
-              onChange={handleShowData}
-            >
-              {dataLength <= 10 ? (
-                <option value={dataLength}>{dataLength}</option>
-              ) : (
-                <>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={30}>30</option>
-                  <option value={40}>40</option>
-                  <option value={50}>50</option>
-                </>
-              )}
-            </select>
-            <p className="ml-2 text-sm italic font-semibold capitalize">
-              dari {dataLength} data
-            </p>
+        {type === 'tab' && (
+          <div className="flex justify-between my-2 max-md:flex-col">
+            <div className="flex items-center ">
+              <label className="mr-2 text-sm italic font-semibold capitalize">
+                data ditampilkan
+              </label>
+              <select
+                className="px-3 py-1 cursor-pointer"
+                value={showItem}
+                onChange={handleShowData}
+              >
+                {dataLength <= 10 ? (
+                  <option value={dataLength}>{dataLength}</option>
+                ) : (
+                  <>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={30}>30</option>
+                    <option value={40}>40</option>
+                    <option value={50}>50</option>
+                  </>
+                )}
+              </select>
+              <p className="ml-2 text-sm italic font-semibold capitalize">
+                dari {dataLength} data
+              </p>
+            </div>
+            {dataLength > 10 && (
+              <Pagination
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+                totalPages={totalPages}
+              />
+            )}
           </div>
-          {dataLength > 10 && (
-            <Pagination
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-              totalPages={totalPages}
-            />
-          )}
-        </div>
+        )}
       </>
     );
   };
@@ -259,13 +344,13 @@ const TabPajak = () => {
     ) : dataTotal === 0 ? (
       <div className="flex items-center flex-col justify-center h-[50vh]">
         <DataEmpty
-          title="Akta"
+          title="Pajak"
           icon={
             <FaFileInvoiceDollar size="12rem" className="mb-4 text-gray-400" />
           }
         />
         <Link
-          to="/tambah-akta"
+          to="/tambah-pajak"
           className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out rounded-lg cursor-pointer text-gray-50 bg-violet-400 hover:bg-slate-800 hover:text-white"
         >
           tambah data

@@ -4,7 +4,7 @@ import TabManajerial from '../../../components/Fragments/TabManajerial';
 const Manajerial = () => {
   return (
     <div className="relative py-4 bg-white border rounded-lg page-padding">
-      <TabManajerial />
+      <TabManajerial type="tab" />
     </div>
   );
 };

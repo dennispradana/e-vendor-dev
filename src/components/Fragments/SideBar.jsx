@@ -30,7 +30,7 @@ const SideBar = () => {
     RKN: [
       { label: 'dashboard', link: '/dashboard' },
       { label: 'data penyedia', link: '/data-penyedia' },
-      { label: 'daftar paket', link: '/daftar-paket' },
+      { label: 'daftar paket baru', link: '/paket-baru' },
     ],
   };
 

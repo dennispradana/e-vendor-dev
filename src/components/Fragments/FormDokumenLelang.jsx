@@ -1,12 +1,7 @@
 import React from 'react';
 import { InputForm } from '../Elements/Input';
 
-const FormDokumenLelang = ({
-  formik,
-  handleModalDok,
-  handleModalKualifikasi,
-  handleModalPenawaran,
-}) => {
+const FormDokumenLelang = ({ formik, handleModalDok }) => {
   return (
     <>
       <InputForm

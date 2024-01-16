@@ -35,7 +35,7 @@ const Dashboard = () => {
           <h1 className="mb-5 text-xl font-bold text-black capitalize">
             Selamat datang {user.nama}
           </h1>
-          <div className="py-10 rounded-md shadow-lg bg-slate-200 page-padding">
+          <div className="py-10 my-5 rounded-md shadow-lg page-padding">
             {dasboardDisplay}
           </div>
         </>
