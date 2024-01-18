@@ -74,8 +74,6 @@ const TablePaketBaru = () => {
     setSelectedLlsId(null);
   };
 
-  console.log(datas);
-
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
     setState((prev) => ({

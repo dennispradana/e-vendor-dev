@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FormPesertaLelang = ({ handleModalPeserta, data, formik }) => {
+const FormPesertaLelang = ({ handleModalPeserta, data, formik, type }) => {
   const handleCheckboxChange = () => {
     const newStatus = formik.values.persetujuan.pst_status === 1 ? 0 : 1;
     formik.setFieldValue('persetujuan.pst_status', newStatus);
@@ -47,13 +47,15 @@ const FormPesertaLelang = ({ handleModalPeserta, data, formik }) => {
       <>
         <div className="flex items-center justify-between">
           <>{renderNamaPenyedia()}</>
-          <button
-            type="button"
-            onClick={handleModalPeserta}
-            className="px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-800 w-[7rem]"
-          >
-            Ganti Penyedia
-          </button>
+          {type !== 'readOnly' && (
+            <button
+              type="button"
+              onClick={handleModalPeserta}
+              className="px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-800 w-[7rem]"
+            >
+              Ganti Penyedia
+            </button>
+          )}
         </div>
       </>
     ) : (
