@@ -92,7 +92,7 @@ const TablePenawaranHargaRkn = ({ data, modal, loading }) => {
                 <td className="px-4 py-2 border">
                   {formatRp(row.total_harga)}
                 </td>
-                <td className="px-4 py-2 border"></td>
+                <td className="px-4 py-2 border">{row.keteragan}</td>
               </tr>
             ))}
           </tbody>

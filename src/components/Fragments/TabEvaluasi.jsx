@@ -34,9 +34,9 @@ const TabEvaluasi = () => {
       case 0:
         return <TabInformasiPaket data={data} loading={loading} />;
       case 1:
-        return <TabPenawaranPeserta />;
+        return <TabPenawaranPeserta data={data} loading={loading} />;
       case 2:
-        return <TabEvaluasiPenawaran />;
+        return <TabEvaluasiPenawaran data={data} loading={loading} />;
       default:
         return null;
     }
