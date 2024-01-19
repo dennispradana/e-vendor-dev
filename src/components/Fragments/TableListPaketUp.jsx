@@ -6,7 +6,7 @@ import { useDebounce } from 'use-debounce';
 import { toasterror } from '../../utils/ToastMessage';
 import DataEmpty from '../Elements/DataEmpty';
 import { FaRegFolderOpen } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { formatDate } from '../../utils/formatDate';
 
@@ -21,7 +21,7 @@ const initialState = {
   showItem: 10,
 };
 
-const TableListPaketUp = () => {
+const TableListPaketUp = ({ type }) => {
   const { user } = useAuthContext();
   const [state, setState] = useState(initialState);
   const {
@@ -35,34 +35,58 @@ const TableListPaketUp = () => {
     totalPages,
   } = state;
   const [loading, setLoading] = useState(true);
-  const { getPaketUp } = paketService();
+  const { getPaketUp, getLelangUp } = paketService();
   const [debaouceSearch] = useDebounce(search, 2000);
   const userId = user.user_id;
+  const navigate = useNavigate();
+
+  const fetchDataPaket = async () => {
+    try {
+      const response = await getPaketUp(
+        userId,
+        showItem,
+        currentPage,
+        debaouceSearch
+      );
+      setState((prev) => ({
+        ...prev,
+        dataTotal: response.total,
+        datas: response.data.data,
+        dataLength: response.data.total,
+        totalPages: Math.ceil(response.data.total / state.showItem),
+        entryNumber: (state.currentPage - 1) * state.showItem + 1,
+      }));
+      setLoading(false);
+    } catch (error) {
+      toasterror(error.message);
+    }
+  };
+
+  const fetchDataLelang = async () => {
+    try {
+      const response = await getLelangUp(
+        userId,
+        showItem,
+        currentPage,
+        debaouceSearch
+      );
+      setState((prev) => ({
+        ...prev,
+        dataTotal: response.total,
+        datas: response.data.data,
+        dataLength: response.data.total,
+        totalPages: Math.ceil(response.data.total / state.showItem),
+        entryNumber: (state.currentPage - 1) * state.showItem + 1,
+      }));
+      setLoading(false);
+    } catch (error) {
+      toasterror(error.message);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getPaketUp(
-          userId,
-          showItem,
-          currentPage,
-          debaouceSearch
-        );
-        setState((prev) => ({
-          ...prev,
-          dataTotal: response.total,
-          datas: response.data.data,
-          dataLength: response.data.total,
-          totalPages: Math.ceil(response.data.total / state.showItem),
-          entryNumber: (state.currentPage - 1) * state.showItem + 1,
-        }));
-        setLoading(false);
-      } catch (error) {
-        toasterror(error.message);
-      }
-    };
-    fetchData();
-  }, [userId, showItem, currentPage, debaouceSearch]);
+    type === 'evaluasi' ? fetchDataLelang() : fetchDataPaket();
+  }, [type, userId, showItem, currentPage, debaouceSearch]);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
@@ -87,6 +111,10 @@ const TableListPaketUp = () => {
       ...prev,
       currentPage: page,
     }));
+  };
+
+  const handleDirect = (llsId) => {
+    navigate(`/evaluasi/${llsId}`);
   };
 
   const renderStatus = (item) => {
@@ -215,10 +243,10 @@ const TableListPaketUp = () => {
                 {dataLength === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
-                      colSpan="6"
+                      colSpan="5"
                       className="px-6 py-4 italic font-semibold text-center"
                     >
-                      Data Pegawai tidak ditemukan
+                      Data tidak ditemukan
                     </td>
                   </tr>
                 ) : (
@@ -288,6 +316,138 @@ const TableListPaketUp = () => {
     );
   };
 
+  const TablePaketEvaluasi = () => {
+    return (
+      <>
+        <div className="flex items-center justify-between pb-4 ">
+          <div className="relative">
+            <label htmlFor="table-search" className="sr-only">
+              Cari
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg
+                  className="w-4 h-4 text-gray-500 "
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+              </div>
+              <input
+                type="text"
+                id="table-search"
+                className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-50 md:w-80 bg-gray-50 focus:outline-violet-300"
+                placeholder="Cari Data Panitia"
+                value={search}
+                onChange={handleSearch}
+                autoFocus
+              />
+            </div>
+          </div>
+        </div>
+        <div className="relative flex flex-col h-[70vh] overflow-x-auto rounded-lg">
+          <div className="flex-grow">
+            <table className="w-full text-sm text-left text-gray-600 md:text-base">
+              <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
+                <tr role="row" className="text-center border border-gray-200">
+                  <th className="px-4 py-3 border border-gray-200">No</th>
+                  <th className="px-4 py-3 border border-gray-200">
+                    Kode Pengadaan
+                  </th>
+                  <th className="px-4 py-3 border border-gray-200">
+                    Nama Paket
+                  </th>
+                  <th className="px-4 py-3 border border-gray-200">
+                    Status Tahapan
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="overflow-y-auto ">
+                {dataLength === 0 ? (
+                  <tr className="capitalize bg-gray-200 border-b">
+                    <td
+                      colSpan="5"
+                      className="px-6 py-4 italic font-semibold text-center"
+                    >
+                      Data tidak ditemukan
+                    </td>
+                  </tr>
+                ) : (
+                  datas.map((item, index) => (
+                    <tr
+                      key={item.pkt_id}
+                      className="duration-150 ease-out bg-white border-b hover:bg-gray-200"
+                    >
+                      <th
+                        scope="row"
+                        className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                      >
+                        {entryNumber + index}
+                      </th>
+                      <td className="px-3 py-4 capitalize">{item.lls_id}</td>
+                      <td
+                        className="px-3 py-4 text-center cursor-pointer capitaliz hover:text-blue-700"
+                        onClick={() => handleDirect(item.lls_id)}
+                      >
+                        {item.pkt_nama}
+                      </td>
+                      <td className="flex items-center justify-center px-3 py-4 capitalize">
+                        {item.tahapan}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="flex justify-between my-2 max-md:flex-col">
+          <div className="flex items-center ">
+            <label className="mr-2 text-sm italic font-semibold capitalize">
+              data ditampilkan
+            </label>
+            <select
+              className="px-3 py-1 cursor-pointer"
+              value={showItem}
+              onChange={handleShowData}
+            >
+              {dataLength <= 10 ? (
+                <option value={dataLength}>{dataLength}</option>
+              ) : (
+                <>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={30}>30</option>
+                  <option value={40}>40</option>
+                  <option value={50}>50</option>
+                </>
+              )}
+            </select>
+            <p className="ml-2 text-sm italic font-semibold capitalize">
+              dari {dataLength} data
+            </p>
+          </div>
+          {dataLength > 10 && (
+            <Pagination
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              totalPages={totalPages}
+            />
+          )}
+        </div>
+      </>
+    );
+  };
+
   const RenderContent = () => {
     return loading ? (
       <>
@@ -304,9 +464,7 @@ const TableListPaketUp = () => {
         />
       </div>
     ) : (
-      <>
-        <TablePaket />
-      </>
+      <>{type === 'evaluasi' ? <TablePaketEvaluasi /> : <TablePaket />}</>
     );
   };
 

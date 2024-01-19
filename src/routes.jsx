@@ -66,6 +66,8 @@ import DokRKN from './pages/penyedia/dokRkn';
 import AddDataKualifikasi from './pages/penyedia/addDataKualifikasi';
 import SendPenawaran from './pages/penyedia/sendPenawaran';
 import DetailLelang from './pages/pegawai/pp/detailLelang';
+import Evaluasi from './pages/pegawai/pp/evaluasi';
+import DokEvaluasi from './pages/pegawai/pp/dokEvaluasi';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -179,6 +181,8 @@ const AppRoute = () => {
               <Route path="up" element={<Up />} />
             </Route>
           </Route>
+          <Route path="evaluasi/:llsId" element={<Evaluasi />} />
+          <Route path="dokumen-evaluasi/:llsId" element={<DokEvaluasi />} />
           <Route path="/data-paket/:llsId" element={<UpdateLelang />} />
           <Route path="/data-paket/detail/:llsId" element={<DetailLelang />} />
         </Route>

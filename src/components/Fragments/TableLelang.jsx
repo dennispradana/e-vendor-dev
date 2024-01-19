@@ -7,20 +7,11 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Spinner from '../Elements/Spinner';
 import Stepper from '../Elements/Stepper';
-import {
-  DokLelang,
-  Kualifikasi,
-  LelangPenyedia,
-  ModalIL,
-  ModalKAK,
-  ModalRK,
-  Penawaran,
-} from '../Elements/Modal/pp';
+import { DokLelang, ModalIL, ModalKAK, ModalRK } from '../Elements/Modal/pp';
 import { formatEditDate } from '../../utils/formatDate';
 import FormJadwaalLelang from './FormJadwaalLelang';
-import { toasterror, toastsuccess } from '../../utils/ToastMessage';
+import { toasterror } from '../../utils/ToastMessage';
 import FormDokumenLelang from './FormDokumenLelang';
-import { FileUploadPemilihan } from '../Elements/Modal/fileUpload';
 import FormPesertaLelang from './FormPesertaLelang';
 import FormPersyaratanLelang from './FormPersyaratanLelang';
 
@@ -42,12 +33,6 @@ const TableLelang = () => {
   const [showModalRK, setShowModalRK] = useState(false);
   const [showModalIL, setShowModalIL] = useState(false);
   const [showModaDok, setShowModaDok] = useState(false);
-  const [showModalKulaifikasi, setShowModalKulaifikasi] = useState(false);
-  const [showModalPenawaran, setShowModalPenawaran] = useState(false);
-  const [showModalPenyedia, setShowModalPenyedia] = useState(false);
-  const [selectKualifikasi, setSelectKualifikasi] = useState([]);
-  const [selectPenawaran, setSelectPenawaran] = useState([]);
-  const [dllId, setDllId] = useState('');
   const navigate = useNavigate();
 
   const fetchDataPaket = async () => {
@@ -56,16 +41,6 @@ const TableLelang = () => {
       const response = await paketLelang(llsId);
       const paket = response.data;
       setDataPaket(paket);
-      setSelectKualifikasi(
-        paket.checklist?.kualifikasi.map((item) => ({
-          ckm_id: item.ckm_id,
-        }))
-      );
-      setSelectPenawaran(
-        paket.checklist?.penawaran.map((item) => ({
-          ckm_id: item.ckm_id,
-        }))
-      );
     } catch (error) {
       toasterror(error.message);
     } finally {
@@ -213,10 +188,6 @@ const TableLelang = () => {
     fetchDataPaket();
   }, []);
 
-  const handleDataUpadate = async () => {
-    await fetchDataPaket();
-  };
-
   const handlePrevious = () => {
     setCurrentStep((prevStep) => prevStep - 1);
   };
@@ -228,7 +199,6 @@ const TableLelang = () => {
         await formik.submitForm();
         if (currentStep === steps.length) {
           navigate('/data-paket');
-          toastsuccess('Berhasil Menyimpan Data');
         } else {
           await fetchDataPaket();
           setCurrentStep((prevStep) => prevStep + 1);
@@ -257,18 +227,6 @@ const TableLelang = () => {
 
   const handleCloseDok = () => {
     setShowModaDok(false);
-  };
-
-  const handleModalKualifikasi = () => {
-    setShowModalKulaifikasi(!showModalKulaifikasi);
-  };
-
-  const handleModalPenawaran = () => {
-    setShowModalPenawaran(!showModalPenawaran);
-  };
-
-  const handleModalPenyedia = () => {
-    setShowModalPenyedia(!showModalPenyedia);
   };
 
   const displayStep = () => {
@@ -315,8 +273,6 @@ const TableLelang = () => {
         return null;
     }
   };
-
-  console.log(dataPaket);
 
   return loading ? (
     <div className="h-[60vh] flex justify-center items-center">
