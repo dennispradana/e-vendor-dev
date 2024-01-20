@@ -1,5 +1,6 @@
 import React from 'react';
 import { SkeletonItem } from '../Elements/Skelekton';
+import { Link } from 'react-router-dom';
 
 const TabPenawaranPeserta = ({ data, loading }) => {
   const TablePaket = () => {
@@ -59,9 +60,12 @@ const TabPenawaranPeserta = ({ data, loading }) => {
                     {data.peserta?.rkn_nama}
                   </td>
                   <td className="px-4 py-2 text-center border">
-                    <button className="px-3 py-1 text-white bg-gray-500 rounded hover:bg-gray-600">
+                    <Link
+                      to={`/evaluasi/dokumen-kulifikasi/${data.peserta?.psr_id}`}
+                      className="px-3 py-1 text-white bg-gray-500 rounded hover:bg-gray-600"
+                    >
                       Kualifikasi
-                    </button>
+                    </Link>
                   </td>
                   <td className="px-4 py-2 text-center border">
                     <button className="px-3 py-1 text-white bg-gray-500 rounded hover:bg-gray-600">

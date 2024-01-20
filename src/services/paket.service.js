@@ -260,6 +260,15 @@ export const paketService = () => {
     }
   };
 
+  const getDokKualifikasiPen = async (psrId, dataDok) => {
+    try {
+      const response = await api.get(`/v1/PP/pen_kual/${psrId}`, dataDok);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mendapatkan Data');
+    }
+  };
+
   return {
     getListPaket,
     getDataPaket,
@@ -283,5 +292,6 @@ export const paketService = () => {
     getPilihPenyediaLelang,
     getLelangUp,
     getLelangDown,
+    getDokKualifikasiPen,
   };
 };
