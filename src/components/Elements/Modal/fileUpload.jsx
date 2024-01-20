@@ -1899,7 +1899,7 @@ export const FileUploadDokKirimPenawaran = ({ save, Id, close }) => {
                 <input
                   type="file"
                   name="file"
-                  accept=".zip, .rar, .docx, .xlxs, .png, .jpg, .jpeg"
+                  accept=".zip, .rar, .docx, .pdf, .xlxs, .png, .jpg, .jpeg"
                   className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-slate-50 hover:file:bg-blue-700 bg-gray-50"
                   ref={fileInputRef}
                   onChange={(event) => {
