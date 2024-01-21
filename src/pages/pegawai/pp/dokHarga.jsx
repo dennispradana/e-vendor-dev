@@ -1,20 +1,19 @@
 import React from 'react';
 import MainLayouts from '../../../components/Layouts/MainLayouts';
 import Breadcrumb from '../../../components/Elements/Breadcrumb';
-import TableDokKualifikasiPen from '../../../components/Fragments/TableDokKualifikasiPen';
+import TableHarga from '../../../components/Fragments/TableHarga';
 
-const DokKualifikasiPen = () => {
+const DokHarga = () => {
   const breadcrumbItems = [
     { label: 'Dashboard', url: '/dashboard' },
-    { label: 'Dokumen Kualifikasi' },
+    { label: 'Administrasi Teknis' },
   ];
-
   return (
     <MainLayouts>
       <Breadcrumb items={breadcrumbItems} />
-      <TableDokKualifikasiPen />
+      <TableHarga />
     </MainLayouts>
   );
 };
 
-export default DokKualifikasiPen;
+export default DokHarga;

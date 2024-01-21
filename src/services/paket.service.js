@@ -268,6 +268,14 @@ export const paketService = () => {
       throw new Error('Gagal Mendapatkan Data');
     }
   };
+  const getDataEvaluasiPen = async (psrId, data) => {
+    try {
+      const response = await api.get(`/v1/PP/pen_penawaran/${psrId}`, data);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mendapatkan Data');
+    }
+  };
 
   return {
     getListPaket,
@@ -293,5 +301,6 @@ export const paketService = () => {
     getLelangUp,
     getLelangDown,
     getDokKualifikasiPen,
+    getDataEvaluasiPen,
   };
 };

@@ -69,18 +69,24 @@ const TabPenawaranPeserta = ({ data, loading }) => {
                   </td>
                   <td className="px-4 py-2 text-center border">
                     <button className="px-3 py-1 text-white bg-gray-500 rounded hover:bg-gray-600">
-                      Cetak
-                    </button>
-                  </td>
-                  <td className="px-4 py-2 text-center border">
-                    <button className="px-3 py-1 text-white bg-gray-500 rounded hover:bg-gray-600">
                       Detail
                     </button>
                   </td>
                   <td className="px-4 py-2 text-center border">
-                    <button className="px-3 py-1 text-white bg-gray-500 rounded hover:bg-gray-600">
+                    <Link
+                      to={`/evaluasi/administrasi/${data.peserta?.psr_id}`}
+                      className="px-3 py-1 text-white bg-gray-500 rounded hover:bg-gray-600"
+                    >
                       Detail
-                    </button>
+                    </Link>
+                  </td>
+                  <td className="px-4 py-2 text-center border">
+                    <Link
+                      to={`/evaluasi/harga/${data.peserta?.psr_id}`}
+                      className="px-3 py-1 text-white bg-gray-500 rounded hover:bg-gray-600"
+                    >
+                      Detail
+                    </Link>
                   </td>
                 </tr>
               </tbody>

@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { paketService } from '../../services/paket.service';
 import { formatDate, getColorClass } from '../../utils/formatDate';
 import { toasterror } from '../../utils/ToastMessage';
-import { Download } from '../Elements/Button/DownloadButton';
+import { DownloadLainnya } from '../Elements/Button/DownloadButton';
 import { formatRp } from '../../utils/formatRupiah';
 import { SkeletonItem } from '../Elements/Skelekton';
+import { DokEvaluasi } from '../Elements/Modal/pp';
+import { IoArrowBackOutline } from 'react-icons/io5';
 
 const initialState = {
-  akta: [],
-  izinUsaha: [],
-  pajak: [],
-  stafAhli: [],
-  pengalaman: [],
-  lainya: '',
+  akta: false,
+  izinUsaha: false,
+  pajak: false,
+  stafAhli: false,
+  pengalaman: false,
 };
 
 const TableDokKualifikasiPen = () => {
@@ -21,8 +22,10 @@ const TableDokKualifikasiPen = () => {
   const [data, setData] = useState('');
   const [loading, setLoading] = useState(true);
   const { getDokKualifikasiPen } = paketService();
-  const [file, setFiles] = useState(initialState);
-  const { akta, izinUsaha, pajak, stafAhli, pengalaman, lainya } = file;
+  const [modal, setModal] = useState(initialState);
+  const { akta, izinUsaha, pajak, stafAhli, pengalaman } = modal;
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,15 +33,6 @@ const TableDokKualifikasiPen = () => {
         const response = await getDokKualifikasiPen(psrId);
         const responseData = response.data;
         setData(responseData);
-        setFiles((prev) => ({
-          ...prev,
-          akta: responseData.landasanhukum,
-          izinUsaha: responseData.izinusaha,
-          pajak: responseData.pajak,
-          stafAhli: responseData.stafahli,
-          pengalaman: responseData.pengalaman,
-          lainya: responseData.lainya.dok_id_attachment,
-        }));
       } catch (error) {
         toasterror(error.message);
       } finally {
@@ -47,6 +41,25 @@ const TableDokKualifikasiPen = () => {
     };
     fetchData();
   }, []);
+
+  const handleModal = (modalType, index) => {
+    setSelectedIndex(index);
+    setModal((prev) => ({
+      ...prev,
+      [modalType]: true,
+    }));
+  };
+
+  const handleCloseModal = (modalType) => {
+    setModal((prev) => ({
+      ...prev,
+      [modalType]: false,
+    }));
+  };
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const TableIdentitas = () => {
     return (
@@ -111,11 +124,17 @@ const TableDokKualifikasiPen = () => {
           <table className="w-full text-sm text-left text-gray-600 md:text-base">
             <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
               <tr role="row" className="text-center border border-gray-200">
-                <th className="px-4 py-3 border border-gray-200">No</th>
-                <th className="px-4 py-3 border border-gray-200">Nama</th>
-                <th className="px-4 py-3 border border-gray-200">NPWP</th>
-                <th className="px-4 py-3 border border-gray-200">Alamat</th>
-                <th className="px-4 py-3 border border-gray-200">
+                <th className="px-4 py-3 text-xs border border-gray-200">No</th>
+                <th className="px-4 py-3 text-xs border border-gray-200">
+                  Nama
+                </th>
+                <th className="px-4 py-3 text-xs border border-gray-200">
+                  NPWP
+                </th>
+                <th className="px-4 py-3 text-xs border border-gray-200">
+                  Alamat
+                </th>
+                <th className="px-4 py-3 text-xs border border-gray-200">
                   Kepemilikan
                 </th>
               </tr>
@@ -125,7 +144,7 @@ const TableDokKualifikasiPen = () => {
                 <tr className="capitalize bg-gray-200 border-b">
                   <td
                     colSpan="6"
-                    className="px-6 py-4 italic font-semibold text-center"
+                    className="px-6 py-4 text-xs italic font-semibold text-center"
                   >
                     Data tidak ditemukan
                   </td>
@@ -138,14 +157,18 @@ const TableDokKualifikasiPen = () => {
                   >
                     <th
                       scope="row"
-                      className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                      className="px-3 py-4 text-xs font-medium text-center text-gray-900 align-top whitespace-nowrap"
                     >
                       {index + 1}
                     </th>
-                    <td className="px-3 py-4 capitalize">{item.mjr_nama}</td>
-                    <td className="px-3 py-4">{item.mjr_npwp}</td>
-                    <td className="px-3 py-4 text-center">{item.mjr_alamat}</td>
-                    <td className="px-3 py-4 text-center">
+                    <td className="px-3 py-4 text-xs capitalize">
+                      {item.mjr_nama}
+                    </td>
+                    <td className="px-3 py-4 text-xs">{item.mjr_npwp}</td>
+                    <td className="px-3 py-4 text-xs text-center">
+                      {item.mjr_alamat}
+                    </td>
+                    <td className="px-3 py-4 text-xs text-center">
                       {item.mjr_jenis === '0' ? 'Pengurus' : 'Pemilik'}
                     </td>
                   </tr>
@@ -163,25 +186,32 @@ const TableDokKualifikasiPen = () => {
       <>
         <div className="relative flex flex-col overflow-x-auto rounded-lg">
           <div className="flex-grow">
-            <table className="w-full text-sm text-left text-gray-600 md:text-base">
+            <table className="w-full text-xs text-left text-gray-600 md:text-base">
               <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
                 <tr role="row" className="text-center border border-gray-200">
-                  <th className="px-4 py-3 border border-gray-200">No</th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    No
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Nomor Akta
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Tanggal Akta
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">Notaris</th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Notaris
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               <tbody className="overflow-y-auto ">
                 {data.landasanhukum?.length === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
-                      colSpan="4"
-                      className="px-6 py-4 italic font-semibold text-center"
+                      colSpan="5"
+                      className="px-6 py-3 italic font-semibold text-center"
                     >
                       Data tidak ditemukan
                     </td>
@@ -194,18 +224,27 @@ const TableDokKualifikasiPen = () => {
                     >
                       <th
                         scope="row"
-                        className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                        className="px-3 py-4 text-xs font-medium text-center text-gray-900 align-top whitespace-nowrap"
                       >
                         {index + 1}
                       </th>
-                      <td className="px-3 py-4 text-center capitalize">
+                      <td className="px-3 py-4 text-xs text-center capitalize">
                         {item.lhkp_no}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {formatDate(new Date(item.lhkp_tanggal))}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {item.lhkp_notaris}
+                      </td>
+                      <td className="px-3 py-4 text-xs text-center">
+                        <button
+                          type="button"
+                          onClick={() => handleModal('akta', index)}
+                          className="px-3 py-1 font-bold text-white duration-200 ease-in bg-green-500 rounded hover:bg-green-700"
+                        >
+                          Lihat Dokumen
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -214,11 +253,6 @@ const TableDokKualifikasiPen = () => {
             </table>
           </div>
         </div>
-        {akta.map((item, index) => (
-          <div key={index}>
-            <Download data={item.lhkp_id_attachment} />
-          </div>
-        ))}
       </>
     );
   };
@@ -231,21 +265,26 @@ const TableDokKualifikasiPen = () => {
             <table className="w-full text-sm text-left text-gray-600 md:text-base">
               <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
                 <tr role="row" className="text-center border border-gray-200">
-                  <th className="px-4 py-3 border border-gray-200">No</th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    No
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Izin Usaha
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Nomor Surat
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Berlaku Sampai
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Instansi Pemberi
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Kualfikasi
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Aksi
                   </th>
                 </tr>
               </thead>
@@ -253,8 +292,8 @@ const TableDokKualifikasiPen = () => {
                 {data.izinusaha?.length === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
-                      colSpan="6"
-                      className="px-6 py-4 italic font-semibold text-center"
+                      colSpan="7"
+                      className="px-6 py-4 text-xs italic font-semibold text-center"
                     >
                       Data tidak ditemukan
                     </td>
@@ -267,14 +306,16 @@ const TableDokKualifikasiPen = () => {
                     >
                       <th
                         scope="row"
-                        className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                        className="px-3 py-4 text-xs font-medium text-center text-gray-900 align-top whitespace-nowrap"
                       >
                         {index + 1}
                       </th>
-                      <td className="px-3 py-4 capitalize">{item.jni_nama}</td>
-                      <td className="px-3 py-4">{item.ius_no}</td>
+                      <td className="px-3 py-4 text-xs capitalize">
+                        {item.jni_nama}
+                      </td>
+                      <td className="px-3 py-4 text-xs">{item.ius_no}</td>
                       <td
-                        className={`px-3 py-4 text-center ${getColorClass(
+                        className={`px-3 py-4 text-xs text-center ${getColorClass(
                           item.ius_berlaku
                         )}`}
                       >
@@ -282,13 +323,22 @@ const TableDokKualifikasiPen = () => {
                           ? formatDate(new Date(item.ius_berlaku))
                           : 'Seumur Hidup'}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {item.ius_instansi}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {item.ius_klasifikasi === null
                           ? '-'
                           : item.ius_klasifikasi}
+                      </td>
+                      <td className="px-3 py-4 text-xs text-center">
+                        <button
+                          type="button"
+                          onClick={() => handleModal('izinUsaha', index)}
+                          className="px-3 py-1 font-bold text-white duration-200 ease-in bg-green-500 rounded hover:bg-green-700"
+                        >
+                          Lihat Dokumen
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -297,11 +347,6 @@ const TableDokKualifikasiPen = () => {
             </table>
           </div>
         </div>
-        {izinUsaha.map((item, index) => (
-          <div key={index}>
-            <Download data={item.ius_id_attachment} />
-          </div>
-        ))}
       </>
     );
   };
@@ -314,13 +359,20 @@ const TableDokKualifikasiPen = () => {
             <table className="w-full text-sm text-left text-gray-600 md:text-base">
               <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
                 <tr role="row" className="text-center border border-gray-200">
-                  <th className="px-4 py-3 border border-gray-200">No</th>
-                  <th className="px-4 py-3 border border-gray-200">Pajak</th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    No
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Pajak
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Tanggal Terima Bukti
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Nomor Bukti
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Aksi
                   </th>
                 </tr>
               </thead>
@@ -328,8 +380,8 @@ const TableDokKualifikasiPen = () => {
                 {data.pajak?.length === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
-                      colSpan="4"
-                      className="px-6 py-4 italic font-semibold text-center"
+                      colSpan="5"
+                      className="px-6 py-4 text-xs italic font-semibold text-center"
                     >
                       Data tidak ditemukan
                     </td>
@@ -342,17 +394,28 @@ const TableDokKualifikasiPen = () => {
                     >
                       <th
                         scope="row"
-                        className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                        className="px-3 py-4 text-xs font-medium text-center text-gray-900 align-top whitespace-nowrap"
                       >
                         {1 + index}
                       </th>
-                      <td className="px-3 py-4 text-center capitalize">
+                      <td className="px-3 py-4 text-xs text-center capitalize">
                         {item.pjk_jenis}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {formatDate(new Date(item.pjk_tanggal))}
                       </td>
-                      <td className="px-3 py-4 text-center">{item.pjk_no}</td>
+                      <td className="px-3 py-4 text-xs text-center">
+                        {item.pjk_no}
+                      </td>
+                      <td className="px-3 py-4 text-xs text-center">
+                        <button
+                          type="button"
+                          onClick={() => handleModal('pajak', index)}
+                          className="px-3 py-1 font-bold text-white duration-200 ease-in bg-green-500 rounded hover:bg-green-700"
+                        >
+                          Lihat Dokumen
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}
@@ -360,11 +423,6 @@ const TableDokKualifikasiPen = () => {
             </table>
           </div>
         </div>
-        {pajak.map((item, index) => (
-          <div key={index}>
-            <Download data={item.pjk_id_attachment} />
-          </div>
-        ))}
       </>
     );
   };
@@ -377,20 +435,29 @@ const TableDokKualifikasiPen = () => {
             <table className="w-full text-sm text-left text-gray-600 md:text-base">
               <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
                 <tr role="row" className="text-center border border-gray-200">
-                  <th className="px-4 py-3 border border-gray-200">No</th>
-                  <th className="px-4 py-3 border border-gray-200">Nama</th>
-                  <th className="px-4 py-3 border border-gray-200">NPWP</th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    No
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Nama
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    NPWP
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Tanggal Lahir
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Pendidikan Akhir
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Pengalaman Kerja
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Profesi Keahlian
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Aksi
                   </th>
                 </tr>
               </thead>
@@ -398,8 +465,8 @@ const TableDokKualifikasiPen = () => {
                 {data.stafahli?.length === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
-                      colSpan="7"
-                      className="px-6 py-4 italic font-semibold text-center"
+                      colSpan="8"
+                      className="px-6 py-4 text-xs italic font-semibold text-center"
                     >
                       Data tidak ditemukan
                     </td>
@@ -412,23 +479,34 @@ const TableDokKualifikasiPen = () => {
                     >
                       <th
                         scope="row"
-                        className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                        className="px-3 py-4 text-xs font-medium text-center text-gray-900 align-top whitespace-nowrap"
                       >
                         {index + 1}
                       </th>
-                      <td className="px-3 py-4 capitalize">{item.sta_nama}</td>
-                      <td className="px-3 py-4">{item.sta_npwp}</td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs capitalize">
+                        {item.sta_nama}
+                      </td>
+                      <td className="px-3 py-4 text-xs">{item.sta_npwp}</td>
+                      <td className="px-3 py-4 text-xs text-center">
                         {formatDate(new Date(item.sta_tgllahir))}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {item.sta_pendidikan}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {item.sta_pengalaman} Tahun
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {item.sta_keahlian}
+                      </td>
+                      <td className="px-3 py-4 text-xs text-center">
+                        <button
+                          type="button"
+                          onClick={() => handleModal('stafAhli', index)}
+                          className="px-3 py-1 font-bold text-white duration-200 ease-in bg-green-500 rounded hover:bg-green-700"
+                        >
+                          Lihat Dokumen
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -437,11 +515,6 @@ const TableDokKualifikasiPen = () => {
             </table>
           </div>
         </div>
-        {stafAhli.map((item, index) => (
-          <div key={index}>
-            <Download data={item.sta_id_attachment} />
-          </div>
-        ))}
       </>
     );
   };
@@ -454,24 +527,30 @@ const TableDokKualifikasiPen = () => {
             <table className="w-full text-sm text-left text-gray-600 md:text-base">
               <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
                 <tr role="row" className="text-center border border-gray-200">
-                  <th className="px-4 py-3 border border-gray-200">No</th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    No
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Pekerjaan
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">Lokasi</th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Lokasi
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Instansi Pemberi Pekerjaan
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Tanggal Kontrak
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Tanggal Selesai Kontrak
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Nilai Kontrak
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">Aksi</th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               <tbody className="overflow-y-auto ">
@@ -479,7 +558,7 @@ const TableDokKualifikasiPen = () => {
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
                       colSpan="8"
-                      className="px-6 py-4 italic font-semibold text-center"
+                      className="px-6 py-4 text-xs italic font-semibold text-center"
                     >
                       Data Izin tidak ditemukan
                     </td>
@@ -492,25 +571,34 @@ const TableDokKualifikasiPen = () => {
                     >
                       <th
                         scope="row"
-                        className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                        className="px-3 py-4 text-xs font-medium text-center text-gray-900 align-top whitespace-nowrap"
                       >
                         {index + 1}
                       </th>
-                      <td className="px-3 py-4 capitalize">
+                      <td className="px-3 py-4 text-xs capitalize">
                         {item.pgl_kegiatan}
                       </td>
-                      <td className="px-3 py-4">{item.pgl_lokasi}</td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs">{item.pgl_lokasi}</td>
+                      <td className="px-3 py-4 text-xs text-center">
                         {item.pgl_pembtgs}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {formatDate(new Date(item.pgl_tglkontrak))}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {formatDate(new Date(item.pgl_slskontrak))}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {formatRp(item.pgl_nilai)}
+                      </td>
+                      <td className="px-3 py-4 text-xs text-center">
+                        <button
+                          type="button"
+                          onClick={() => handleModal('pengalaman', index)}
+                          className="px-3 py-1 font-bold text-white duration-200 ease-in bg-green-500 rounded hover:bg-green-700"
+                        >
+                          Lihat Dokumen
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -519,11 +607,6 @@ const TableDokKualifikasiPen = () => {
             </table>
           </div>
         </div>
-        {pengalaman.map((item, index) => (
-          <div key={index}>
-            <Download data={item.pgl_id_attachment} />
-          </div>
-        ))}
       </>
     );
   };
@@ -536,17 +619,25 @@ const TableDokKualifikasiPen = () => {
             <table className="w-full text-sm text-left text-gray-600 md:text-base">
               <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
                 <tr role="row" className="text-center border border-gray-200">
-                  <th className="px-4 py-3 border border-gray-200">No</th>
-                  <th className="px-4 py-3 border border-gray-200">Nama</th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    No
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Nama
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Kapasitas
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">Jumlah</th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Jumlah
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Merk/Tipe
                   </th>
-                  <th className="px-4 py-3 border border-gray-200">Kondisi</th>
-                  <th className="px-4 py-3 border border-gray-200">
+                  <th className="px-4 py-3 text-xs border border-gray-200">
+                    Kondisi
+                  </th>
+                  <th className="px-4 py-3 text-xs border border-gray-200">
                     Kepemilikan
                   </th>
                 </tr>
@@ -556,7 +647,7 @@ const TableDokKualifikasiPen = () => {
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
                       colSpan="8"
-                      className="px-6 py-4 italic font-semibold text-center"
+                      className="px-6 py-4 text-xs italic font-semibold text-center"
                     >
                       Data tidak ditemukan
                     </td>
@@ -569,22 +660,26 @@ const TableDokKualifikasiPen = () => {
                     >
                       <th
                         scope="row"
-                        className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                        className="px-3 py-4 text-xs font-medium text-center text-gray-900 align-top whitespace-nowrap"
                       >
                         {index + 1}
                       </th>
-                      <td className="px-3 py-4 capitalize">{item.alt_jenis}</td>
-                      <td className="px-3 py-4">{item.alt_kapasitas}</td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs capitalize">
+                        {item.alt_jenis}
+                      </td>
+                      <td className="px-3 py-4 text-xs">
+                        {item.alt_kapasitas}
+                      </td>
+                      <td className="px-3 py-4 text-xs text-center">
                         {item.alt_jumlah}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {item.alt_merktipe}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {item.alt_kondisi === '0' ? 'baik' : 'rusak'}
                       </td>
-                      <td className="px-3 py-4 text-center">
+                      <td className="px-3 py-4 text-xs text-center">
                         {item.alt_kepemilikan}
                       </td>
                     </tr>
@@ -647,13 +742,59 @@ const TableDokKualifikasiPen = () => {
           <p className="px-3 mb-3 text-sm font-bold capitalize">
             Dokumen Lainnya
           </p>
-          <Download data={lainya} />
+          <DownloadLainnya data={data.lainya?.dok_id_attachment} />
         </div>
+        <button
+          onClick={handleBack}
+          className="flex items-center gap-2 text-black hover:text-blue-600 hover:underline"
+        >
+          <IoArrowBackOutline />
+          Kembali
+        </button>
       </div>
     );
   };
 
-  return <RenderContent />;
+  return (
+    <>
+      <RenderContent />
+      {akta && (
+        <DokEvaluasi
+          Id={data.landasanhukum?.[selectedIndex]?.lhkp_id_attachment}
+          close={() => handleCloseModal('akta')}
+          title="Landasan Hukum"
+        />
+      )}
+      {izinUsaha && (
+        <DokEvaluasi
+          Id={data.izinusaha?.[selectedIndex]?.ius_id_attachment}
+          close={() => handleCloseModal('izinUsaha')}
+          title="Izin Usaha"
+        />
+      )}
+      {pajak && (
+        <DokEvaluasi
+          Id={data.pajak?.[selectedIndex]?.pjk_id_attachment}
+          close={() => handleCloseModal('pajak')}
+          title="Pajak"
+        />
+      )}
+      {stafAhli && (
+        <DokEvaluasi
+          Id={data.stafahli?.[selectedIndex]?.sta_id_attachment}
+          close={() => handleCloseModal('stafAhli')}
+          title="Landasan Hukum"
+        />
+      )}
+      {pengalaman && (
+        <DokEvaluasi
+          Id={data.pengalaman?.[selectedIndex]?.pgl_id_attachment}
+          close={() => handleCloseModal('pengalaman')}
+          title="Landasan Hukum"
+        />
+      )}
+    </>
+  );
 };
 
 export default TableDokKualifikasiPen;

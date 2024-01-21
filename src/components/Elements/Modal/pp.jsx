@@ -7,6 +7,7 @@ import { paketService } from '../../../services/paket.service';
 import { SkeletonItem } from '../Skelekton';
 import { useFormik } from 'formik';
 import Button from '../Button';
+import { evaluasiService } from '../../../services/evaluasi.service';
 
 export const ModalKAK = ({ close, data }) => {
   const { getFile, downloadFile } = fileService();
@@ -1165,6 +1166,150 @@ export const LelangPenyedia = ({ close, llsId, onUpdate }) => {
               <p className="font-bold">Daftar Penyedia</p>
             </div>
             <RenderTabel />
+            <button
+              onClick={close}
+              className="p-3 font-bold text-red-500 border-b border-solid rounded-md rounded-t hover:text-red-600 border-slate-200"
+              type="button"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="fixed inset-0 z-40 bg-black opacity-30"></div>
+    </>
+  );
+};
+
+export const DokEvaluasi = ({ Id, close, title }) => {
+  const { downloadFile } = fileService();
+  const { getFile } = evaluasiService();
+  const [loading, setLoading] = useState(true);
+  const [downloading, setDownloading] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const getTableFile = async () => {
+      try {
+        const response = await getFile(Id);
+        setFiles(response);
+      } catch (error) {
+        toasterror(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getTableFile();
+  }, [Id]);
+
+  const handleDownload = async (idContent, versi, fileName) => {
+    try {
+      const response = await downloadFile(idContent, versi);
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      if (response.status === 200) {
+        toastsuccess('File Berhasil Diunduh');
+      } else {
+        toasterror('Gagal mengunduh file');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    }
+  };
+
+  const RenderTable = () => {
+    return (
+      <div className="relative flex flex-col h-[60vh] overflow-x-auto rounded-lg px-6 py-8">
+        <div className="flex-grow">
+          <table className="w-full text-sm text-left text-gray-600 md:text-sm">
+            <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
+              <tr role="row" className="text-center border border-gray-200">
+                <th className="px-4 py-3 border border-gray-200">No</th>
+                <th className="px-4 py-3 border border-gray-200">Nama File</th>
+                <th className="px-4 py-3 border border-gray-200">
+                  Tanggal Upload
+                </th>
+              </tr>
+            </thead>
+            {loading ? (
+              <tbody>
+                <tr className="h-56 capitalize bg-gray-200 border-b">
+                  <td colSpan="3" className="text-center">
+                    <Spinner />
+                  </td>
+                </tr>
+              </tbody>
+            ) : (
+              <tbody className="overflow-y-auto ">
+                {files.length === 0 ? (
+                  <tr className="capitalize bg-gray-200 border-b">
+                    <td
+                      colSpan="3"
+                      className="px-6 py-4 italic font-semibold text-center"
+                    >
+                      Belum ada File yang Diunggah
+                    </td>
+                  </tr>
+                ) : (
+                  files.map((file, index) => (
+                    <tr
+                      key={index}
+                      className="duration-150 ease-out bg-white border-b hover:bg-gray-200"
+                    >
+                      <th
+                        scope="row"
+                        className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                      >
+                        {index + 1}
+                      </th>
+                      <td className="px-4 py-4">
+                        <button
+                          onClick={() => {
+                            if (!downloading) {
+                              setDownloading(true);
+                              handleDownload(
+                                file.ctn_id_content,
+                                file.ctn_versi,
+                                JSON.parse(file.blb_path).name
+                              ).then(() => setDownloading(false));
+                            }
+                          }}
+                          className={`font-semibold hover:text-blue-500 hover:underline ${
+                            downloading ? 'cursor-not-allowed' : ''
+                          }`}
+                          disabled={downloading}
+                        >
+                          {downloading
+                            ? 'Download....'
+                            : JSON.parse(file.blb_path).name}
+                        </button>
+                      </td>
+                      <td className="px-3 py-4 text-center">
+                        {file.blb_date_time}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            )}
+          </table>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+        <div className="relative w-[70vw] mx-auto my-6 ">
+          <div className="relative flex flex-col w-full px-3 py-6 bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+            <div className="font-semibold text-center">{title}</div>
+            <RenderTable />
             <button
               onClick={close}
               className="p-3 font-bold text-red-500 border-b border-solid rounded-md rounded-t hover:text-red-600 border-slate-200"
