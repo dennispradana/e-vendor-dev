@@ -4,6 +4,18 @@ import { Link } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 
 const TabEvaluasiPenawaran = ({ data }) => {
+  const renderButtonPemenang = () => {
+    return (
+      data.evaluasi?.kualifikasi?.nev_lulus === '1' &&
+      data.evaluasi?.administrasi?.nev_lulus === '1' &&
+      data.evaluasi?.teknis?.nev_lulus === '1' &&
+      data.evaluasi?.harga?.nev_lulus === '1' && (
+        <button className="px-3 py-1 mx-4 text-xs text-white bg-gray-500 rounded hover:bg-gray-600">
+          Penepatan Pemenang
+        </button>
+      )
+    );
+  };
   const evaluateStatus = (category) => {
     switch (category?.nev_lulus) {
       case '1':
@@ -48,9 +60,9 @@ const TabEvaluasiPenawaran = ({ data }) => {
 
   const Table = () => {
     return (
-      <div className="relative flex flex-col overflow-x-auto rounded-lg">
+      <div className="relative flex flex-col overflow-x-auto">
         <div className="flex-grow">
-          <table className="w-full text-xs text-left border border-collapse rounded-lg">
+          <table className="w-full text-xs">
             <thead>
               <tr>
                 <th
@@ -154,38 +166,44 @@ const TabEvaluasiPenawaran = ({ data }) => {
   return (
     <>
       <RenderDataLelang />
+      <div className="flex items-center justify-between bg-blue-200 border border-b-0">
+        <p className="p-2 font-bold text-blue-600">Hasil Evaluasi</p>
+        {renderButtonPemenang()}
+      </div>
       <Table />
-      <div className="flex flex-wrap gap-4 my-6 text-xs">
-        <p>
-          <span className="px-2 py-1 mx-2 font-semibold text-white bg-red-500 rounded">
-            K
-          </span>
-          Evaluasi Kualifikasi
-        </p>
-        <p>
-          <span className="px-2 py-1 mx-2 font-semibold text-white bg-green-500 rounded">
-            A
-          </span>
-          Evaluasi Administrasi
-        </p>
-        <p>
-          <span className="px-2 py-1 mx-2 font-semibold text-white bg-green-700 rounded">
-            T
-          </span>
-          Evaluasi Teknis
-        </p>
-        <p>
-          <span className="px-2 py-1 mx-2 font-semibold text-white bg-blue-500 rounded">
-            H
-          </span>
-          Evaluasi Harga/Biaya
-        </p>
-        <p>
-          <span className="px-2 py-1 mx-2 font-semibold text-white bg-yellow-500 rounded">
-            P
-          </span>
-          Pemenang
-        </p>
+      <div className="border">
+        <div className="flex flex-wrap gap-4 my-6 text-xs">
+          <p>
+            <span className="px-2 py-1 mx-2 font-semibold text-white bg-red-500 rounded">
+              K
+            </span>
+            Evaluasi Kualifikasi
+          </p>
+          <p>
+            <span className="px-2 py-1 mx-2 font-semibold text-white bg-green-500 rounded">
+              A
+            </span>
+            Evaluasi Administrasi
+          </p>
+          <p>
+            <span className="px-2 py-1 mx-2 font-semibold text-white bg-green-700 rounded">
+              T
+            </span>
+            Evaluasi Teknis
+          </p>
+          <p>
+            <span className="px-2 py-1 mx-2 font-semibold text-white bg-blue-500 rounded">
+              H
+            </span>
+            Evaluasi Harga/Biaya
+          </p>
+          <p>
+            <span className="px-2 py-1 mx-2 font-semibold text-white bg-yellow-500 rounded">
+              P
+            </span>
+            Pemenang
+          </p>
+        </div>
       </div>
     </>
   );
