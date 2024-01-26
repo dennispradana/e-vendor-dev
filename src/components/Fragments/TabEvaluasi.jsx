@@ -30,8 +30,6 @@ const TabEvaluasi = () => {
     fetchData();
   }, []);
 
-  console.log(data);
-
   const renderContent = () => {
     switch (currentStep) {
       case 0:

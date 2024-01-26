@@ -1,8 +1,28 @@
 import React from 'react';
 import { formatRp } from '../../utils/formatRupiah';
 import { Link } from 'react-router-dom';
+import { FaCheck } from 'react-icons/fa';
 
 const TabEvaluasiPenawaran = ({ data }) => {
+  const evaluateStatus = (category) => {
+    switch (category?.nev_lulus) {
+      case '1':
+        return (
+          <div className="flex items-center justify-center text-green-500">
+            <FaCheck />
+          </div>
+        );
+      case '0':
+        return (
+          <div className="flex items-center justify-center font-bold text-red-500">
+            X
+          </div>
+        );
+      default:
+        return <div className="flex items-center justify-center">-</div>;
+    }
+  };
+
   const RenderDataLelang = () => {
     return (
       <table className="w-full mb-10 text-sm text-left border border-collapse">
@@ -106,10 +126,18 @@ const TabEvaluasiPenawaran = ({ data }) => {
                   {data.peserta?.psr_harga_terkoreksi !== null &&
                     formatRp(data.peserta?.psr_harga_terkoreksi)}
                 </td>
-                <td className="px-2 py-1 text-center border"></td>
-                <td className="px-2 py-1 text-center border"></td>
-                <td className="px-2 py-1 text-center border"></td>
-                <td className="px-2 py-1 text-center border"></td>
+                <td className="px-2 py-1 text-center border">
+                  {evaluateStatus(data.evaluasi?.kualifikasi)}
+                </td>
+                <td className="px-2 py-1 text-center border">
+                  {evaluateStatus(data.evaluasi?.administrasi)}
+                </td>
+                <td className="px-2 py-1 text-center border">
+                  {evaluateStatus(data.evaluasi?.teknis)}
+                </td>
+                <td className="px-2 py-1 text-center border">
+                  {evaluateStatus(data.evaluasi?.harga)}
+                </td>
                 <td className="px-2 py-1 text-center border"></td>
                 <td className="px-4 py-2 text-center border">
                   <button className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">
