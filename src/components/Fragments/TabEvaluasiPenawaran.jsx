@@ -1,7 +1,8 @@
 import React from 'react';
 import { formatRp } from '../../utils/formatRupiah';
+import { Link } from 'react-router-dom';
 
-const TabEvaluasiPenawaran = ({ data, loading }) => {
+const TabEvaluasiPenawaran = ({ data }) => {
   const RenderDataLelang = () => {
     return (
       <table className="w-full mb-10 text-sm text-left border border-collapse">
@@ -54,13 +55,31 @@ const TabEvaluasiPenawaran = ({ data, loading }) => {
                   scope="col"
                   className="px-6 py-2 text-center text-white bg-gray-100 border"
                 >
-                  <span className="px-2 py-1 mx-2 bg-red-500 rounded">K</span>
-                  <span className="px-2 py-1 mx-2 bg-green-500 rounded">A</span>
-                  <span className="px-2 py-1 mx-2 bg-green-700 rounded">T</span>
-                  <span className="px-2 py-1 mx-2 bg-blue-500 rounded">H</span>
-                  <span className="px-2 py-1 mx-2 bg-yellow-500 rounded">
-                    P
-                  </span>
+                  <span className="px-2 py-1 bg-red-500 rounded">K</span>
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-2 text-center text-white bg-gray-100 border"
+                >
+                  <span className="px-2 py-1 bg-green-500 rounded">A</span>
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-2 text-center text-white bg-gray-100 border"
+                >
+                  <span className="px-2 py-1 bg-green-700 rounded">T</span>
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-2 text-center text-white bg-gray-100 border"
+                >
+                  <span className="px-2 py-1 bg-blue-500 rounded">H</span>
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-2 text-center text-white bg-gray-100 border"
+                >
+                  <span className="px-2 py-1 bg-yellow-500 rounded">P</span>
                 </th>
                 <th
                   scope="col"
@@ -73,7 +92,12 @@ const TabEvaluasiPenawaran = ({ data, loading }) => {
             <tbody>
               <tr>
                 <td className="px-4 py-2 text-center capitalize border">
-                  {data.peserta?.rkn_nama}
+                  <Link
+                    to={`/evaluasi/peserta/${data.peserta?.psr_id}`}
+                    className="hover:text-blue-500"
+                  >
+                    {data.peserta?.rkn_nama}
+                  </Link>
                 </td>
                 <td className="px-4 py-2 text-center border">
                   {formatRp(data.peserta?.psr_harga)}
@@ -82,12 +106,11 @@ const TabEvaluasiPenawaran = ({ data, loading }) => {
                   {data.peserta?.psr_harga_terkoreksi !== null &&
                     formatRp(data.peserta?.psr_harga_terkoreksi)}
                 </td>
-                <td className="px-2 py-1 text-center border">
-                  <input
-                    type="text"
-                    className="w-full p-1 px-3 text-gray-700 bg-white border rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2 focus:border-transparent"
-                  />
-                </td>
+                <td className="px-2 py-1 text-center border"></td>
+                <td className="px-2 py-1 text-center border"></td>
+                <td className="px-2 py-1 text-center border"></td>
+                <td className="px-2 py-1 text-center border"></td>
+                <td className="px-2 py-1 text-center border"></td>
                 <td className="px-4 py-2 text-center border">
                   <button className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">
                     Verifikasi

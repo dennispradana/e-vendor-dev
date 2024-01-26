@@ -30,6 +30,8 @@ const TabEvaluasi = () => {
     fetchData();
   }, []);
 
+  console.log(data);
+
   const renderContent = () => {
     switch (currentStep) {
       case 0:
@@ -37,7 +39,7 @@ const TabEvaluasi = () => {
       case 1:
         return <TabPenawaranPeserta data={data} loading={loading} />;
       case 2:
-        return <TabEvaluasiPenawaran data={data} loading={loading} />;
+        return <TabEvaluasiPenawaran data={data} />;
       default:
         return null;
     }

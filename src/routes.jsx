@@ -71,6 +71,8 @@ import DokEvaluasi from './pages/pegawai/pp/dokEvaluasi';
 import DokKualifikasiPen from './pages/pegawai/pp/dokKualifikasiPen';
 import DokAdministrasiTeknis from './pages/pegawai/pp/dokAdministrasiTeknis';
 import DokHarga from './pages/pegawai/pp/dokHarga';
+import DokSuratPenawaranEvaluasi from './pages/pegawai/pp/dokSuratPenawaran';
+import EvaluasiPeserta from './pages/pegawai/pp/evaluasiPeseta';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -193,6 +195,11 @@ const AppRoute = () => {
             path="evaluasi/administrasi/:psrId"
             element={<DokAdministrasiTeknis />}
           />
+          <Route
+            path="evaluasi/surat-penawaran/:psrId"
+            element={<DokSuratPenawaranEvaluasi />}
+          />
+          <Route path="evaluasi/peserta/:psrId" element={<EvaluasiPeserta />} />
           <Route path="evaluasi/harga/:psrId" element={<DokHarga />} />
           <Route path="dokumen-evaluasi/:llsId" element={<DokEvaluasi />} />
           <Route path="/data-paket/:llsId" element={<UpdateLelang />} />
