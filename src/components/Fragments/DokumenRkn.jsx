@@ -128,87 +128,111 @@ const DokumenRKN = () => {
           </p>
         </div>
         <div className="mb-6">
-          <h1 className="font-bold">Persyaratan Kualifikasi</h1>
-          <div className="py-1 ">
-            <table className="w-full text-xl text-left text-gray-600 md:text-base">
-              <thead className="text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
-                <tr role="row" className="text-center border border-gray-200">
-                  <th className="px-2 py-2 border border-gray-200">No</th>
-                  <th className="px-2 py-2 border border-gray-200">
-                    Persyaratan Kualifikasi
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="overflow-y-auto text-xs">
-                {data.checklist?.kualifikasi.length === 0 ? (
-                  <tr className="capitalize bg-gray-200 border-b">
-                    <td
-                      colSpan="2"
-                      className="px-6 py-4 italic font-semibold text-center"
-                    >
-                      Tidak ada Persyaratan Kualifikasi
-                    </td>
-                  </tr>
-                ) : (
-                  data.checklist?.kualifikasi.map((item, index) => (
-                    <tr
-                      key={item.ckm_id}
-                      className="duration-150 ease-out bg-white border-b hover:bg-gray-200"
-                    >
-                      <th
-                        scope="row"
-                        className="px-3 py-2 text-center text-gray-900 align-top whitespace-nowrap"
-                      >
-                        {index + 1}
-                      </th>
-                      <td className="px-3 py-2 capitalize">{item.ckm_nama}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+          <h1 className="mb-3 font-bold">Persyaratan Kualifikasi</h1>
+          <div className="mb-6 border-b ">
+            <p className="mb-1 text-sm font-semibold">Administrasi</p>
+            {data.checklist?.kualifikasi?.administrasi.length === 0 ? (
+              <p className="text-xs text-justify">
+                Tidak ada Persyaratan Administrasi
+              </p>
+            ) : (
+              data.checklist?.kualifikasi?.administrasi.map((item, index) => (
+                <div className="flex gap-2 p-1" key={item.ckm_id}>
+                  <p className="text-xs text-justify align-top">
+                    {index + 1 + '.'}
+                  </p>
+                  <p className="text-xs text-justify">{item.ckm_nama}</p>
+                </div>
+              ))
+            )}
+          </div>
+          <div className="mb-6 border-b ">
+            <p className="mb-1 text-sm font-semibold">Keuangan</p>
+            {data.checklist?.kualifikasi?.keuangan.length === 0 ? (
+              <p className="text-xs text-justify">
+                Tidak ada Persyaratan Keuangan
+              </p>
+            ) : (
+              data.checklist?.kualifikasi?.keuangan.map((item, index) => (
+                <div className="flex gap-2 p-1" key={item.ckm_id}>
+                  <p className="text-xs text-justify align-top">
+                    {index + 1 + '.'}
+                  </p>
+                  <p className="text-xs text-justify">{item.ckm_nama}</p>
+                </div>
+              ))
+            )}
+          </div>
+          <div className="mb-6 border-b ">
+            <p className="mb-1 text-sm font-semibold">Teknis</p>
+            {data.checklist?.kualifikasi?.teknis.length === 0 ? (
+              <p className="text-xs text-justify">
+                Tidak ada Persyaratan Teknis
+              </p>
+            ) : (
+              data.checklist?.kualifikasi?.teknis.map((item, index) => (
+                <div className="flex gap-2 p-1" key={item.ckm_id}>
+                  <p className="text-xs text-justify align-top">
+                    {index + 1 + '.'}
+                  </p>
+                  <p className="text-xs text-justify">{item.ckm_nama}</p>
+                </div>
+              ))
+            )}
           </div>
         </div>
         <div className="mb-6">
-          <h1 className="font-bold">Dokumen Penawaran</h1>
-          <div className="py-1 ">
-            <table className="w-full text-xl text-left text-gray-600 md:text-base">
-              <thead className="text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
-                <tr role="row" className="text-center border border-gray-200">
-                  <th className="px-2 py-2 border border-gray-200">No</th>
-                  <th className="px-2 py-2 border border-gray-200">
-                    Persyaratan penawaran
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="overflow-y-auto text-xs">
-                {data.checklist?.penawaran.length === 0 ? (
-                  <tr className="capitalize bg-gray-200 border-b">
-                    <td
-                      colSpan="2"
-                      className="px-6 py-4 italic font-semibold text-center"
-                    >
-                      belum ada Persyaratan penawaran
-                    </td>
-                  </tr>
-                ) : (
-                  data.checklist?.penawaran.map((item, index) => (
-                    <tr
-                      key={item.ckm_id}
-                      className="duration-150 ease-out bg-white border-b hover:bg-gray-200"
-                    >
-                      <th
-                        scope="row"
-                        className="px-3 py-2 text-center text-gray-900 align-top whitespace-nowrap"
-                      >
-                        {index + 1}
-                      </th>
-                      <td className="px-3 py-2 capitalize">{item.ckm_nama}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+          <h1 className="mb-3 font-bold">Dokumen Penawaran</h1>
+          <div className="mb-6 border-b ">
+            <p className="mb-1 text-sm font-semibold">Administrasi</p>
+            {data.checklist?.penawaran?.administrasi.length === 0 ? (
+              <p className="text-xs text-justify">
+                Tidak ada Persyaratan Administrasi
+              </p>
+            ) : (
+              data.checklist?.penawaran?.administrasi.map((item, index) => (
+                <div className="flex gap-2 p-1" key={item.ckm_id}>
+                  <p className="text-xs text-justify align-top">
+                    {index + 1 + '.'}
+                  </p>
+                  <p className="text-xs text-justify">{item.ckm_nama}</p>
+                </div>
+              ))
+            )}
+          </div>
+          <div className="mb-6 border-b ">
+            <p className="mb-1 text-sm font-semibold">Keuangan</p>
+            {data.checklist?.penawaran?.harga.length === 0 ? (
+              <p className="text-xs text-justify">
+                Tidak ada Persyaratan Harga
+              </p>
+            ) : (
+              data.checklist?.penawaran?.harga.map((item, index) => (
+                <div className="flex gap-2 p-1" key={item.ckm_id}>
+                  <p className="text-xs text-justify align-top">
+                    {index + 1 + '.'}
+                  </p>
+                  <p className="text-xs text-justify">{item.ckm_nama}</p>
+                </div>
+              ))
+            )}
+          </div>
+          <div className="mb-6 border-b ">
+            <p className="mb-1 text-sm font-semibold">Teknis</p>
+            {data.checklist?.penawaran?.teknis.length === 0 ? (
+              <p className="text-xs text-justify">
+                Tidak ada Persyaratan Teknis
+              </p>
+            ) : (
+              data.checklist?.penawaran?.teknis.map((item, index) => (
+                <div className="flex gap-2 p-1" key={item.ckm_id}>
+                  <p className="text-xs text-justify align-top">
+                    {index + 1 + '.'}
+                  </p>
+                  <p className="text-xs text-justify">{item.ckm_nama}</p>
+                </div>
+              ))
+            )}
           </div>
         </div>
         <div className="mb-6">
@@ -298,7 +322,9 @@ const DokumenRKN = () => {
                       {item.item}
                     </th>
                     <td className="px-3 py-2 capitalize">{item.paket}</td>
-                    <td className="px-3 py-2 capitalize">{item.vol}</td>
+                    <td className="px-3 py-2 text-center capitalize">
+                      {item.vol}
+                    </td>
                     <td className="px-3 py-2 capitalize">{item.keterangan}</td>
                   </tr>
                 ))}
