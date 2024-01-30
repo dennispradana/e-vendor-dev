@@ -10,9 +10,12 @@ const TabEvaluasiPenawaran = ({ data }) => {
       data.evaluasi?.administrasi?.nev_lulus === '1' &&
       data.evaluasi?.teknis?.nev_lulus === '1' &&
       data.evaluasi?.harga?.nev_lulus === '1' && (
-        <button className="px-3 py-1 mx-4 text-xs text-white bg-gray-500 rounded hover:bg-gray-600">
+        <Link
+          to={`/evaluasi/penetapan/${data.peserta?.psr_id}`}
+          className="px-3 py-1 mx-4 text-xs text-white bg-gray-500 rounded hover:bg-gray-600"
+        >
           Penepatan Pemenang
-        </button>
+        </Link>
       )
     );
   };
