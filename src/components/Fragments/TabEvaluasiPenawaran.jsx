@@ -2,6 +2,7 @@ import React from 'react';
 import { formatRp } from '../../utils/formatRupiah';
 import { Link } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
+import { IoStar } from 'react-icons/io5';
 
 const TabEvaluasiPenawaran = ({ data }) => {
   const renderButtonPemenang = () => {
@@ -36,6 +37,17 @@ const TabEvaluasiPenawaran = ({ data }) => {
       default:
         return <div className="flex items-center justify-center">-</div>;
     }
+  };
+
+  const pemenangLelang = () => {
+    return (
+      data.evaluasi !== null &&
+      data.evaluasi?.pemenang !== null && (
+        <div className="flex items-center justify-center text-xl font-bold text-yellow-400">
+          <IoStar />
+        </div>
+      )
+    );
   };
 
   const RenderDataLelang = () => {
@@ -153,7 +165,9 @@ const TabEvaluasiPenawaran = ({ data }) => {
                 <td className="px-2 py-1 text-center border">
                   {evaluateStatus(data.evaluasi?.harga)}
                 </td>
-                <td className="px-2 py-1 text-center border"></td>
+                <td className="px-2 py-1 text-center border">
+                  {pemenangLelang()}
+                </td>
                 <td className="px-4 py-2 text-center border">
                   <button className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">
                     Verifikasi

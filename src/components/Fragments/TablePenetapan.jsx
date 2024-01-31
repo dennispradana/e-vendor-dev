@@ -106,8 +106,6 @@ const TablePenetapan = () => {
     navigate(-1);
   };
 
-  console.log(data);
-
   const RenderDataLelang = () => {
     return (
       <table className="w-full text-sm text-left border border-collapse">
