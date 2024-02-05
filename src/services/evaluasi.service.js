@@ -75,11 +75,105 @@ export const evaluasiService = () => {
     }
   };
 
+  const getVerifikasi = async (psrId) => {
+    try {
+      const response = await api.get(`v1/PP/verifikasi/${psrId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
+  const verManajerial = async (pegId, mnj) => {
+    try {
+      const response = await api.get(
+        `v1/PP/do_verif/${pegId}?verif_mnj=${mnj}`
+      );
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Melakukan Verifikasi');
+    }
+  };
+
+  const verLhkp = async (pegId, lhkp) => {
+    try {
+      const response = await api.get(
+        `v1/PP/do_verif/${pegId}?verif_lhkp=${lhkp}`
+      );
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Melakukan Verifikasi');
+    }
+  };
+
+  const verIus = async (pegId, ius) => {
+    try {
+      const response = await api.get(
+        `v1/PP/do_verif/${pegId}?verif_ius=${ius}`
+      );
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Melakukan Verifikasi');
+    }
+  };
+
+  const verPjk = async (pegId, pjk) => {
+    try {
+      const response = await api.get(
+        `v1/PP/do_verif/${pegId}?verif_pjk=${pjk}`
+      );
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Melakukan Verifikasi');
+    }
+  };
+
+  const verStp = async (pegId, stp) => {
+    try {
+      const response = await api.get(
+        `v1/PP/do_verif/${pegId}?verif_stp=${stp}`
+      );
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Melakukan Verifikasi');
+    }
+  };
+
+  const verPen = async (pegId, pen) => {
+    try {
+      const response = await api.get(
+        `v1/PP/do_verif/${pegId}?verif_pen=${pen}`
+      );
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Melakukan Verifikasi');
+    }
+  };
+
+  const verPrl = async (pegId, prl) => {
+    try {
+      const response = await api.get(
+        `v1/PP/do_verif/${pegId}?verif_prl=${prl}`
+      );
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Melakukan Verifikasi');
+    }
+  };
+
   return {
     getEvaluasi,
     getDokEvaluasi,
     getFile,
     getDokEvaluasiPeserta,
     updateEvaluasi,
+    getVerifikasi,
+    verIus,
+    verLhkp,
+    verManajerial,
+    verPen,
+    verPjk,
+    verPrl,
+    verStp,
   };
 };

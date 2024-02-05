@@ -169,9 +169,12 @@ const TabEvaluasiPenawaran = ({ data }) => {
                   {pemenangLelang()}
                 </td>
                 <td className="px-4 py-2 text-center border">
-                  <button className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600">
+                  <Link
+                    to={`/evaluasi/verifikasi/${data.peserta?.psr_id}`}
+                    className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
+                  >
                     Verifikasi
-                  </button>
+                  </Link>
                 </td>
               </tr>
             </tbody>

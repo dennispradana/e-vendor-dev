@@ -8,6 +8,9 @@ import { SkeletonItem } from '../Skelekton';
 import { useFormik } from 'formik';
 import Button from '../Button';
 import { evaluasiService } from '../../../services/evaluasi.service';
+import { InputForm, TextAreaForm } from '../Input';
+import { IoCloseCircleSharp, IoDocumentTextOutline } from 'react-icons/io5';
+import { FaPrint } from 'react-icons/fa6';
 
 export const ModalKAK = ({ close, data }) => {
   const { getFile, downloadFile } = fileService();
@@ -1317,6 +1320,55 @@ export const DokEvaluasi = ({ Id, close, title }) => {
             >
               Tutup
             </button>
+          </div>
+        </div>
+      </div>
+      <div className="fixed inset-0 z-40 bg-black opacity-30"></div>
+    </>
+  );
+};
+
+export const ModalBeritaAcara = ({ close, title }) => {
+  return (
+    <>
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+        <div className="relative w-[70vw] mx-auto my-6 ">
+          <div className="relative flex flex-col w-full px-3 bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+            <div className="flex justify-end">
+              <button
+                onClick={close}
+                className="p-3 text-xl font-bold text-red-500 hover:text-red-600"
+                type="button"
+              >
+                <IoCloseCircleSharp />
+              </button>
+            </div>
+            <div className="font-semibold border-b">
+              <p className="pb-3 font-sm">{title}</p>
+            </div>
+            <div className="px-6 my-6">
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <InputForm label="Nomor" type="text" />
+                <InputForm label="Tanggal" type="date" />
+              </div>
+              <TextAreaForm label="Keterangan Tambahan Lainnya" />
+            </div>
+            <div className="flex gap-4 px-6 mb-6">
+              <button
+                className="flex items-center justify-center gap-1 px-3 py-1 text-white bg-green-600 rounded hover:bg-green-700"
+                type="button"
+              >
+                <FaPrint />
+                Cetak
+              </button>
+              <button
+                className="flex items-center justify-center gap-1 px-3 py-1 text-white bg-blue-600 rounded hover:bg-blue-700"
+                type="button"
+              >
+                <IoDocumentTextOutline />
+                Preview
+              </button>
+            </div>
           </div>
         </div>
       </div>

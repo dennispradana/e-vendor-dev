@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SkeletonItem } from '../Elements/Skelekton';
 import { Link } from 'react-router-dom';
 import { TiStar } from 'react-icons/ti';
+import { ModalBeritaAcara } from '../Elements/Modal/pp';
+
+const initialState = {
+  kualifikasi: false,
+  penawaran: false,
+  pengadaan: false,
+  lainnya: false,
+};
 
 const TabInformasiPaket = ({ data, loading }) => {
+  const [modal, setModal] = useState(initialState);
+  const { kualifikasi, penawaran, pengadaan, lainnya } = modal;
+
+  const handleModal = (modalType) => {
+    setModal((prev) => ({
+      ...prev,
+      [modalType]: true,
+    }));
+  };
+
+  const handleCloseModal = (modalType) => {
+    setModal((prev) => ({
+      ...prev,
+      [modalType]: false,
+    }));
+  };
+
+  console.log(data);
   const RenderTablePemenang = () => {
     return (
       <table className="w-full text-sm text-left border border-collapse">
@@ -58,14 +84,7 @@ const TabInformasiPaket = ({ data, loading }) => {
               <table className="w-full text-sm text-left rounded-md">
                 <thead>
                   <tr className="capitalize border-b">
-                    <th className="p-1">
-                      <div className="flex items-center justify-between px-3">
-                        <p>pengumaman pemenang</p>
-                        <button className="px-2 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600">
-                          Hasil evaluasi
-                        </button>
-                      </div>
-                    </th>
+                    <th className="p-1">pengumaman pemenang</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -91,36 +110,133 @@ const TabInformasiPaket = ({ data, loading }) => {
               </table>
             </td>
           </tr>
+          {data.berita && data.berita?.BA_EVALUASI_KUALIFIKASI && (
+            <tr>
+              <th className="w-1/4 px-4 py-2 align-top border-b border-r">
+                Berita Acara Hasil Evaluasi Kualifikasi
+              </th>
+              <td className="px-4 py-2 border-b">
+                <table className="w-full mb-4 text-sm text-left rounded-md">
+                  <thead className="bg-blue-100">
+                    <tr className="border border-collapse border-blue-200">
+                      <th className="p-2">
+                        <div className="flex items-center justify-end gap-4 px-3">
+                          {data.berita?.BA_EVALUASI_KUALIFIKASI !== null && (
+                            <button
+                              onClick={() => handleModal('kualifikasi')}
+                              className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600"
+                            >
+                              Upload
+                            </button>
+                          )}
+                          <button className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600">
+                            Cetak
+                          </button>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border border-collapse border-blue-200">
+                      <td className="p-2">
+                        {data.berita?.BA_EVALUASI_KUALIFIKASI?.brt_no}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          )}
           <tr>
             <th className="w-1/4 px-4 py-2 align-top border-b border-r">
-              Berita Acara
+              Berita Acara Hasil Evaluasi Penawaraan
             </th>
             <td className="px-4 py-2 border-b">
               <table className="w-full mb-4 text-sm text-left rounded-md">
                 <thead className="bg-blue-100">
                   <tr className="border border-collapse border-blue-200">
                     <th className="p-2">
-                      Berita Acara Hasil Evaluasi Penawaraan
+                      <div className="flex items-center justify-end gap-4 px-3">
+                        {data.berita?.BA_EVALUASI_PENAWARAN !== null && (
+                          <button
+                            onClick={() => handleModal('penawaran')}
+                            className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600"
+                          >
+                            Upload
+                          </button>
+                        )}
+                        <button className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600">
+                          Cetak
+                        </button>
+                      </div>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border border-collapse border-blue-200">
-                    <td className="p-2"></td>
+                    <td className="p-2">
+                      {data.berita?.BA_EVALUASI_PENAWARAN?.brt_no}
+                    </td>
                   </tr>
                 </tbody>
               </table>
-              <table className="w-full text-sm text-left rounded-md">
+            </td>
+          </tr>
+          <tr>
+            <th className="w-1/4 px-4 py-2 align-top border-b border-r">
+              Berita Acara Hasil Pengadaan
+            </th>
+            <td className="px-4 py-2 border-b">
+              <table className="w-full mb-4 text-sm text-left rounded-md">
                 <thead className="bg-blue-100">
                   <tr className="border border-collapse border-blue-200">
-                    <th className="p-2">Berita Acara Hasil Non Tender</th>
+                    <th className="p-2">
+                      <div className="flex items-center justify-end gap-4 px-3">
+                        {data.berita?.BA_HASIL_LELANG !== null && (
+                          <button
+                            onClick={() => handleModal('pengadaan')}
+                            className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600"
+                          >
+                            Upload
+                          </button>
+                        )}
+                        <button className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600">
+                          Cetak
+                        </button>
+                      </div>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border border-collapse border-blue-200">
-                    <td className="p-2"></td>
+                    <td className="p-2">
+                      {data.berita?.BA_HASIL_LELANG?.brt_no}
+                    </td>
                   </tr>
                 </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th className="w-1/4 px-4 py-2 align-top border-b border-r">
+              Berita Acara Lainya
+            </th>
+            <td className="px-4 py-2 border-b">
+              <table className="w-full mb-4 text-sm text-left rounded-md">
+                <thead className="bg-blue-100">
+                  <tr className="border border-collapse border-blue-200">
+                    <th className="p-2">
+                      <div className="flex items-center justify-end gap-4 px-3">
+                        <button
+                          onClick={() => handleModal('lainnya')}
+                          className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600"
+                        >
+                          Upload
+                        </button>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
               </table>
             </td>
           </tr>
@@ -238,7 +354,15 @@ const TabInformasiPaket = ({ data, loading }) => {
       </table>
     </>
   ) : (
-    <RenderContent />
+    <>
+      <RenderContent />
+      {kualifikasi && (
+        <ModalBeritaAcara
+          close={() => handleCloseModal('kualifikasi')}
+          title="Cetak Berita Acara Evaluasi Kualifikasi"
+        />
+      )}
+    </>
   );
 };
 
