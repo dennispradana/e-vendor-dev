@@ -137,6 +137,7 @@ const TablePenetapan = () => {
             }`}
             disabled={formik.isSubmitting}
             onClick={() => handleBack()}
+            type="button"
           >
             Kembali
           </button>

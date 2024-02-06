@@ -1,19 +1,120 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SkeletonItem } from '../Elements/Skelekton';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { TiStar } from 'react-icons/ti';
-import { ModalBeritaAcara } from '../Elements/Modal/pp';
+import { CetakBeritaAcara } from '../Elements/Modal/pp';
+import { useFormik } from 'formik';
+import { evaluasiService } from '../../services/evaluasi.service';
+import { FileUploadDokBeritaAcara } from '../Elements/Modal/fileUpload';
+import { toasterror } from '../../utils/ToastMessage';
 
 const initialState = {
   kualifikasi: false,
   penawaran: false,
   pengadaan: false,
   lainnya: false,
+  formKualifikasi: false,
+  formPenawaran: false,
+  formPengadaan: false,
 };
 
-const TabInformasiPaket = ({ data, loading }) => {
+const TabInformasiPaket = ({ data, loading, onUpdate }) => {
+  const { llsId } = useParams();
+  const { updateBerita } = evaluasiService();
   const [modal, setModal] = useState(initialState);
-  const { kualifikasi, penawaran, pengadaan, lainnya } = modal;
+  const {
+    kualifikasi,
+    penawaran,
+    pengadaan,
+    lainnya,
+    formKualifikasi,
+    formPenawaran,
+    formPengadaan,
+  } = modal;
+
+  const initialValues = {
+    berita: {
+      BA_EVALUASI_KUALIFIKASI: {
+        brc_id_attachment: '',
+        brt_info: '',
+        brt_no: '',
+        brt_tgl_evaluasi: '',
+        brc_jenis_ba: '',
+      },
+      BA_EVALUASI_PENAWARAN: {
+        brc_id_attachment: '',
+        brt_info: '',
+        brt_no: '',
+        brt_tgl_evaluasi: '',
+        brc_jenis_ba: '',
+      },
+      BA_HASIL_LELANG: {
+        brc_id_attachment: '',
+        brt_info: '',
+        brt_no: '',
+        brt_tgl_evaluasi: '',
+        brc_jenis_ba: '',
+      },
+      BA_TAMBAHAN: {
+        brc_id_attachment: '',
+        brc_jenis_ba: '',
+      },
+    },
+  };
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      await updateBerita(llsId, values);
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: handleSubmit,
+  });
+
+  useEffect(() => {
+    formik.setValues({
+      berita: {
+        BA_EVALUASI_KUALIFIKASI: {
+          brc_id_attachment:
+            data.berita?.BA_EVALUASI_KUALIFIKASI?.brc_id_attachment || '',
+          brt_info: data.berita?.BA_EVALUASI_KUALIFIKASI?.brt_info || '',
+          brt_no: data.berita?.BA_EVALUASI_KUALIFIKASI?.brt_no || '',
+          brt_tgl_evaluasi:
+            data.berita?.BA_EVALUASI_KUALIFIKASI?.brt_tgl_evaluasi || '',
+          brc_jenis_ba:
+            data.berita?.BA_EVALUASI_KUALIFIKASI?.brc_jenis_ba || '',
+        },
+        BA_EVALUASI_PENAWARAN: {
+          brc_id_attachment:
+            data.berita?.BA_EVALUASI_PENAWARAN?.brc_id_attachment || '',
+          brt_info: data.berita?.BA_EVALUASI_PENAWARAN?.brt_info || '',
+          brt_no: data.berita?.BA_EVALUASI_PENAWARAN?.brt_no || '',
+          brt_tgl_evaluasi:
+            data.berita?.BA_EVALUASI_PENAWARAN?.brt_tgl_evaluasi || '',
+          brc_jenis_ba: data.berita?.BA_EVALUASI_PENAWARAN?.brc_jenis_ba || '',
+        },
+        BA_HASIL_LELANG: {
+          brc_id_attachment:
+            data.berita?.BA_HASIL_LELANG?.brc_id_attachment || '',
+          brt_info: data.berita?.BA_HASIL_LELANG?.brt_info || '',
+          brt_no: data.berita?.BA_HASIL_LELANG?.brt_no || '',
+          brt_tgl_evaluasi:
+            data.berita?.BA_HASIL_LELANG?.brt_tgl_evaluasi || '',
+          brc_jenis_ba: data.berita?.BA_HASIL_LELANG?.brc_jenis_ba || '',
+        },
+        BA_TAMBAHAN: {
+          brc_id_attachment: data.berita?.BA_TAMBAHAN?.brc_id_attachment || '',
+          brc_jenis_ba: data.berita?.BA_TAMBAHAN?.brc_jenis_ba || '',
+        },
+      },
+    });
+  }, [data]);
 
   const handleModal = (modalType) => {
     setModal((prev) => ({
@@ -29,7 +130,90 @@ const TabInformasiPaket = ({ data, loading }) => {
     }));
   };
 
-  console.log(data);
+  const handleSaveKualifikasi = async (dokIdAttachment) => {
+    formik.setFieldValue(
+      'berita.BA_EVALUASI_KUALIFIKASI.brc_id_attachment',
+      dokIdAttachment
+    );
+
+    try {
+      formik.setSubmitting(true);
+      await formik.submitForm();
+      onUpdate();
+      setModal((prev) => ({
+        ...prev,
+        kualifikasi: false,
+      }));
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      formik.setSubmitting(false);
+    }
+  };
+
+  const handleSavePenawaran = async (dokIdAttachment) => {
+    formik.setFieldValue(
+      'berita.BA_EVALUASI_PENAWARAN.brc_id_attachment',
+      dokIdAttachment
+    );
+
+    try {
+      formik.setSubmitting(true);
+      await formik.submitForm();
+      onUpdate();
+      setModal((prev) => ({
+        ...prev,
+        penawaran: false,
+      }));
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      formik.setSubmitting(false);
+    }
+  };
+
+  const handleSavePengadaan = async (dokIdAttachment) => {
+    formik.setFieldValue(
+      'berita.BA_HASIL_LELANG.brc_id_attachment',
+      dokIdAttachment
+    );
+
+    try {
+      formik.setSubmitting(true);
+      await formik.submitForm();
+      onUpdate();
+      setModal((prev) => ({
+        ...prev,
+        pengadaan: false,
+      }));
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      formik.setSubmitting(false);
+    }
+  };
+
+  const handleSaveLainnya = async (dokIdAttachment) => {
+    formik.setFieldValue(
+      'berita.BA_TAMBAHAN.brc_id_attachment',
+      dokIdAttachment
+    );
+
+    try {
+      formik.setSubmitting(true);
+      await formik.submitForm();
+      onUpdate();
+      setModal((prev) => ({
+        ...prev,
+        lainnya: false,
+      }));
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      formik.setSubmitting(false);
+    }
+  };
+
   const RenderTablePemenang = () => {
     return (
       <table className="w-full text-sm text-left border border-collapse">
@@ -110,7 +294,7 @@ const TabInformasiPaket = ({ data, loading }) => {
               </table>
             </td>
           </tr>
-          {data.berita && data.berita?.BA_EVALUASI_KUALIFIKASI && (
+          {data.berita && data.berita?.mode && (
             <tr>
               <th className="w-1/4 px-4 py-2 align-top border-b border-r">
                 Berita Acara Hasil Evaluasi Kualifikasi
@@ -129,7 +313,10 @@ const TabInformasiPaket = ({ data, loading }) => {
                               Upload
                             </button>
                           )}
-                          <button className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600">
+                          <button
+                            onClick={() => handleModal('formKualifikasi')}
+                            className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600"
+                          >
                             Cetak
                           </button>
                         </div>
@@ -165,7 +352,10 @@ const TabInformasiPaket = ({ data, loading }) => {
                             Upload
                           </button>
                         )}
-                        <button className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600">
+                        <button
+                          onClick={() => handleModal('formPenawaran')}
+                          className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600"
+                        >
                           Cetak
                         </button>
                       </div>
@@ -200,7 +390,10 @@ const TabInformasiPaket = ({ data, loading }) => {
                             Upload
                           </button>
                         )}
-                        <button className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600">
+                        <button
+                          onClick={() => handleModal('formPengadaan')}
+                          className="px-3 py-1 text-xs text-white capitalize bg-gray-500 rounded hover:bg-gray-600"
+                        >
                           Cetak
                         </button>
                       </div>
@@ -357,9 +550,58 @@ const TabInformasiPaket = ({ data, loading }) => {
     <>
       <RenderContent />
       {kualifikasi && (
-        <ModalBeritaAcara
+        <FileUploadDokBeritaAcara
           close={() => handleCloseModal('kualifikasi')}
-          title="Cetak Berita Acara Evaluasi Kualifikasi"
+          Id={data.berita?.BA_EVALUASI_KUALIFIKASI?.brc_id_attachment}
+          save={handleSaveKualifikasi}
+        />
+      )}
+      {formKualifikasi && (
+        <CetakBeritaAcara
+          close={() => handleCloseModal('formKualifikasi')}
+          title="Cetak Berita Acara Hasil Evaluasi Kualifikasi"
+          form="BA_EVALUASI_KUALIFIKASI"
+          data={data}
+          onUpdate={onUpdate}
+        />
+      )}
+      {penawaran && (
+        <FileUploadDokBeritaAcara
+          Id={data.berita?.BA_EVALUASI_PENAWARAN?.brc_id_attachment}
+          save={handleSavePenawaran}
+          close={() => handleCloseModal('penawaran')}
+        />
+      )}
+      {formPenawaran && (
+        <CetakBeritaAcara
+          close={() => handleCloseModal('formPenawaran')}
+          title="Cetak Berita Acara Hasil Evaluasi Penawaran"
+          form="BA_EVALUASI_PENAWARAN"
+          data={data}
+          onUpdate={onUpdate}
+        />
+      )}
+      {pengadaan && (
+        <FileUploadDokBeritaAcara
+          Id={data.berita?.BA_HASIL_LELANG?.brc_id_attachment}
+          save={handleSavePengadaan}
+          close={() => handleCloseModal('pengadaan')}
+        />
+      )}
+      {formPengadaan && (
+        <CetakBeritaAcara
+          close={() => handleCloseModal('formPengadaan')}
+          title="Cetak Berita Acara Hasil Evaluasi Pengadaan"
+          form="BA_HASIL_LELANG"
+          data={data}
+          onUpdate={onUpdate}
+        />
+      )}
+      {lainnya && (
+        <FileUploadDokBeritaAcara
+          Id={data.berita?.BA_TAMBAHAN?.brc_id_attachment}
+          save={handleSaveLainnya}
+          close={() => handleCloseModal('lainnya')}
         />
       )}
     </>

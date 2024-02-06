@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { fileService } from '../../../services/file.service';
 import { toasterror, toastsuccess } from '../../../utils/ToastMessage';
 import Spinner from '../Spinner';
-import { formatDate } from '../../../utils/formatDate';
+import { formatDate, formatEditDate } from '../../../utils/formatDate';
 import { paketService } from '../../../services/paket.service';
 import { SkeletonItem } from '../Skelekton';
 import { useFormik } from 'formik';
@@ -11,6 +11,7 @@ import { evaluasiService } from '../../../services/evaluasi.service';
 import { InputForm, TextAreaForm } from '../Input';
 import { IoCloseCircleSharp, IoDocumentTextOutline } from 'react-icons/io5';
 import { FaPrint } from 'react-icons/fa6';
+import { useParams } from 'react-router-dom';
 
 export const ModalKAK = ({ close, data }) => {
   const { getFile, downloadFile } = fileService();
@@ -1190,7 +1191,6 @@ export const DokEvaluasi = ({ Id, close, title }) => {
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
   const [files, setFiles] = useState([]);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     const getTableFile = async () => {
@@ -1328,7 +1328,109 @@ export const DokEvaluasi = ({ Id, close, title }) => {
   );
 };
 
-export const ModalBeritaAcara = ({ close, title }) => {
+export const CetakBeritaAcara = ({ close, title, form, data, onUpdate }) => {
+  const { llsId } = useParams();
+  const { updateBerita } = evaluasiService();
+  const initialValues = {
+    berita: {
+      BA_EVALUASI_KUALIFIKASI: {
+        brc_id_attachment: '',
+        brt_info: '',
+        brt_no: '',
+        brt_tgl_evaluasi: '',
+        brc_jenis_ba: '',
+      },
+      BA_EVALUASI_PENAWARAN: {
+        brc_id_attachment: '',
+        brt_info: '',
+        brt_no: '',
+        brt_tgl_evaluasi: '',
+        brc_jenis_ba: '',
+      },
+      BA_HASIL_LELANG: {
+        brc_id_attachment: '',
+        brt_info: '',
+        brt_no: '',
+        brt_tgl_evaluasi: '',
+        brc_jenis_ba: '',
+      },
+      BA_TAMBAHAN: {
+        brc_id_attachment: '',
+        brc_jenis_ba: '',
+      },
+    },
+  };
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const response = await updateBerita(llsId, values);
+      if (response.data.success) {
+        onUpdate();
+        toastsuccess('Berhasil Menyimpan');
+      } else {
+        toasterror('Terjadi Kesalahan');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: handleSubmit,
+  });
+
+  useEffect(() => {
+    formik.setValues({
+      berita: {
+        BA_EVALUASI_KUALIFIKASI: {
+          brc_id_attachment:
+            data.berita?.BA_EVALUASI_KUALIFIKASI?.brc_id_attachment || '',
+          brt_info: data.berita?.BA_EVALUASI_KUALIFIKASI?.brt_info || '',
+          brt_no: data.berita?.BA_EVALUASI_KUALIFIKASI?.brt_no || '',
+          brt_tgl_evaluasi: data.berita?.BA_EVALUASI_KUALIFIKASI
+            ?.brt_tgl_evaluasi
+            ? formatEditDate(
+                new Date(data.berita?.BA_EVALUASI_KUALIFIKASI?.brt_tgl_evaluasi)
+              )
+            : '',
+          brc_jenis_ba:
+            data.berita?.BA_EVALUASI_KUALIFIKASI?.brc_jenis_ba || '',
+        },
+        BA_EVALUASI_PENAWARAN: {
+          brc_id_attachment:
+            data.berita?.BA_EVALUASI_PENAWARAN?.brc_id_attachment || '',
+          brt_info: data.berita?.BA_EVALUASI_PENAWARAN?.brt_info || '',
+          brt_no: data.berita?.BA_EVALUASI_PENAWARAN?.brt_no || '',
+          brt_tgl_evaluasi: data.berita?.BA_EVALUASI_PENAWARAN?.brt_tgl_evaluasi
+            ? formatEditDate(
+                new Date(data.berita?.BA_EVALUASI_PENAWARAN?.brt_tgl_evaluasi)
+              )
+            : '',
+          brc_jenis_ba: data.berita?.BA_EVALUASI_PENAWARAN?.brc_jenis_ba || '',
+        },
+        BA_HASIL_LELANG: {
+          brc_id_attachment:
+            data.berita?.BA_HASIL_LELANG?.brc_id_attachment || '',
+          brt_info: data.berita?.BA_HASIL_LELANG?.brt_info || '',
+          brt_no: data.berita?.BA_HASIL_LELANG?.brt_no || '',
+          brt_tgl_evaluasi: data.berita?.BA_HASIL_LELANG?.brt_tgl_evaluasi
+            ? formatEditDate(
+                new Date(data.berita?.BA_HASIL_LELANG?.brt_tgl_evaluasi)
+              )
+            : '',
+          brc_jenis_ba: data.berita?.BA_HASIL_LELANG?.brc_jenis_ba || '',
+        },
+        BA_TAMBAHAN: {
+          brc_id_attachment: data.berita?.BA_TAMBAHAN?.brc_id_attachment || '',
+          brc_jenis_ba: data.berita?.BA_TAMBAHAN?.brc_jenis_ba || '',
+        },
+      },
+    });
+  }, [data]);
+
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
@@ -1337,7 +1439,7 @@ export const ModalBeritaAcara = ({ close, title }) => {
             <div className="flex justify-end">
               <button
                 onClick={close}
-                className="p-3 text-xl font-bold text-red-500 hover:text-red-600"
+                className="pt-1 text-xl font-bold text-red-500 hover:text-red-600"
                 type="button"
               >
                 <IoCloseCircleSharp />
@@ -1346,29 +1448,48 @@ export const ModalBeritaAcara = ({ close, title }) => {
             <div className="font-semibold border-b">
               <p className="pb-3 font-sm">{title}</p>
             </div>
-            <div className="px-6 my-6">
-              <div className="grid md:grid-cols-2 md:gap-6">
-                <InputForm label="Nomor" type="text" />
-                <InputForm label="Tanggal" type="date" />
+            <form onSubmit={formik.handleSubmit}>
+              <div className="px-6 my-6">
+                <div className="grid md:grid-cols-2 md:gap-6">
+                  <InputForm
+                    label="Nomor"
+                    type="text"
+                    {...formik.getFieldProps(`berita.${form}.brt_no`)}
+                  />
+                  <InputForm
+                    label="Tanggal"
+                    type="date"
+                    {...formik.getFieldProps(`berita.${form}.brt_tgl_evaluasi`)}
+                  />
+                </div>
+                <TextAreaForm
+                  label="Keterangan Tambahan Lainnya"
+                  {...formik.getFieldProps(`berita.${form}.brt_info`)}
+                />
               </div>
-              <TextAreaForm label="Keterangan Tambahan Lainnya" />
-            </div>
-            <div className="flex gap-4 px-6 mb-6">
-              <button
-                className="flex items-center justify-center gap-1 px-3 py-1 text-white bg-green-600 rounded hover:bg-green-700"
-                type="button"
-              >
-                <FaPrint />
-                Cetak
-              </button>
-              <button
-                className="flex items-center justify-center gap-1 px-3 py-1 text-white bg-blue-600 rounded hover:bg-blue-700"
-                type="button"
-              >
-                <IoDocumentTextOutline />
-                Preview
-              </button>
-            </div>
+              <div className="flex gap-4 px-6 mb-6">
+                <button
+                  className={`flex items-center justify-center gap-1 px-3 py-1 text-white bg-blue-600 rounded hover:bg-blue-700 ${
+                    formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                  type="submit"
+                  disabled={formik.isSubmitting}
+                >
+                  <IoDocumentTextOutline />
+                  Simpan
+                </button>
+                <button
+                  className={`flex items-center justify-center gap-1 px-3 py-1 text-white bg-green-600 rounded hover:bg-green-700 ${
+                    formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                  type="button"
+                  disabled={formik.isSubmitting}
+                >
+                  <FaPrint />
+                  Cetak
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

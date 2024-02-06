@@ -58,6 +58,19 @@ export const evaluasiService = () => {
     throw new Error('Gagal mendapatkan file setelah beberapa percobaan');
   };
 
+  const updateBerita = async (llsId, dataBerita) => {
+    try {
+      const response = await api.put(`/v1/PP/berita/${llsId}`, dataBerita, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Memperbarui Data');
+    }
+  };
+
   const updateEvaluasi = async (psrId, dataEvaluasi) => {
     try {
       const response = await api.put(
@@ -167,6 +180,7 @@ export const evaluasiService = () => {
     getFile,
     getDokEvaluasiPeserta,
     updateEvaluasi,
+    updateBerita,
     getVerifikasi,
     verIus,
     verLhkp,

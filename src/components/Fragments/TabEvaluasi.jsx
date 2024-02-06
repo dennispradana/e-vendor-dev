@@ -16,24 +16,35 @@ const TabEvaluasi = () => {
   const [data, setData] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const fetchData = async () => {
+    try {
+      const response = await getEvaluasi(llsId);
+      setData(response.data);
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getEvaluasi(llsId);
-        setData(response.data);
-      } catch (error) {
-        toasterror(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
+
+  const handleUpdate = async () => {
+    await fetchData();
+  };
 
   const renderContent = () => {
     switch (currentStep) {
       case 0:
-        return <TabInformasiPaket data={data} loading={loading} />;
+        return (
+          <TabInformasiPaket
+            data={data}
+            loading={loading}
+            onUpdate={handleUpdate}
+          />
+        );
       case 1:
         return <TabPenawaranPeserta data={data} loading={loading} />;
       case 2:
