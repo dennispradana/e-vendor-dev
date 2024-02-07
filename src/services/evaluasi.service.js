@@ -58,6 +58,15 @@ export const evaluasiService = () => {
     throw new Error('Gagal mendapatkan file setelah beberapa percobaan');
   };
 
+  const getDokBeritaAcara = async (brcId) => {
+    try {
+      const response = await api.get(`/v1/PP/berita/${brcId}`);
+      return response;
+    } catch (error) {
+      throw new Error('Gagal Mengunduh Dokumen');
+    }
+  };
+
   const updateBerita = async (llsId, dataBerita) => {
     try {
       const response = await api.put(`/v1/PP/berita/${llsId}`, dataBerita, {
@@ -180,6 +189,7 @@ export const evaluasiService = () => {
     getFile,
     getDokEvaluasiPeserta,
     updateEvaluasi,
+    getDokBeritaAcara,
     updateBerita,
     getVerifikasi,
     verIus,

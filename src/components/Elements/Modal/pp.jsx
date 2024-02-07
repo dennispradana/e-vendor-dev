@@ -1330,7 +1330,8 @@ export const DokEvaluasi = ({ Id, close, title }) => {
 
 export const CetakBeritaAcara = ({ close, title, form, data, onUpdate }) => {
   const { llsId } = useParams();
-  const { updateBerita } = evaluasiService();
+  const { updateBerita, getDokBeritaAcara } = evaluasiService();
+  const [downloading, setDownloading] = useState(false);
   const initialValues = {
     berita: {
       BA_EVALUASI_KUALIFIKASI: {
@@ -1374,6 +1375,14 @@ export const CetakBeritaAcara = ({ close, title, form, data, onUpdate }) => {
       toasterror(error.message);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleCetak = async (brcId) => {
+    try {
+      await getDokBeritaAcara(brcId);
+    } catch (error) {
+      toasterror(error.message);
     }
   };
 
@@ -1473,17 +1482,27 @@ export const CetakBeritaAcara = ({ close, title, form, data, onUpdate }) => {
                     formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
                   type="submit"
-                  disabled={formik.isSubmitting}
+                  disabled={formik.isSubmitting || downloading}
                 >
                   <IoDocumentTextOutline />
                   Simpan
                 </button>
                 <button
                   className={`flex items-center justify-center gap-1 px-3 py-1 text-white bg-green-600 rounded hover:bg-green-700 ${
-                    formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                    formik.isSubmitting || downloading
+                      ? 'opacity-50 cursor-not-allowed'
+                      : ''
                   }`}
                   type="button"
-                  disabled={formik.isSubmitting}
+                  disabled={formik.isSubmitting || downloading}
+                  onClick={() => {
+                    if (!downloading) {
+                      setDownloading(true);
+                      handleCetak(data.berita[form].brc_id).then(() =>
+                        setDownloading(false)
+                      );
+                    }
+                  }}
                 >
                   <FaPrint />
                   Cetak
