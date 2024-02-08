@@ -1675,12 +1675,14 @@ export const FileUploadDokKirimPenawaran = ({ save, Id, close }) => {
       .test('fileType', 'File type not supported', (value) => {
         if (value) {
           const supportedTypes = [
+            'image/jpeg',
+            'image/png',
             'application/pdf',
             'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'image/jpeg',
-            'image/png',
+            'application/zip',
+            'application/x-rar-compressed',
           ];
           const fileType = value.type;
           return supportedTypes.includes(fileType);
@@ -1897,8 +1899,8 @@ export const FileUploadDokKirimPenawaran = ({ save, Id, close }) => {
                 <input
                   type="file"
                   name="file"
+                  accept=".zip, .rar, .docx, .pdf, .xlxs, .png, .jpg, .jpeg"
                   className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-slate-50 hover:file:bg-blue-700 bg-gray-50"
-                  accept=".pdf, .doc, .docx, .xlsx"
                   ref={fileInputRef}
                   onChange={(event) => {
                     formik.setFieldValue('file', event.currentTarget.files[0]);

@@ -156,6 +156,14 @@ const AppRoute = () => {
               element={<AddDataKualifikasi />}
             />
             <Route path="/kirim-penawaran/:llsId" element={<SendPenawaran />} />
+            <Route path="/paket-baru" element={<DaftarPaketBaru />} />
+            <Route path="/penawaran/:llsId" element={<Penawaran />} />
+            <Route path="/dokumen-penawaran/:llsId" element={<DokRKN />} />
+            <Route
+              path="/dokumen-kualifikasi/:llsId"
+              element={<AddDataKualifikasi />}
+            />
+            <Route path="/kirim-penawaran/:llsId" element={<SendPenawaran />} />
           </Route>
           <Route element={<KipbjAccess />}>
             <Route path="/daftar-panitia" element={<ListPanitia />} />
@@ -187,27 +195,33 @@ const AppRoute = () => {
               <Route path="down" element={<Down />} />
               <Route path="up" element={<Up />} />
             </Route>
+            <Route path="evaluasi/:llsId" element={<Evaluasi />} />
+            <Route
+              path="evaluasi/dokumen-kulifikasi/:psrId"
+              element={<DokKualifikasiPen />}
+            />
+            <Route
+              path="evaluasi/administrasi/:psrId"
+              element={<DokAdministrasiTeknis />}
+            />
+            <Route
+              path="evaluasi/surat-penawaran/:psrId"
+              element={<DokSuratPenawaranEvaluasi />}
+            />
+            <Route
+              path="evaluasi/peserta/:psrId"
+              element={<EvaluasiPeserta />}
+            />
+            <Route path="evaluasi/harga/:psrId" element={<DokHarga />} />
+            <Route path="evaluasi/penetapan/:psrId" element={<Penetapan />} />
+            <Route path="evaluasi/verifikasi/:psrId" element={<Verifikasi />} />
+            <Route path="dokumen-evaluasi/:llsId" element={<DokEvaluasi />} />
+            <Route path="/data-paket/:llsId" element={<UpdateLelang />} />
+            <Route
+              path="/data-paket/detail/:llsId"
+              element={<DetailLelang />}
+            />
           </Route>
-          <Route path="evaluasi/:llsId" element={<Evaluasi />} />
-          <Route
-            path="evaluasi/dokumen-kulifikasi/:psrId"
-            element={<DokKualifikasiPen />}
-          />
-          <Route
-            path="evaluasi/administrasi/:psrId"
-            element={<DokAdministrasiTeknis />}
-          />
-          <Route
-            path="evaluasi/surat-penawaran/:psrId"
-            element={<DokSuratPenawaranEvaluasi />}
-          />
-          <Route path="evaluasi/peserta/:psrId" element={<EvaluasiPeserta />} />
-          <Route path="evaluasi/harga/:psrId" element={<DokHarga />} />
-          <Route path="evaluasi/penetapan/:psrId" element={<Penetapan />} />
-          <Route path="evaluasi/verifikasi/:psrId" element={<Verifikasi />} />
-          <Route path="dokumen-evaluasi/:llsId" element={<DokEvaluasi />} />
-          <Route path="/data-paket/:llsId" element={<UpdateLelang />} />
-          <Route path="/data-paket/detail/:llsId" element={<DetailLelang />} />
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<NotFound />} />
