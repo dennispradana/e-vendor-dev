@@ -1511,7 +1511,7 @@ export const CetakBeritaAcara = ({ close, title, form, data, onUpdate }) => {
                       setDownloading(true);
                       handleCetak(
                         data.berita[form].brc_id,
-                        `${data.berita[form].brc_jenis_ba}.pdf`
+                        `${data.berita[form].brc_jenis_ba}-${llsId}.pdf`
                       ).then(() => setDownloading(false));
                     }
                   }}
