@@ -60,7 +60,9 @@ export const evaluasiService = () => {
 
   const getDokBeritaAcara = async (brcId) => {
     try {
-      const response = await api.get(`/v1/PP/berita/${brcId}`);
+      const response = await api.get(`/v1/PP/berita/${brcId}`, {
+        responseType: 'blob',
+      });
       return response;
     } catch (error) {
       throw new Error('Gagal Mengunduh Dokumen');

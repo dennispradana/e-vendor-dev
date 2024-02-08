@@ -1378,9 +1378,20 @@ export const CetakBeritaAcara = ({ close, title, form, data, onUpdate }) => {
     }
   };
 
-  const handleCetak = async (brcId) => {
+  const handleCetak = async (brcId, fileName) => {
     try {
-      await getDokBeritaAcara(brcId);
+      const response = await getDokBeritaAcara(brcId);
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      if (response.status === 200) {
+        toastsuccess('File Berhasil Diunduh');
+      } else {
+        toasterror('Gagal mengunduh file');
+      }
     } catch (error) {
       toasterror(error.message);
     }
@@ -1498,9 +1509,10 @@ export const CetakBeritaAcara = ({ close, title, form, data, onUpdate }) => {
                   onClick={() => {
                     if (!downloading) {
                       setDownloading(true);
-                      handleCetak(data.berita[form].brc_id).then(() =>
-                        setDownloading(false)
-                      );
+                      handleCetak(
+                        data.berita[form].brc_id,
+                        `${data.berita[form].brc_jenis_ba}.pdf`
+                      ).then(() => setDownloading(false));
                     }
                   }}
                 >
