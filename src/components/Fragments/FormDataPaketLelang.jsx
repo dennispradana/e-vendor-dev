@@ -25,6 +25,7 @@ const FormDataPaketLelang = ({
   handleModalRK,
   handleModalIL,
   formik,
+  type,
 }) => {
   const renderBtkUsaha = () => {
     const lls_bentuk_usaha = datas.nonLel?.lls_bentuk_usaha;
@@ -66,14 +67,16 @@ const FormDataPaketLelang = ({
     const statusConfig = {
       edit: {
         condition:
-          datas.checklist?.kualifikasi.length ||
-          datas.checklist?.penawaran.length !== 0,
+          datas.checklist?.kualifikasi.length !== 0 ||
+          datas.checklist?.penawaran.length !== 0 ||
+          type === 'readOnly',
         render: <>{renderBtkUsaha()}</>,
       },
       readOnly: {
         condition:
-          datas.checklist?.kualifikasi.length ||
-          datas.checklist?.penawaran.length === 0,
+          datas.checklist?.kualifikasi.length === 0 ||
+          datas.checklist?.penawaran.length === 0 ||
+          type === 'readOnly',
         render: (
           <select
             className={`w-full py-1 px-3 text-gray-700 bg-white border ${
@@ -144,7 +147,6 @@ const FormDataPaketLelang = ({
 
     return status ? statusConfig[status].render : null;
   };
-
 
   return loading ? (
     <div className="h-[60vh] flex justify-center items-center">

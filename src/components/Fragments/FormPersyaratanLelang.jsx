@@ -4,19 +4,22 @@ const FormPersyaratanLelang = ({
   data,
   handleModalKualifikasi,
   handleModalPenawaran,
+  type,
 }) => {
   const TablePersyaratanKualifikasi = () => {
     return (
       <>
         <div className="flex justify-between pb-2">
           <p className="font-bold">Pesyaratan Kualifikasi</p>
-          <button
-            type="button"
-            onClick={handleModalKualifikasi}
-            className="px-4 py-1 capitalize transition duration-200 ease-in-out bg-blue-400 rounded-lg cursor-pointer text-gray-50 hover:bg-slate-800 hover:text-white"
-          >
-            Tambah Kualifikasi
-          </button>
+          {type !== 'readOnly' && (
+            <button
+              type="button"
+              onClick={handleModalKualifikasi}
+              className="px-4 py-1 capitalize transition duration-200 ease-in-out bg-blue-400 rounded-lg cursor-pointer text-gray-50 hover:bg-slate-800 hover:text-white"
+            >
+              Tambah Kualifikasi
+            </button>
+          )}
         </div>
         <div className="relative flex flex-col overflow-x-auto rounded-lg">
           <div className="flex-grow">
@@ -68,13 +71,15 @@ const FormPersyaratanLelang = ({
       <>
         <div className="flex justify-between pb-2">
           <p className="font-bold">Pesyaratan Penawaran</p>
-          <button
-            type="button"
-            onClick={handleModalPenawaran}
-            className="px-4 py-1 capitalize transition duration-200 ease-in-out bg-blue-400 rounded-lg cursor-pointer text-gray-50 hover:bg-slate-800 hover:text-white"
-          >
-            Tambah Penawaran
-          </button>
+          {type !== 'readOnly' && (
+            <button
+              type="button"
+              onClick={handleModalPenawaran}
+              className="px-4 py-1 capitalize transition duration-200 ease-in-out bg-blue-400 rounded-lg cursor-pointer text-gray-50 hover:bg-slate-800 hover:text-white"
+            >
+              Tambah Penawaran
+            </button>
+          )}
         </div>
         <div className="relative flex flex-col overflow-x-auto rounded-lg">
           <div className="flex-grow">

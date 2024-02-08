@@ -2,11 +2,16 @@ import { useEffect, useState } from 'react';
 import { fileService } from '../../../services/file.service';
 import { toasterror, toastsuccess } from '../../../utils/ToastMessage';
 import Spinner from '../Spinner';
-import { formatDate } from '../../../utils/formatDate';
+import { formatDate, formatEditDate } from '../../../utils/formatDate';
 import { paketService } from '../../../services/paket.service';
 import { SkeletonItem } from '../Skelekton';
 import { useFormik } from 'formik';
 import Button from '../Button';
+import { evaluasiService } from '../../../services/evaluasi.service';
+import { InputForm, TextAreaForm } from '../Input';
+import { IoCloseCircleSharp, IoDocumentTextOutline } from 'react-icons/io5';
+import { FaPrint } from 'react-icons/fa6';
+import { useParams } from 'react-router-dom';
 
 export const ModalKAK = ({ close, data }) => {
   const { getFile, downloadFile } = fileService();
@@ -427,6 +432,149 @@ export const ModalIL = ({ close, data }) => {
             <div className="font-semibold text-center">
               Dokumen Kerangka Acuan Kerja (KAK) / Spesifikasi Teknis dan Gambar
             </div>
+            <RenderTable />
+            <button
+              onClick={close}
+              className="p-3 font-bold text-red-500 border-b border-solid rounded-md rounded-t hover:text-red-600 border-slate-200"
+              type="button"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="fixed inset-0 z-40 bg-black opacity-30"></div>
+    </>
+  );
+};
+
+export const DokLelang = ({ close, data }) => {
+  const { getFile, downloadFile } = fileService();
+  const [files, setFiles] = useState([]);
+  const [error, setError] = useState('');
+  const [downloading, setDownloading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getTableFile = async () => {
+      try {
+        const response = await getFile(data.dokumen.dll_id_attachment);
+        setFiles(response);
+      } catch (error) {
+        setError('Belum ada file yang diunggah');
+      } finally {
+        setLoading(false);
+      }
+    };
+    getTableFile();
+  }, [data.dokumen.dll_id_attachment]);
+
+  const handleDownload = async (idContent, versi, fileName) => {
+    try {
+      const response = await downloadFile(idContent, versi);
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      if (response.status === 200) {
+        toastsuccess('File Berhasil Diunduh');
+      } else {
+        toasterror('Gagal mengunduh file');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    }
+  };
+
+  const RenderTable = () => {
+    return (
+      <div className="relative flex flex-col h-[60vh] overflow-x-auto rounded-lg px-6 py-8">
+        <div className="flex-grow">
+          <table className="w-full text-sm text-left text-gray-600 md:text-sm">
+            <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
+              <tr role="row" className="text-center border border-gray-200">
+                <th className="px-4 py-3 border border-gray-200">No</th>
+                <th className="px-4 py-3 border border-gray-200">Nama File</th>
+                <th className="px-4 py-3 border border-gray-200">
+                  Tanggal Upload
+                </th>
+              </tr>
+            </thead>
+            {loading ? (
+              <tbody>
+                <tr className="h-56 capitalize bg-gray-200 border-b">
+                  <td colSpan="4" className="text-center">
+                    <Spinner />
+                  </td>
+                </tr>
+              </tbody>
+            ) : (
+              <tbody className="overflow-y-auto ">
+                {files.length === 0 ? (
+                  <tr className="capitalize bg-gray-200 border-b">
+                    <td
+                      colSpan="4"
+                      className="px-6 py-4 italic font-semibold text-center"
+                    >
+                      {error}
+                    </td>
+                  </tr>
+                ) : (
+                  files.map((file, index) => (
+                    <tr
+                      key={index}
+                      className="duration-150 ease-out bg-white border-b hover:bg-gray-200"
+                    >
+                      <th
+                        scope="row"
+                        className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                      >
+                        {index + 1}
+                      </th>
+                      <td className="px-4 py-4">
+                        <button
+                          onClick={() => {
+                            if (!downloading) {
+                              setDownloading(true);
+                              handleDownload(
+                                file.ctn_id_content,
+                                file.ctn_versi,
+                                JSON.parse(file.blb_path).name
+                              ).then(() => setDownloading(false));
+                            }
+                          }}
+                          className={`font-semibold hover:text-blue-500 hover:underline ${
+                            downloading ? 'cursor-not-allowed' : ''
+                          }`}
+                          disabled={downloading}
+                        >
+                          {downloading
+                            ? 'Download....'
+                            : JSON.parse(file.blb_path).name}
+                        </button>
+                      </td>
+                      <td className="px-3 py-4 text-center">
+                        {formatDate(new Date(file.blb_date_time))}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            )}
+          </table>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+        <div className="relative w-[70vw] mx-auto my-6 ">
+          <div className="relative flex flex-col w-full px-3 py-6 bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+            <div className="font-semibold text-center">Dokumen Pemilihan</div>
             <RenderTable />
             <button
               onClick={close}
@@ -1029,6 +1177,350 @@ export const LelangPenyedia = ({ close, llsId, onUpdate }) => {
             >
               Tutup
             </button>
+          </div>
+        </div>
+      </div>
+      <div className="fixed inset-0 z-40 bg-black opacity-30"></div>
+    </>
+  );
+};
+
+export const DokEvaluasi = ({ Id, close, title }) => {
+  const { downloadFile } = fileService();
+  const { getFile } = evaluasiService();
+  const [loading, setLoading] = useState(true);
+  const [downloading, setDownloading] = useState(false);
+  const [files, setFiles] = useState([]);
+
+  useEffect(() => {
+    const getTableFile = async () => {
+      try {
+        const response = await getFile(Id);
+        setFiles(response);
+      } catch (error) {
+        toasterror(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getTableFile();
+  }, [Id]);
+
+  const handleDownload = async (idContent, versi, fileName) => {
+    try {
+      const response = await downloadFile(idContent, versi);
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      if (response.status === 200) {
+        toastsuccess('File Berhasil Diunduh');
+      } else {
+        toasterror('Gagal mengunduh file');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    }
+  };
+
+  const RenderTable = () => {
+    return (
+      <div className="relative flex flex-col h-[60vh] overflow-x-auto rounded-lg px-6 py-8">
+        <div className="flex-grow">
+          <table className="w-full text-sm text-left text-gray-600 md:text-sm">
+            <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
+              <tr role="row" className="text-center border border-gray-200">
+                <th className="px-4 py-3 border border-gray-200">No</th>
+                <th className="px-4 py-3 border border-gray-200">Nama File</th>
+                <th className="px-4 py-3 border border-gray-200">
+                  Tanggal Upload
+                </th>
+              </tr>
+            </thead>
+            {loading ? (
+              <tbody>
+                <tr className="h-56 capitalize bg-gray-200 border-b">
+                  <td colSpan="3" className="text-center">
+                    <Spinner />
+                  </td>
+                </tr>
+              </tbody>
+            ) : (
+              <tbody className="overflow-y-auto ">
+                {files.length === 0 ? (
+                  <tr className="capitalize bg-gray-200 border-b">
+                    <td
+                      colSpan="3"
+                      className="px-6 py-4 italic font-semibold text-center"
+                    >
+                      Belum ada File yang Diunggah
+                    </td>
+                  </tr>
+                ) : (
+                  files.map((file, index) => (
+                    <tr
+                      key={index}
+                      className="duration-150 ease-out bg-white border-b hover:bg-gray-200"
+                    >
+                      <th
+                        scope="row"
+                        className="px-3 py-4 font-medium text-center text-gray-900 whitespace-nowrap"
+                      >
+                        {index + 1}
+                      </th>
+                      <td className="px-4 py-4">
+                        <button
+                          onClick={() => {
+                            if (!downloading) {
+                              setDownloading(true);
+                              handleDownload(
+                                file.ctn_id_content,
+                                file.ctn_versi,
+                                JSON.parse(file.blb_path).name
+                              ).then(() => setDownloading(false));
+                            }
+                          }}
+                          className={`font-semibold hover:text-blue-500 hover:underline ${
+                            downloading ? 'cursor-not-allowed' : ''
+                          }`}
+                          disabled={downloading}
+                        >
+                          {downloading
+                            ? 'Download....'
+                            : JSON.parse(file.blb_path).name}
+                        </button>
+                      </td>
+                      <td className="px-3 py-4 text-center">
+                        {file.blb_date_time}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            )}
+          </table>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+        <div className="relative w-[70vw] mx-auto my-6 ">
+          <div className="relative flex flex-col w-full px-3 py-6 bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+            <div className="font-semibold text-center">{title}</div>
+            <RenderTable />
+            <button
+              onClick={close}
+              className="p-3 font-bold text-red-500 border-b border-solid rounded-md rounded-t hover:text-red-600 border-slate-200"
+              type="button"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="fixed inset-0 z-40 bg-black opacity-30"></div>
+    </>
+  );
+};
+
+export const CetakBeritaAcara = ({ close, title, form, data, onUpdate }) => {
+  const { llsId } = useParams();
+  const { updateBerita, getDokBeritaAcara } = evaluasiService();
+  const [downloading, setDownloading] = useState(false);
+  const initialValues = {
+    berita: {
+      BA_EVALUASI_KUALIFIKASI: {
+        brc_id_attachment: '',
+        brt_info: '',
+        brt_no: '',
+        brt_tgl_evaluasi: '',
+        brc_jenis_ba: '',
+      },
+      BA_EVALUASI_PENAWARAN: {
+        brc_id_attachment: '',
+        brt_info: '',
+        brt_no: '',
+        brt_tgl_evaluasi: '',
+        brc_jenis_ba: '',
+      },
+      BA_HASIL_LELANG: {
+        brc_id_attachment: '',
+        brt_info: '',
+        brt_no: '',
+        brt_tgl_evaluasi: '',
+        brc_jenis_ba: '',
+      },
+      BA_TAMBAHAN: {
+        brc_id_attachment: '',
+        brc_jenis_ba: '',
+      },
+    },
+  };
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const response = await updateBerita(llsId, values);
+      if (response.data.success) {
+        onUpdate();
+        toastsuccess('Berhasil Menyimpan');
+      } else {
+        toasterror('Terjadi Kesalahan');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleCetak = async (brcId, fileName) => {
+    try {
+      const response = await getDokBeritaAcara(brcId);
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      if (response.status === 200) {
+        toastsuccess('File Berhasil Diunduh');
+      } else {
+        toasterror('Gagal mengunduh file');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: handleSubmit,
+  });
+
+  useEffect(() => {
+    formik.setValues({
+      berita: {
+        BA_EVALUASI_KUALIFIKASI: {
+          brc_id_attachment:
+            data.berita?.BA_EVALUASI_KUALIFIKASI?.brc_id_attachment || '',
+          brt_info: data.berita?.BA_EVALUASI_KUALIFIKASI?.brt_info || '',
+          brt_no: data.berita?.BA_EVALUASI_KUALIFIKASI?.brt_no || '',
+          brt_tgl_evaluasi: data.berita?.BA_EVALUASI_KUALIFIKASI
+            ?.brt_tgl_evaluasi
+            ? formatEditDate(
+                new Date(data.berita?.BA_EVALUASI_KUALIFIKASI?.brt_tgl_evaluasi)
+              )
+            : '',
+          brc_jenis_ba:
+            data.berita?.BA_EVALUASI_KUALIFIKASI?.brc_jenis_ba || '',
+        },
+        BA_EVALUASI_PENAWARAN: {
+          brc_id_attachment:
+            data.berita?.BA_EVALUASI_PENAWARAN?.brc_id_attachment || '',
+          brt_info: data.berita?.BA_EVALUASI_PENAWARAN?.brt_info || '',
+          brt_no: data.berita?.BA_EVALUASI_PENAWARAN?.brt_no || '',
+          brt_tgl_evaluasi: data.berita?.BA_EVALUASI_PENAWARAN?.brt_tgl_evaluasi
+            ? formatEditDate(
+                new Date(data.berita?.BA_EVALUASI_PENAWARAN?.brt_tgl_evaluasi)
+              )
+            : '',
+          brc_jenis_ba: data.berita?.BA_EVALUASI_PENAWARAN?.brc_jenis_ba || '',
+        },
+        BA_HASIL_LELANG: {
+          brc_id_attachment:
+            data.berita?.BA_HASIL_LELANG?.brc_id_attachment || '',
+          brt_info: data.berita?.BA_HASIL_LELANG?.brt_info || '',
+          brt_no: data.berita?.BA_HASIL_LELANG?.brt_no || '',
+          brt_tgl_evaluasi: data.berita?.BA_HASIL_LELANG?.brt_tgl_evaluasi
+            ? formatEditDate(
+                new Date(data.berita?.BA_HASIL_LELANG?.brt_tgl_evaluasi)
+              )
+            : '',
+          brc_jenis_ba: data.berita?.BA_HASIL_LELANG?.brc_jenis_ba || '',
+        },
+        BA_TAMBAHAN: {
+          brc_id_attachment: data.berita?.BA_TAMBAHAN?.brc_id_attachment || '',
+          brc_jenis_ba: data.berita?.BA_TAMBAHAN?.brc_jenis_ba || '',
+        },
+      },
+    });
+  }, [data]);
+
+  return (
+    <>
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+        <div className="relative w-[70vw] mx-auto my-6 ">
+          <div className="relative flex flex-col w-full px-3 bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+            <div className="flex justify-end">
+              <button
+                onClick={close}
+                className="pt-1 text-xl font-bold text-red-500 hover:text-red-600"
+                type="button"
+              >
+                <IoCloseCircleSharp />
+              </button>
+            </div>
+            <div className="font-semibold border-b">
+              <p className="pb-3 font-sm">{title}</p>
+            </div>
+            <form onSubmit={formik.handleSubmit}>
+              <div className="px-6 my-6">
+                <div className="grid md:grid-cols-2 md:gap-6">
+                  <InputForm
+                    label="Nomor"
+                    type="text"
+                    {...formik.getFieldProps(`berita.${form}.brt_no`)}
+                  />
+                  <InputForm
+                    label="Tanggal"
+                    type="date"
+                    {...formik.getFieldProps(`berita.${form}.brt_tgl_evaluasi`)}
+                  />
+                </div>
+                <TextAreaForm
+                  label="Keterangan Tambahan Lainnya"
+                  {...formik.getFieldProps(`berita.${form}.brt_info`)}
+                />
+              </div>
+              <div className="flex gap-4 px-6 mb-6">
+                <button
+                  className={`flex items-center justify-center gap-1 px-3 py-1 text-white bg-blue-600 rounded hover:bg-blue-700 ${
+                    formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                  type="submit"
+                  disabled={formik.isSubmitting || downloading}
+                >
+                  <IoDocumentTextOutline />
+                  Simpan
+                </button>
+                <button
+                  className={`flex items-center justify-center gap-1 px-3 py-1 text-white bg-green-600 rounded hover:bg-green-700 ${
+                    formik.isSubmitting || downloading
+                      ? 'opacity-50 cursor-not-allowed'
+                      : ''
+                  }`}
+                  type="button"
+                  disabled={formik.isSubmitting || downloading}
+                  onClick={() => {
+                    if (!downloading) {
+                      setDownloading(true);
+                      handleCetak(
+                        data.berita[form].brc_id,
+                        `${data.berita[form].brc_jenis_ba}-${llsId}.pdf`
+                      ).then(() => setDownloading(false));
+                    }
+                  }}
+                >
+                  <FaPrint />
+                  Cetak
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

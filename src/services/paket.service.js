@@ -118,11 +118,32 @@ export const paketService = () => {
       throw new Error('Data Paket Tidak Tersedia');
     }
   };
+  const getLelangUp = async (userId, lenght, page, search) => {
+    try {
+      const response = await api.get(
+        `/v1/PP/list_lelangUp/${userId}?length=${lenght}&page=${page}&q=${search}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Data Paket Tidak Tersedia');
+    }
+  };
 
   const getPaketDown = async (userId, lenght, page, search) => {
     try {
       const response = await api.get(
         `/v1/PP/list_paketDown/${userId}?length=${lenght}&page=${page}&q=${search}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Data Paket Tidak Tersedia');
+    }
+  };
+
+  const getLelangDown = async (userId, lenght, page, search) => {
+    try {
+      const response = await api.get(
+        `/v1/PP/list_lelangDown/${userId}?length=${lenght}&page=${page}&q=${search}`
       );
       return response.data;
     } catch (error) {
@@ -239,6 +260,23 @@ export const paketService = () => {
     }
   };
 
+  const getDokKualifikasiPen = async (psrId, dataDok) => {
+    try {
+      const response = await api.get(`/v1/PP/pen_kual/${psrId}`, dataDok);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mendapatkan Data');
+    }
+  };
+  const getDataEvaluasiPen = async (psrId, data) => {
+    try {
+      const response = await api.get(`/v1/PP/pen_penawaran/${psrId}`, data);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mendapatkan Data');
+    }
+  };
+
   return {
     getListPaket,
     getDataPaket,
@@ -260,5 +298,9 @@ export const paketService = () => {
     updatePenawaran,
     getPenyediaLelang,
     getPilihPenyediaLelang,
+    getLelangUp,
+    getLelangDown,
+    getDokKualifikasiPen,
+    getDataEvaluasiPen,
   };
 };

@@ -65,6 +65,16 @@ import Penawaran from './pages/penyedia/penawaran';
 import DokRKN from './pages/penyedia/dokRkn';
 import AddDataKualifikasi from './pages/penyedia/addDataKualifikasi';
 import SendPenawaran from './pages/penyedia/sendPenawaran';
+import DetailLelang from './pages/pegawai/pp/detailLelang';
+import Evaluasi from './pages/pegawai/pp/evaluasi';
+import DokEvaluasi from './pages/pegawai/pp/dokEvaluasi';
+import DokKualifikasiPen from './pages/pegawai/pp/dokKualifikasiPen';
+import DokAdministrasiTeknis from './pages/pegawai/pp/dokAdministrasiTeknis';
+import DokHarga from './pages/pegawai/pp/dokHarga';
+import DokSuratPenawaranEvaluasi from './pages/pegawai/pp/dokSuratPenawaran';
+import EvaluasiPeserta from './pages/pegawai/pp/evaluasiPeseta';
+import Penetapan from './pages/pegawai/pp/penetapan';
+import Verifikasi from './pages/pegawai/pp/verifikasi';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -178,7 +188,26 @@ const AppRoute = () => {
               <Route path="up" element={<Up />} />
             </Route>
           </Route>
+          <Route path="evaluasi/:llsId" element={<Evaluasi />} />
+          <Route
+            path="evaluasi/dokumen-kulifikasi/:psrId"
+            element={<DokKualifikasiPen />}
+          />
+          <Route
+            path="evaluasi/administrasi/:psrId"
+            element={<DokAdministrasiTeknis />}
+          />
+          <Route
+            path="evaluasi/surat-penawaran/:psrId"
+            element={<DokSuratPenawaranEvaluasi />}
+          />
+          <Route path="evaluasi/peserta/:psrId" element={<EvaluasiPeserta />} />
+          <Route path="evaluasi/harga/:psrId" element={<DokHarga />} />
+          <Route path="evaluasi/penetapan/:psrId" element={<Penetapan />} />
+          <Route path="evaluasi/verifikasi/:psrId" element={<Verifikasi />} />
+          <Route path="dokumen-evaluasi/:llsId" element={<DokEvaluasi />} />
           <Route path="/data-paket/:llsId" element={<UpdateLelang />} />
+          <Route path="/data-paket/detail/:llsId" element={<DetailLelang />} />
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<NotFound />} />
