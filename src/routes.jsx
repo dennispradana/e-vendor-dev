@@ -156,6 +156,14 @@ const AppRoute = () => {
               element={<AddDataKualifikasi />}
             />
             <Route path="/kirim-penawaran/:llsId" element={<SendPenawaran />} />
+            <Route path="/paket-baru" element={<DaftarPaketBaru />} />
+            <Route path="/penawaran/:llsId" element={<Penawaran />} />
+            <Route path="/dokumen-penawaran/:llsId" element={<DokRKN />} />
+            <Route
+              path="/dokumen-kualifikasi/:llsId"
+              element={<AddDataKualifikasi />}
+            />
+            <Route path="/kirim-penawaran/:llsId" element={<SendPenawaran />} />
           </Route>
           <Route element={<KipbjAccess />}>
             <Route path="/daftar-panitia" element={<ListPanitia />} />
@@ -187,47 +195,33 @@ const AppRoute = () => {
               <Route path="down" element={<Down />} />
               <Route path="up" element={<Up />} />
             </Route>
-            <Route path="/tambah-izin-usaha" element={<AddIzinUsaha />} />
+            <Route path="evaluasi/:llsId" element={<Evaluasi />} />
             <Route
-              path="/edit-izin-usaha/:penyediaIusId"
-              element={<UpdateIzinUsaha />}
+              path="evaluasi/dokumen-kulifikasi/:psrId"
+              element={<DokKualifikasiPen />}
             />
-            <Route path="/tambah-akta" element={<AddAkta />} />
-            <Route path="/edit-akta/:penyediaLhkpId" element={<UpdateAkta />} />
-            <Route path="/tambah-manajerial" element={<AddManajerial />} />
             <Route
-              path="/edit-manajerial/:penyediaManajerId"
-              element={<UpdateManajerial />}
+              path="evaluasi/administrasi/:psrId"
+              element={<DokAdministrasiTeknis />}
             />
-            <Route path="/tambah-sdm" element={<AddTenagaAhli />} />
-            <Route path="/tambah-pengalaman" element={<AddPengalaman />} />
-            <Route path="/tambah-peralatan" element={<AddPeralatan />} />
-            <Route path="/tambah-pajak" element={<AddPajak />} />
             <Route
-              path="/edit-pajak/:penyediaPjkId"
-              element={<UpdatePajak />}
+              path="evaluasi/surat-penawaran/:psrId"
+              element={<DokSuratPenawaranEvaluasi />}
+            />
+            <Route
+              path="evaluasi/peserta/:psrId"
+              element={<EvaluasiPeserta />}
+            />
+            <Route path="evaluasi/harga/:psrId" element={<DokHarga />} />
+            <Route path="evaluasi/penetapan/:psrId" element={<Penetapan />} />
+            <Route path="evaluasi/verifikasi/:psrId" element={<Verifikasi />} />
+            <Route path="dokumen-evaluasi/:llsId" element={<DokEvaluasi />} />
+            <Route path="/data-paket/:llsId" element={<UpdateLelang />} />
+            <Route
+              path="/data-paket/detail/:llsId"
+              element={<DetailLelang />}
             />
           </Route>
-          <Route path="evaluasi/:llsId" element={<Evaluasi />} />
-          <Route
-            path="evaluasi/dokumen-kulifikasi/:psrId"
-            element={<DokKualifikasiPen />}
-          />
-          <Route
-            path="evaluasi/administrasi/:psrId"
-            element={<DokAdministrasiTeknis />}
-          />
-          <Route
-            path="evaluasi/surat-penawaran/:psrId"
-            element={<DokSuratPenawaranEvaluasi />}
-          />
-          <Route path="evaluasi/peserta/:psrId" element={<EvaluasiPeserta />} />
-          <Route path="evaluasi/harga/:psrId" element={<DokHarga />} />
-          <Route path="evaluasi/penetapan/:psrId" element={<Penetapan />} />
-          <Route path="evaluasi/verifikasi/:psrId" element={<Verifikasi />} />
-          <Route path="dokumen-evaluasi/:llsId" element={<DokEvaluasi />} />
-          <Route path="/data-paket/:llsId" element={<UpdateLelang />} />
-          <Route path="/data-paket/detail/:llsId" element={<DetailLelang />} />
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<NotFound />} />
