@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { paketService } from '../../services/paket.service';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toasterror } from '../../utils/ToastMessage';
 import TableHPS from './TableHPS';
@@ -8,9 +7,10 @@ import DetailDataPaket from './DetailDataPaket';
 import DetailDokumenPaket from './DetailDokumenPaket';
 import Spinner from '../Elements/Spinner';
 import Stepper from '../Elements/Stepper';
+import { panitiaService } from '../../services/panitia.service';
 
 const PaketDetail = ({ type }) => {
-  const { getDataPaket } = paketService();
+  const { getDataPaket } = panitiaService();
   const { paketId } = useParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [dataPaket, setDataPaket] = useState('');

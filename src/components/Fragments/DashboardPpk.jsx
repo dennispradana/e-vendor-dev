@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { penyediaService } from '../../services/penyedia.service';
 import { SkeletonItem } from '../Elements/Skelekton';
 import Pagination from '../Elements/Pagination';
 import { useDebounce } from 'use-debounce';
@@ -89,10 +88,6 @@ const DashboardPpk = () => {
     }));
   };
 
-  const handleDirect = (llsId) => {
-    navigate(`/penawaran/${llsId}`);
-  };
-
   const TableDashboard = () => {
     return (
       <>
@@ -171,10 +166,7 @@ const DashboardPpk = () => {
                       <td className="px-3 py-4 text-center capitalize">
                         {item.lls_id}
                       </td>
-                      <td
-                        className="px-3 py-4 text-center cursor-pointer capitaliz hover:text-blue-700"
-                        onClick={() => handleDirect(item.lls_id)}
-                      >
+                      <td className="px-3 py-4 text-center cursor-pointer capitaliz hover:text-blue-700">
                         {item.pkt_nama}
                       </td>
                       <td className="px-3 py-4">{item.tahapan}</td>

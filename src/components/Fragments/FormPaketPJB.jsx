@@ -16,9 +16,11 @@ import {
   ModalRK,
 } from '../Elements/Modal/kipjb';
 import { toasterror, toastsuccess } from '../../utils/ToastMessage';
+import { panitiaService } from '../../services/panitia.service';
 
 const FormPaketPJB = () => {
-  const { getDataPaket, updateDataPaket, inisiasiLelang } = paketService();
+  const { inisiasiLelang } = paketService();
+  const { getDataPaket, updateDataPaket } = panitiaService();
   const { paketId } = useParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [dataPaket, setDataPaket] = useState('');

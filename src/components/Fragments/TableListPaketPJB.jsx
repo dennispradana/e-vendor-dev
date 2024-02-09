@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { paketService } from '../../services/paket.service';
 import { SkeletonItem } from '../Elements/Skelekton';
 import Pagination from '../Elements/Pagination';
 import { useDebounce } from 'use-debounce';
@@ -8,6 +7,7 @@ import DataEmpty from '../Elements/DataEmpty';
 import { FaRegFolderOpen } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../utils/formatDate';
+import { panitiaService } from '../../services/panitia.service';
 
 const initialState = {
   datas: [],
@@ -33,7 +33,7 @@ const TableListPaketPJB = () => {
     totalPages,
   } = state;
   const [loading, setLoading] = useState(true);
-  const { getListPaket } = paketService();
+  const { getListPaket } = panitiaService();
   const [debaouceSearch] = useDebounce(search, 2000);
 
   useEffect(() => {
@@ -126,7 +126,7 @@ const TableListPaketPJB = () => {
         condition: item.pkt_status !== '1',
         render: (
           <Link to={`/paket/${item.pkt_id}`}>
-            <button className="w-1/2 p-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
+            <button className="p-1 text-blue-500 border border-blue-400 rounded-md  hover:text-white hover:bg-blue-400">
               Inisiasi Paket
             </button>
           </Link>

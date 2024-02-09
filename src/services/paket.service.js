@@ -25,7 +25,11 @@ export const paketService = () => {
 
   const updateDataPaket = async (paketId, dataPaket) => {
     try {
-      const response = await api.put(`/v1/PPK/paket/${paketId}`, dataPaket);
+      const response = await api.put(`/v1/PPK/paket/${paketId}`, dataPaket, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error('Gagal Memperbarui Data Paket');
@@ -77,7 +81,7 @@ export const paketService = () => {
   const getPilihPegawai = async (paketId, pegawaiId, dataPegawai) => {
     try {
       const response = await api.get(
-        `/v1/paket_pp/${paketId}?peg_id=${pegawaiId}`,
+        `/v1/KIPBJ/paket_pp/${paketId}?peg_id=${pegawaiId}`,
         dataPegawai
       );
       return response.data;
@@ -89,7 +93,7 @@ export const paketService = () => {
   const getPilihPanitia = async (paketId, panitiaId, dataPanitia) => {
     try {
       const response = await api.get(
-        `/v1/paket_panitia/${paketId}?pnt_id=${panitiaId}`,
+        `/v1/KIPBJ/paket_panitia/${paketId}?pnt_id=${panitiaId}`,
         dataPanitia
       );
       return response.data;
