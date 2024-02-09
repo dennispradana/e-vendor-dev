@@ -3,10 +3,10 @@ import { useAuthContext } from '../contexts/AuthContext';
 
 export const paketService = () => {
   const { userToken } = useAuthContext();
-  const getListPaket = async (lenght, page, search) => {
+  const getListPaket = async (userId, lenght, page, search) => {
     try {
       const response = await api.get(
-        `/v1/list_paket?length=${lenght}&page=${page}&q=${search}`
+        `/v1/PPK/list_paket/${userId}?length=${lenght}&page=${page}&q=${search}`
       );
       return response.data;
     } catch (error) {
@@ -16,7 +16,7 @@ export const paketService = () => {
 
   const getDataPaket = async (paketId, dataPaket) => {
     try {
-      const response = await api.get(`/v1/paket/${paketId}`, dataPaket);
+      const response = await api.get(`/v1/PPK/paket/${paketId}`, dataPaket);
       return response.data;
     } catch (error) {
       throw new Error('Data Paket Tidak Tersedia');
@@ -25,7 +25,7 @@ export const paketService = () => {
 
   const updateDataPaket = async (paketId, dataPaket) => {
     try {
-      const response = await api.put(`/v1/paket/${paketId}`, dataPaket);
+      const response = await api.put(`/v1/PPK/paket/${paketId}`, dataPaket);
       return response.data;
     } catch (error) {
       throw new Error('Gagal Memperbarui Data Paket');
@@ -34,7 +34,7 @@ export const paketService = () => {
 
   const postRupForAnggaran = async (dataPaket) => {
     try {
-      const response = await api.post('/v1/anggaran', dataPaket);
+      const response = await api.post('/v1/PPK/anggaran', dataPaket);
       return response.data;
     } catch (error) {
       throw new Error('Data Paket Tidak Tersedia');
@@ -44,7 +44,7 @@ export const paketService = () => {
   const postAnggaran = async (paketId, dataAnggaran) => {
     try {
       const response = await api.post(
-        `/v1/tambahangg/${paketId}`,
+        `/v1/PPK/tambahangg/${paketId}`,
         dataAnggaran
       );
       return response.data;
@@ -55,7 +55,10 @@ export const paketService = () => {
 
   const updateAnggaran = async (paketId, dataAnggaran) => {
     try {
-      const response = await api.post(`/v1/editangg/${paketId}`, dataAnggaran);
+      const response = await api.post(
+        `/v1/PPK/editangg/${paketId}`,
+        dataAnggaran
+      );
       return response.data;
     } catch (error) {
       throw new Error('Gagal Memperbarui Anggaran');
@@ -64,7 +67,7 @@ export const paketService = () => {
 
   const paketInisiasi = async (dataPaket) => {
     try {
-      const response = await api.post('/v1/InisiasiPaket', dataPaket);
+      const response = await api.post('/v1/PPK/InisiasiPaket', dataPaket);
       return response.data;
     } catch (error) {
       throw new Error('Data Paket Tidak Tersedia');
@@ -268,12 +271,24 @@ export const paketService = () => {
       throw new Error('Gagal Mendapatkan Data');
     }
   };
+
   const getDataEvaluasiPen = async (psrId, data) => {
     try {
       const response = await api.get(`/v1/PP/pen_penawaran/${psrId}`, data);
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mendapatkan Data');
+    }
+  };
+
+  const getDataDahsboardPPK = async (userId, lenght, page, search) => {
+    try {
+      const response = await api.get(
+        `v1/PPK/lelang/${userId}?length=${lenght}&page=${page}&q=${search}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
     }
   };
 
@@ -302,5 +317,6 @@ export const paketService = () => {
     getLelangDown,
     getDokKualifikasiPen,
     getDataEvaluasiPen,
+    getDataDahsboardPPK,
   };
 };

@@ -14,6 +14,7 @@ import PaketInisiasi from './PaketInisiasi';
 import Spinner from '../Elements/Spinner';
 import { IoIosClose } from 'react-icons/io';
 import { Link } from 'react-router-dom';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const initialState = {
   datas: [],
@@ -27,6 +28,7 @@ const initialState = {
 };
 
 const TableListsPaket = () => {
+  const { user } = useAuthContext();
   const [state, setState] = useState(initialState);
   const {
     datas,
@@ -49,6 +51,7 @@ const TableListsPaket = () => {
     const fetchData = async () => {
       try {
         const response = await getListPaket(
+          user.user_id,
           showItem,
           currentPage,
           debaouceSearch
@@ -165,7 +168,7 @@ const TableListsPaket = () => {
 
     return status ? statusConfig[status].render : null;
   };
-  
+
   const renderDirectName = (item) => {
     const statusConfig = {
       edit: {
