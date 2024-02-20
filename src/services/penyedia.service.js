@@ -33,7 +33,7 @@ export const penyediaService = () => {
   const getPenyedia = async (lenght, page, search) => {
     try {
       const response = await api.get(
-        `/v1/penyedia?length=${lenght}&page=${page}&q=${search}`
+        `/v1/ADM/penyedia?length=${lenght}&page=${page}&q=${search}`
       );
       return response.data;
     } catch (error) {
@@ -43,7 +43,10 @@ export const penyediaService = () => {
 
   const editPenyedia = async (penyediaId, dataPenyedia) => {
     try {
-      const response = await api.get(`v1/penyedia/${penyediaId}`, dataPenyedia);
+      const response = await api.get(
+        `v1/ADM/penyedia/${penyediaId}`,
+        dataPenyedia
+      );
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data Penyedia');
@@ -52,7 +55,15 @@ export const penyediaService = () => {
 
   const updatePenyedia = async (penyediaId, dataPenyedia) => {
     try {
-      const response = await api.put(`v1/penyedia/${penyediaId}`, dataPenyedia);
+      const response = await api.put(
+        `v1/ADM/penyedia/${penyediaId}`,
+        dataPenyedia,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       throw new Error('Gagal Memperbarui Data Penyedia');
