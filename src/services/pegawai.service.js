@@ -7,7 +7,7 @@ export const pegawaiService = () => {
   const getPegawai = async (show, page, search) => {
     try {
       const response = await api.get(
-        `/v1/list_pegawai?length=${show}&page=${page}&q=${search}`,
+        `/v1/ADM/pegawai?length=${show}&page=${page}&q=${search}`,
         {
           headers: {
             Authorization: `Bearer ${userToken.access_token}`,
@@ -22,7 +22,7 @@ export const pegawaiService = () => {
 
   const postPegawai = async (dataPegawai) => {
     try {
-      const response = await api.post('/v1/pegawai', dataPegawai, {
+      const response = await api.post('/v1/ADM/pegawai', dataPegawai, {
         headers: {
           Authorization: `Bearer ${userToken.access_token}`,
         },
@@ -35,11 +35,15 @@ export const pegawaiService = () => {
 
   const editPegawai = async (pegawaiId, dataPegawai) => {
     try {
-      const response = await api.get(`/v1/pegawai/${pegawaiId}`, dataPegawai, {
-        headers: {
-          Authorization: `Bearer ${userToken.access_token}`,
-        },
-      });
+      const response = await api.get(
+        `/v1/ADM/pegawai/${pegawaiId}`,
+        dataPegawai,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       throw new Error('Gagal Mengambil Data Pegawai');
@@ -48,11 +52,15 @@ export const pegawaiService = () => {
 
   const updatePegawai = async (pegawaiId, dataPegawai) => {
     try {
-      const response = await api.put(`/v1/pegawai/${pegawaiId}`, dataPegawai, {
-        headers: {
-          Authorization: `Bearer ${userToken.access_token}`,
-        },
-      });
+      const response = await api.put(
+        `/v1/ADM/pegawai/${pegawaiId}`,
+        dataPegawai,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       throw new Error('Gagal Memperbarui Data Pegawai');
