@@ -218,9 +218,6 @@ const TableListsPaket = () => {
             <button className="px-4 py-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
               Addendum
             </button>
-            <button className="px-4 py-1 text-red-500 border border-red-400 rounded-md hover:text-white hover:bg-red-400">
-              Hapus
-            </button>
           </div>
         ),
       },

@@ -38,7 +38,11 @@ export const paketService = () => {
 
   const postRupForAnggaran = async (dataPaket) => {
     try {
-      const response = await api.post('/v1/PPK/anggaran', dataPaket);
+      const response = await api.post('/v1/PPK/anggaran', dataPaket, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error('Data Paket Tidak Tersedia');
@@ -49,7 +53,12 @@ export const paketService = () => {
     try {
       const response = await api.post(
         `/v1/PPK/tambahangg/${paketId}`,
-        dataAnggaran
+        dataAnggaran,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -61,7 +70,12 @@ export const paketService = () => {
     try {
       const response = await api.post(
         `/v1/PPK/editangg/${paketId}`,
-        dataAnggaran
+        dataAnggaran,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -71,7 +85,11 @@ export const paketService = () => {
 
   const paketInisiasi = async (dataPaket) => {
     try {
-      const response = await api.post('/v1/PPK/InisiasiPaket', dataPaket);
+      const response = await api.post('/v1/PPK/InisiasiPaket', dataPaket, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error('Data Paket Tidak Tersedia');
