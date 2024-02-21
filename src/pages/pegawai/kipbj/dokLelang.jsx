@@ -1,19 +1,22 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
+import DokumenLelang from '../../../components/Fragments/DokumenLelang';
 import MainLayouts from '../../../components/Layouts/MainLayouts';
 import Breadcrumb from '../../../components/Elements/Breadcrumb';
-import TableDetaiLelang from '../../../components/Fragments/TableDetaiLelang';
 
-const DetailLelangKIPJB = () => {
+const DokLelangKIPJB = () => {
+  const { llsId } = useParams();
   const breadcrumbItems = [
     { label: 'Dashboard', url: '/dashboard' },
-    { label: 'Detail Lelang' },
+    { label: 'Detail Lelang', url: `/detail-lelang/${llsId}` },
+    { label: 'Dokumen' },
   ];
   return (
     <MainLayouts>
       <Breadcrumb items={breadcrumbItems} />
-      <TableDetaiLelang />
+      <DokumenLelang />
     </MainLayouts>
   );
 };
 
-export default DetailLelangKIPJB;
+export default DokLelangKIPJB;

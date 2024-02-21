@@ -88,6 +88,10 @@ const DashboardKipbj = () => {
     }));
   };
 
+  const handleDirect = (llsId) => {
+    navigate(`/detail-lelang/${llsId}`);
+  };
+
   const TableDashboard = () => {
     return (
       <>
@@ -166,7 +170,10 @@ const DashboardKipbj = () => {
                       <td className="px-3 py-4 text-center capitalize">
                         {item.lls_id}
                       </td>
-                      <td className="px-3 py-4 text-center cursor-pointer capitaliz hover:text-blue-700">
+                      <td
+                        className="px-3 py-4 text-center cursor-pointer capitaliz hover:text-blue-700"
+                        onClick={() => handleDirect(item.lls_id)}
+                      >
                         {item.pkt_nama}
                       </td>
                       <td className="px-3 py-4">{item.tahapan}</td>

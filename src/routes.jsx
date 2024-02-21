@@ -75,6 +75,8 @@ import DokSuratPenawaranEvaluasi from './pages/pegawai/pp/dokSuratPenawaran';
 import EvaluasiPeserta from './pages/pegawai/pp/evaluasiPeseta';
 import Penetapan from './pages/pegawai/pp/penetapan';
 import Verifikasi from './pages/pegawai/pp/verifikasi';
+import DetailLelangKIPJB from './pages/pegawai/kipbj/detailLelang';
+import DokLelangKIPJB from './pages/pegawai/kipbj/dokLelang';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -180,6 +182,11 @@ const AppRoute = () => {
             <Route path="/paket" element={<ListPaketPJB />} />
             <Route path="/paket/:paketId" element={<UpdatePaketPJB />} />
             <Route path="/paket/detail/:paketId" element={<DetailPaketPjb />} />
+            <Route
+              path="/detail-lelang/:llsId"
+              element={<DetailLelangKIPJB />}
+            />
+            <Route path="/dokumen-Lelang/:llsId" element={<DokLelangKIPJB />} />
           </Route>
           <Route element={<PpkAccess />}>
             <Route path="/daftar-paket" element={<ListPaket />} />
