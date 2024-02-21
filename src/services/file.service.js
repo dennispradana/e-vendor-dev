@@ -21,7 +21,7 @@ export const fileService = () => {
       );
       return response.data;
     } catch (error) {
-      throw new Error('terjasi keselahaan saat Menampilkan File');
+      throw new Error('terjadi keselahaan saat Menampilkan File');
     }
   };
 
@@ -30,6 +30,20 @@ export const fileService = () => {
       const response = await api.get(
         `v1/download?id_content=${idContent}&versi=${versi}`,
         fileName
+      );
+      return response;
+    } catch (error) {
+      throw new Error('terjadi kesalahaan saat mengunduh File');
+    }
+  };
+
+  const downloadFileBa = async (idContent, versi) => {
+    try {
+      const response = await api.get(
+        `v1/download?id_content=${idContent}&versi=${versi}`,
+        {
+          responseType: 'blob',
+        }
       );
       return response;
     } catch (error) {
@@ -59,5 +73,12 @@ export const fileService = () => {
     }
   };
 
-  return { postFile, getFile, downloadFile, deleteFile, downloadTemplate };
+  return {
+    postFile,
+    getFile,
+    downloadFile,
+    deleteFile,
+    downloadTemplate,
+    downloadFileBa,
+  };
 };
