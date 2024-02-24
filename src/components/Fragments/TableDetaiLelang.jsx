@@ -5,6 +5,7 @@ import { SkeletonItem } from '../Elements/Skelekton';
 import { TiStar } from 'react-icons/ti';
 import { fileService } from '../../services/file.service';
 import { toasterror, toastsuccess } from '../../utils/ToastMessage';
+import { ppkService } from '../../services/ppk.service';
 
 const initialState = {
   kualifikasi: [],
@@ -13,8 +14,9 @@ const initialState = {
   lainnya: [],
 };
 
-const TableDetaiLelang = () => {
+const TableDetaiLelang = ({ type }) => {
   const { getDatalLelangPjb } = pjbService();
+  const { getDatalLelangPpk } = ppkService();
   const { getFile, downloadFileBa } = fileService();
   const { llsId } = useParams();
   const [data, setData] = useState('');
@@ -38,7 +40,11 @@ const TableDetaiLelang = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getDatalLelangPjb(llsId);
+        let response;
+        type === 'ppk'
+          ? (response = await getDatalLelangPpk(llsId))
+          : (response = await getDatalLelangPjb(llsId));
+
         setData(response.data);
         const handleBaType = async (baType, baKey) => {
           const idAttachment = response.data.berita?.[baKey]?.brc_id_attachment;
