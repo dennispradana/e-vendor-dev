@@ -135,12 +135,21 @@ const TableDetaiLelang = ({ type }) => {
                 <tbody>
                   <tr className="border border-collapse border-blue-200">
                     <td className="p-2">
-                      <Link
-                        className="hover:text-blue-500"
-                        to={`/dokumen-lelang/${data.lelang?.lls_id}`}
-                      >
-                        {data.dokumen?.dll_nama_dokumen}
-                      </Link>
+                      {type === 'ppk' ? (
+                        <Link
+                          className="hover:text-blue-500"
+                          to={`/dokumen-PPK/${data.lelang?.lls_id}`}
+                        >
+                          {data.dokumen?.dll_nama_dokumen}
+                        </Link>
+                      ) : (
+                        <Link
+                          className="hover:text-blue-500"
+                          to={`/dokumen-lelang/${data.lelang?.lls_id}`}
+                        >
+                          {data.dokumen?.dll_nama_dokumen}
+                        </Link>
+                      )}
                     </td>
                   </tr>
                 </tbody>
