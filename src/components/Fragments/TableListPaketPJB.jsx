@@ -8,6 +8,7 @@ import { FaRegFolderOpen } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../utils/formatDate';
 import { panitiaService } from '../../services/panitia.service';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const initialState = {
   datas: [],
@@ -21,6 +22,7 @@ const initialState = {
 };
 
 const TableListPaketPJB = () => {
+  const { user } = useAuthContext();
   const [state, setState] = useState(initialState);
   const {
     datas,
@@ -40,6 +42,7 @@ const TableListPaketPJB = () => {
     const fetchData = async () => {
       try {
         const response = await getListPaket(
+          user.user_id,
           showItem,
           currentPage,
           debaouceSearch
@@ -126,7 +129,7 @@ const TableListPaketPJB = () => {
         condition: item.pkt_status !== '1',
         render: (
           <Link to={`/paket/${item.pkt_id}`}>
-            <button className="p-1 text-blue-500 border border-blue-400 rounded-md  hover:text-white hover:bg-blue-400">
+            <button className="p-1 text-blue-500 border border-blue-400 rounded-md hover:text-white hover:bg-blue-400">
               Inisiasi Paket
             </button>
           </Link>
