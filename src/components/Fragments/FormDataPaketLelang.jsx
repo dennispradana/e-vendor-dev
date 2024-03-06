@@ -234,7 +234,7 @@ const FormDataPaketLelang = ({
           </tr>
           <tr>
             <th className="w-1/3 px-4 py-2 border-b border-r">
-              Kerangka Acuan Kerja (KAK) / Spesifikasi Teknis dan Gambar
+              Informasi Lainnya
             </th>
             <td className="px-4 py-4 text-sm border-b">
               <button
