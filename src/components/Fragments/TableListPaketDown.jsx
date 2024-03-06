@@ -6,7 +6,7 @@ import { useDebounce } from 'use-debounce';
 import { toasterror } from '../../utils/ToastMessage';
 import DataEmpty from '../Elements/DataEmpty';
 import { FaRegFolderOpen } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { formatDate } from '../../utils/formatDate';
 
@@ -38,6 +38,8 @@ const TableListPaketDown = ({ type }) => {
   const { getPaketDown, getLelangDown } = paketService();
   const [debaouceSearch] = useDebounce(search, 2000);
   const userId = user.user_id;
+  const navigate = useNavigate();
+
   const fetchDataPaket = async () => {
     try {
       const response = await getPaketDown(
@@ -62,7 +64,7 @@ const TableListPaketDown = ({ type }) => {
 
   const fetchDataLelang = async () => {
     try {
-      const response = await getPaketDown(
+      const response = await getLelangDown(
         userId,
         showItem,
         currentPage,
@@ -109,6 +111,10 @@ const TableListPaketDown = ({ type }) => {
       ...prev,
       currentPage: page,
     }));
+  };
+
+  const handleDirect = (llsId) => {
+    navigate(`/evaluasi/${llsId}`);
   };
 
   const renderStatus = (item) => {
