@@ -21,8 +21,28 @@ export const ppkService = () => {
     }
   };
 
+  const getKontrakPPK = async (llsId) => {
+    try {
+      const response = await api.get(`v1/PPK/base_kontrak/${llsId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
+  const getSuratKontrak = async (llsId) => {
+    try {
+      const response = await api.get(`v1/PPK/init_sppbj/${llsId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
   return {
     getDatalLelangPpk,
     getDokLelangPPK,
+    getKontrakPPK,
+    getSuratKontrak,
   };
 };
