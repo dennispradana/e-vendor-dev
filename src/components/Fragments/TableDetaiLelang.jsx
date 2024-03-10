@@ -168,24 +168,26 @@ const TableDetaiLelang = ({ type }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td className="p-2">
-                      <div className="grid grid-cols-2">
-                        <div className="px-2">
-                          <div className="flex align-top">
-                            <p className="capitalize">urutan 1</p>
-                            <div className="text-yellow-500 ">
-                              <TiStar />
+                  {data.evaluasi?.pemenang !== null && (
+                    <tr>
+                      <td className="p-2">
+                        <div className="grid grid-cols-2">
+                          <div className="px-2">
+                            <div className="flex align-top">
+                              <p className="capitalize">urutan 1</p>
+                              <div className="text-yellow-500 ">
+                                <TiStar />
+                              </div>
                             </div>
+                            <p>* Pemanang Hasil evaluasi</p>
                           </div>
-                          <p>* Pemanang Hasil evaluasi</p>
+                          <div className="capitalize">
+                            {data.evaluasi?.pemenang?.rkn_nama}
+                          </div>
                         </div>
-                        <div className="capitalize">
-                          {data.evaluasi?.pemenang?.rkn_nama}
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </td>
