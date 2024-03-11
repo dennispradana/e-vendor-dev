@@ -74,7 +74,7 @@ const TabKontrak = () => {
           onClick={handleModal}
           className="px-4 py-3 font-semibold capitalize transition duration-200 ease-in-out bg-green-600 rounded-lg cursor-pointer text-gray-50 hover:bg-green-800 hover:text-white"
         >
-          Buat Kontrak
+          Buat SPPBJ
         </button>
       </div>
     );
@@ -123,11 +123,14 @@ const TabKontrak = () => {
               {data.sppbj?.sppbj_id !== null ? (
                 <tr>
                   <td className="px-4 py-2 text-center capitalize border">
-                    <Link className="hover:text-blue-500">
+                    <Link
+                      to={`/sppbj/${data.sppbj?.sppbj_id}`}
+                      className="hover:text-blue-500"
+                    >
                       {data.sppbj?.sppbj_id}
                     </Link>
                   </td>
-                  <td className="px-4 py-2 text-center border">
+                  <td className="px-4 py-2 text-center uppercase border">
                     {data.sppbj?.rkn_nama}
                   </td>
                   <td className="px-4 py-2 text-center border">
