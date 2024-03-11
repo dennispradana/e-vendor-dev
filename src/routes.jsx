@@ -79,6 +79,7 @@ import DetailLelangKIPJB from './pages/pegawai/kipbj/detailLelang';
 import DokLelangKIPJB from './pages/pegawai/kipbj/dokLelang';
 import LelangPPK from './pages/pegawai/ppk/lelangPPK';
 import DokumenPPK from './pages/pegawai/ppk/dokPPK';
+import UpdateSppbj from './pages/pegawai/ppk/updateSppbj';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -199,6 +200,7 @@ const AppRoute = () => {
             />
             <Route path="/lelang/:llsId" element={<LelangPPK />} />
             <Route path="/dokumen-PPK/:llsId" element={<DokumenPPK />} />
+            <Route path="/Sppbj/:sppbjId" element={<UpdateSppbj />} />
           </Route>
           <Route element={<PpAccess />}>
             <Route path="data-paket" element={<DataPaket />}>

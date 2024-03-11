@@ -14,6 +14,23 @@ export const InputForm = (props) => {
   );
 };
 
+export const InputFlex = (props) => {
+  const { type, error, ...formikProps } = props;
+  return (
+    <div className="flex items-center">
+      <input
+        type={type}
+        className={`w-full p-1 px-3 text-gray-700 bg-white border ${
+          error
+            ? 'border-red-500 focus:ring-red-600'
+            : 'border-gray-300  focus:ring-sky-600'
+        } rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2  focus:border-transparent`}
+        {...formikProps}
+      />
+    </div>
+  );
+};
+
 export const SelectForm = (props) => {
   const { label, options, error, ...formikProps } = props;
   return (

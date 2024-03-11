@@ -39,10 +39,20 @@ export const ppkService = () => {
     }
   };
 
+  const getSppbj = async (sppbjId) => {
+    try {
+      const response = await api.get(`v1/PPK/sppbj/${sppbjId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
   return {
     getDatalLelangPpk,
     getDokLelangPPK,
     getKontrakPPK,
     getSuratKontrak,
+    getSppbj,
   };
 };
