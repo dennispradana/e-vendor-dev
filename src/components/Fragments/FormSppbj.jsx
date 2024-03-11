@@ -1,28 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { IoIosCloseCircle } from 'react-icons/io';
-import { ppkService } from '../../../services/ppk.service';
-import { formatRp } from '../../../utils/formatRupiah';
-import { SkeletonItem } from '../Skelekton';
-import { InputFlex } from '../Input';
+import Button from '../Elements/Button';
+import { formatRp } from '../../utils/formatRupiah';
+import { SkeletonItem } from '../Elements/Skelekton';
+import { InputFlex } from '../Elements/Input';
+import { IoMdRemoveCircleOutline } from 'react-icons/io';
 
-const FormEKontrak = ({ close, llsId }) => {
-  const { getSuratKontrak } = ppkService();
-  const [data, setData] = useState('');
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getSuratKontrak(llsId);
-        setData(response.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [llsId]);
+const FormSppbj = ({ data, loading }) => {
+  const handleBack = () => {
+    history.back();
+  };
 
   const InformasiPaket = () => {
     return loading ? (
@@ -80,7 +66,7 @@ const FormEKontrak = ({ close, llsId }) => {
       return (
         <div className="flex flex-col">
           <InputFlex type="text" />
-          <p className="text-xs italic capitalize">
+          <p className="mt-2 text-xs italic capitalize">
             Contoh Pengisian: 1 Lembar
           </p>
           <p className="text-xs italic">isi dengan tanda (-) jika tidak ada</p>
@@ -296,8 +282,54 @@ const FormEKontrak = ({ close, llsId }) => {
               </td>
             </tr>
             <tr>
-              <th className="w-1/4 px-4 py-2 border-b border-r">Tembusan</th>
+              <th className="w-1/4 px-4 py-2 align-top border-b border-r">
+                Tembusan
+              </th>
               <td className="px-4 py-2 border-b">{inputTembusan()}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const Dokumen = () => {
+    const renderCetak = () => {
+      return (
+        <>
+          <button className="px-3 py-2 mb-2 text-white bg-green-500 rounded hover:bg-green-600">
+            Upload
+          </button>
+          <table className="w-full text-sm text-left border-t rounded-md">
+            <thead>
+              <tr>
+                <th className="p-2">Nama File</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="p-2"></td>
+              </tr>
+            </tbody>
+          </table>
+        </>
+      );
+    };
+
+    return loading ? (
+      <SkeletonItem itemCount={1} cN="bg-gray-200 h-36" />
+    ) : (
+      <div className="mb-2">
+        <div className="mb-2 bg-blue-200">
+          <p className="px-4 py-2 text-sm font-bold">Dokumen SPPBJ</p>
+        </div>
+        <table className="w-full text-sm text-left border border-collapse">
+          <tbody>
+            <tr>
+              <th className="w-1/4 px-4 py-2 align-top border-b border-r">
+                Dokumen Cetak SPPBJ
+              </th>
+              <td className="px-4 py-2 border-b">{renderCetak()}</td>
             </tr>
           </tbody>
         </table>
@@ -307,32 +339,27 @@ const FormEKontrak = ({ close, llsId }) => {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
-        <div className="relative w-[70vw] mx-auto my-6 max-h-screen">
-          <div className="relative flex flex-col w-full px-2 pb-6 bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
-            <div className="flex justify-end">
-              <button className="mb-3" onClick={close}>
-                <IoIosCloseCircle size="2rem" className="hover:text-red-600" />
-              </button>
-            </div>
-            <InformasiPaket />
-            <FormSPPBJ />
-            <PihakPertama />
-            <InformasiPendukung />
-            <div className="flex justify-center mt-5">
-              <button
-                className="px-3 py-2 font-bold text-white bg-green-600 border-b border-solid rounded-md rounded-t hover:bg-green-700 border-slate-200"
-                type="button"
-              >
-                Simpan
-              </button>
-            </div>
-          </div>
-        </div>
+      <InformasiPaket />
+      <FormSPPBJ />
+      <PihakPertama />
+      <InformasiPendukung />
+      <Dokumen />
+      <div className="flex gap-4 mt-6">
+        <Button
+          cN={`btn bg-sky-500 text-white  hover:bg-blue-600 ease-in duration-200 `}
+        >
+          Simpan
+        </Button>
+        <Button
+          cN={`btn bg-slate-300 text-black hover:bg-slate-400 ease-in duration-200 `}
+          type="button"
+          onClick={() => handleBack()}
+        >
+          Kembali
+        </Button>
       </div>
-      <div className="fixed inset-0 z-40 bg-black opacity-30"></div>
     </>
   );
 };
 
-export default FormEKontrak;
+export default FormSppbj;
