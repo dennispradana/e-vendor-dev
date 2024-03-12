@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IoIosCloseCircle, IoMdRemoveCircleOutline } from 'react-icons/io';
+import { IoIosCloseCircle, IoMdRemoveCircleOutline } from 'react-icons/io';
 import { ppkService } from '../../../services/ppk.service';
 import { formatRp } from '../../../utils/formatRupiah';
 import { SkeletonItem } from '../Skelekton';
@@ -9,11 +10,20 @@ import * as Yup from 'yup';
 import { toasterror, toastsuccess } from '../../../utils/ToastMessage';
 import Button from '../Button';
 import Spinner from '../Spinner';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { toasterror, toastsuccess } from '../../../utils/ToastMessage';
+import Button from '../Button';
+import Spinner from '../Spinner';
 
+const FormEKontrak = ({ close, updated, llsId }) => {
+  const { getSuratKontrak, postSppbj } = ppkService();
 const FormEKontrak = ({ close, updated, llsId }) => {
   const { getSuratKontrak, postSppbj } = ppkService();
   const [data, setData] = useState('');
   const [loading, setLoading] = useState(true);
+  const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState('');
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
 

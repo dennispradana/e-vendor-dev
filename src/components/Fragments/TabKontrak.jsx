@@ -25,6 +25,17 @@ const TabKontrak = () => {
     }
   };
 
+  const fetchData = async () => {
+    try {
+      const response = await getKontrakPPK(llsId);
+      setData(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
