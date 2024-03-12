@@ -13,19 +13,24 @@ const TabKontrak = () => {
   const [loading, setLoading] = useState(true);
   const [modalKontrak, setModalKontrak] = useState(false);
 
+  const fetchData = async () => {
+    try {
+      const response = await getKontrakPPK(llsId);
+      setData(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getKontrakPPK(llsId);
-        setData(response.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
+
+  const handleUpdate = async () => {
+    await fetchData();
+  };
 
   const handleModal = () => {
     setModalKontrak(!modalKontrak);
@@ -190,7 +195,13 @@ const TabKontrak = () => {
       <div className="min-h-[50vh]">
         <Table />
       </div>
-      {modalKontrak && <FormEKontrak close={handleModal} llsId={llsId} />}
+      {modalKontrak && (
+        <FormEKontrak
+          close={handleModal}
+          llsId={llsId}
+          updated={handleUpdate}
+        />
+      )}
     </>
   );
 };
