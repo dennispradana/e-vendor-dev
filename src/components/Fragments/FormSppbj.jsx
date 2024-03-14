@@ -73,7 +73,6 @@ const FormSppbj = ({ data, loading, sppbjId }) => {
         toastsuccess('Data Disimpan');
         navigate(`/lelang/${data.lelang?.lls_id}`);
       }
-      console.log(newValues);
     } catch (error) {
       toasterror(error.message);
     } finally {
