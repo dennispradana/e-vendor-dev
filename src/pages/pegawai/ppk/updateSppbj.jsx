@@ -34,9 +34,8 @@ const UpdateSppbj = () => {
   return (
     <MainLayouts>
       <Breadcrumb items={breadcrumbItems} />
-      <div className="py-10 mb-10 shadow-xl rounded-xl backdrop-blur-sm bg-white/60 page-padding">
-        <FormSppbj data={data} loading={loading} />
-      </div>
+
+      <FormSppbj data={data} loading={loading} sppbjId={sppbjId} />
     </MainLayouts>
   );
 };
