@@ -15,7 +15,7 @@ export const InputForm = (props) => {
 };
 
 export const InputFlex = (props) => {
-  const { type, error, ...formikProps } = props;
+  const { type, error, cN, ...formikProps } = props;
   return (
     <div className="flex items-center">
       <input
@@ -24,7 +24,7 @@ export const InputFlex = (props) => {
           error
             ? 'border-red-500 focus:ring-red-600'
             : 'border-gray-300  focus:ring-sky-600'
-        } rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2  focus:border-transparent`}
+        } rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2  focus:border-transparent ${cN}`}
         {...formikProps}
       />
     </div>
