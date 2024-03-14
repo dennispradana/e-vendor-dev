@@ -65,6 +65,19 @@ export const ppkService = () => {
     }
   };
 
+  const updateSppbj = async (sppbjId, dataKontrak) => {
+    try {
+      const response = await api.put(`v1/PPK/sppbj/${sppbjId}`, dataKontrak, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
   return {
     getDatalLelangPpk,
     getDokLelangPPK,
@@ -72,5 +85,6 @@ export const ppkService = () => {
     getSuratKontrak,
     getSppbj,
     postSppbj,
+    updateSppbj,
   };
 };

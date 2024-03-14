@@ -47,6 +47,19 @@ const FormEKontrak = ({ close, updated, llsId }) => {
     },
   };
 
+  const validation = Yup.object({
+    sppbj: Yup.object({
+      sppbj_no: Yup.string().required(),
+      sppbj_lamp: Yup.string().required(),
+      sppbj_tgl_buat: Yup.date().required(),
+      sppbj_kota: Yup.string().required(),
+      jabatan_ppk_sppbj: Yup.string().required(),
+      alamat_satker: Yup.string().required(),
+      jaminan_pelaksanaan: Yup.string().required(),
+      psr_id: Yup.string().required(),
+    }),
+  });
+
   const handleSubmit = async (values, { setSubmitting }) => {
     const tembusan = tags.join(', ');
     const newValues = {
@@ -72,7 +85,8 @@ const FormEKontrak = ({ close, updated, llsId }) => {
   };
 
   const formik = useFormik({
-    initialValues,
+    initialValues: initialValues,
+    validationSchema: validation,
     onSubmit: handleSubmit,
   });
 
@@ -94,7 +108,13 @@ const FormEKontrak = ({ close, updated, llsId }) => {
   const inputLampiran = () => {
     return (
       <div className="flex flex-col">
-        <InputFlex type="text" {...formik.getFieldProps('sppbj.sppbj_lamp')} />
+        <InputFlex
+          type="text"
+          {...formik.getFieldProps('sppbj.sppbj_lamp')}
+          error={
+            formik.touched.sppbj?.sppbj_lamp && formik.errors.sppbj?.sppbj_lamp
+          }
+        />
         <p className="mt-2 text-xs italic capitalize">
           Contoh Pengisian: 1 Lembar
         </p>
@@ -143,7 +163,7 @@ const FormEKontrak = ({ close, updated, llsId }) => {
         <div className="flex items-center mt-2">
           <input
             type="text"
-            name="ius_klasifikasi"
+            name="sppbj.sppbj_tembusan"
             className="w-[90%] p-1 px-3 text-gray-700 bg-white border-t border-b border-l border-gray-300 shadow-sm appearance-none focus:ring-sky-600 focus:outline-none focus:ring-1 focus:border-transparent rounded-l-md"
             onChange={(e) => handleTagInputChange(e)}
             value={tagInput}
@@ -242,6 +262,10 @@ const FormEKontrak = ({ close, updated, llsId }) => {
                           <InputFlex
                             type="text"
                             {...formik.getFieldProps('sppbj.sppbj_no')}
+                            error={
+                              formik.touched.sppbj?.sppbj_no &&
+                              formik.errors.sppbj?.sppbj_no
+                            }
                           />
                         </td>
                       </tr>
@@ -261,6 +285,10 @@ const FormEKontrak = ({ close, updated, llsId }) => {
                           <InputFlex
                             type="date"
                             {...formik.getFieldProps('sppbj.sppbj_tgl_buat')}
+                            error={
+                              formik.touched.sppbj?.sppbj_tgl_buat &&
+                              formik.errors.sppbj?.sppbj_tgl_buat
+                            }
                           />
                         </td>
                       </tr>
@@ -272,6 +300,10 @@ const FormEKontrak = ({ close, updated, llsId }) => {
                           <InputFlex
                             type="text"
                             {...formik.getFieldProps('sppbj.sppbj_kota')}
+                            error={
+                              formik.touched.sppbj?.sppbj_kota &&
+                              formik.errors.sppbj?.sppbj_kota
+                            }
                           />
                         </td>
                       </tr>
@@ -312,6 +344,10 @@ const FormEKontrak = ({ close, updated, llsId }) => {
                           <InputFlex
                             type="text"
                             {...formik.getFieldProps('sppbj.jabatan_ppk_sppbj')}
+                            error={
+                              formik.touched.sppbj?.jabatan_ppk_sppbj &&
+                              formik.errors.sppbj?.jabatan_ppk_sppbj
+                            }
                           />
                         </td>
                       </tr>
@@ -331,6 +367,10 @@ const FormEKontrak = ({ close, updated, llsId }) => {
                           <InputFlex
                             type="text"
                             {...formik.getFieldProps('sppbj.alamat_satker')}
+                            error={
+                              formik.touched.sppbj?.alamat_satker &&
+                              formik.errors.sppbj?.alamat_satker
+                            }
                           />
                         </td>
                       </tr>
@@ -352,27 +392,36 @@ const FormEKontrak = ({ close, updated, llsId }) => {
                           Penyedia
                         </th>
                         <td className="px-4 py-2 border-b">
-                          <table className="w-full text-sm text-left rounded-md">
+                          <table
+                            className={`w-full text-sm text-left rounded-md border border-collapse ${
+                              formik.touched.sppbj?.psr_id &&
+                              formik.errors.sppbj?.psr_id
+                                ? 'border-red-500 focus:ring-red-600'
+                                : 'border-gray-300  focus:ring-sky-600'
+                            }`}
+                          >
                             <thead>
-                              <tr className="border border-collapse">
-                                <th className="px-6 py-2 border-r">Pemenang</th>
-                                <th className="p-2 border-r">NPWP</th>
-                                <th className="p-2 border-r">Harga</th>
+                              <tr className="">
+                                <th className="px-6 py-2">Pemenang</th>
+                                <th className="p-2">NPWP</th>
+                                <th className="p-2">Harga</th>
                               </tr>
                             </thead>
                             <tbody>
                               {data.peserta?.map((item, index) => (
                                 <tr
                                   key={index}
-                                  className="border border-collapse "
+                                  className={`border border-collapse ${
+                                    formik.errors.sppbj?.psr_id
+                                      ? 'border-red-500 focus:ring-red-600'
+                                      : 'border-gray-300  focus:ring-sky-600'
+                                  }`}
                                 >
-                                  <td className="p-2 uppercase border-r">
+                                  <td className="p-2 uppercase">
                                     {inputPemenang(item)}
                                   </td>
-                                  <td className="p-2 border-r">
-                                    {item.rkn_npwp}
-                                  </td>
-                                  <td className="p-2 border-r">
+                                  <td className="p-2">{item.rkn_npwp}</td>
+                                  <td className="p-2">
                                     {formatRp(item.nev_harga_negosiasi)}
                                   </td>
                                 </tr>
@@ -387,10 +436,15 @@ const FormEKontrak = ({ close, updated, llsId }) => {
                         </th>
                         <td className="px-4 py-2 border-b">
                           <InputFlex
-                            type="text"
+                            type="number"
                             {...formik.getFieldProps(
                               'sppbj.jaminan_pelaksanaan'
                             )}
+                            error={
+                              formik.touched.sppbj?.jaminan_pelaksanaan &&
+                              formik.errors.sppbj?.jaminan_pelaksanaan
+                            }
+                            cN="number-input"
                           />
                         </td>
                       </tr>
