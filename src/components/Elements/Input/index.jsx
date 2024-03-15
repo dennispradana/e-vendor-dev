@@ -31,6 +31,21 @@ export const InputFlex = (props) => {
   );
 };
 
+export const TextAreaFlex = (props) => {
+  const { error, ...formikProps } = props;
+  return (
+    <textarea
+      className={`w-full p-1 px-3 text-gray-700 bg-white border ${
+        error
+          ? 'border-red-500 focus:ring-red-600'
+          : 'border-gray-300  focus:ring-sky-600'
+      } rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2  focus:border-transparent`}
+      rows="4"
+      {...formikProps}
+    />
+  );
+};
+
 export const SelectForm = (props) => {
   const { label, options, error, ...formikProps } = props;
   return (
