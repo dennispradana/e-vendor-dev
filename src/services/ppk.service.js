@@ -78,6 +78,15 @@ export const ppkService = () => {
     }
   };
 
+  const getKontrak = async (skId) => {
+    try {
+      const response = await api.get(`v1/PPK/kontrak/${skId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
   return {
     getDatalLelangPpk,
     getDokLelangPPK,
@@ -86,5 +95,6 @@ export const ppkService = () => {
     getSppbj,
     postSppbj,
     updateSppbj,
+    getKontrak,
   };
 };

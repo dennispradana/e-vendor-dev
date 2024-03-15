@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ppkService } from '../../services/ppk.service';
 import { formatRp } from '../../utils/formatRupiah';
 import { SkeletonItem } from '../Elements/Skelekton';
@@ -12,6 +12,7 @@ const TabKontrak = () => {
   const [data, setData] = useState('');
   const [loading, setLoading] = useState(true);
   const [modalKontrak, setModalKontrak] = useState(false);
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -36,18 +37,32 @@ const TabKontrak = () => {
     setModalKontrak(!modalKontrak);
   };
 
+  const kontrakNavigate = () => {
+    navigate(`/kontrak/${data.kontrak?.kontrak_id}`);
+  };
+
+  const spkNavigate = () => {
+    navigate(`/spk/${data.spk?.spk_id}`);
+  };
+
   const renderButton = () => {
     const mtd = data.lelang?.mtd_pemilihan;
     switch (mtd) {
       case '0':
         return (
-          <button className="px-3 py-1 mx-4 text-xs text-white bg-gray-500 rounded hover:bg-gray-600">
+          <button
+            onClick={spkNavigate}
+            className="px-3 py-1 mx-4 text-xs text-white bg-gray-500 rounded hover:bg-gray-600"
+          >
             SPK
           </button>
         );
       case '1':
         return (
-          <button className="px-3 py-1 mx-4 text-xs text-white bg-gray-500 rounded hover:bg-gray-600">
+          <button
+            onClick={kontrakNavigate}
+            className="px-3 py-1 mx-4 text-xs text-white bg-gray-500 rounded hover:bg-gray-600"
+          >
             Kontrak
           </button>
         );
