@@ -214,6 +214,7 @@ export const penyediaService = () => {
         headers: {
           Authorization: `Bearer ${userToken.access_token}`,
         },
+        responseType: 'blob',
       });
       return response;
     } catch (error) {
