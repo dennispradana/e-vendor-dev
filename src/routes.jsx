@@ -77,6 +77,10 @@ import Penetapan from './pages/pegawai/pp/penetapan';
 import Verifikasi from './pages/pegawai/pp/verifikasi';
 import DetailLelangKIPJB from './pages/pegawai/kipbj/detailLelang';
 import DokLelangKIPJB from './pages/pegawai/kipbj/dokLelang';
+import LelangPPK from './pages/pegawai/ppk/lelangPPK';
+import DokumenPPK from './pages/pegawai/ppk/dokPPK';
+import UpdateSppbj from './pages/pegawai/ppk/updateSppbj';
+import KontrakPPK from './pages/pegawai/ppk/kontrak';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -195,6 +199,11 @@ const AppRoute = () => {
               path="/daftar-paket/detail/:paketId"
               element={<DetailPaketPpk />}
             />
+            <Route path="/lelang/:llsId" element={<LelangPPK />} />
+            <Route path="/dokumen-PPK/:llsId" element={<DokumenPPK />} />
+            <Route path="/sppbj/:sppbjId" element={<UpdateSppbj />} />
+            <Route path="/kontrak/:kontrakId" element={<KontrakPPK />} />
+            <Route path="/spk/:spkId" element={<KontrakPPK />} />
           </Route>
           <Route element={<PpAccess />}>
             <Route path="data-paket" element={<DataPaket />}>

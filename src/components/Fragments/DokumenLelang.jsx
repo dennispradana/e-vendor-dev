@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { fileService } from '../../services/file.service';
 import { toasterror, toastsuccess } from '../../utils/ToastMessage';
 import { SkeletonItem } from '../Elements/Skelekton';
+import { ppkService } from '../../services/ppk.service';
 
 const initialState = {
   pemilihan: [],
@@ -11,9 +12,10 @@ const initialState = {
   kontrak: [],
 };
 
-const DokumenLelang = () => {
+const DokumenLelang = ({ type }) => {
   const { llsId } = useParams();
   const { getDokLelang } = pjbService();
+  const { getDokLelangPPK } = ppkService();
   const { getFile, downloadFileBa } = fileService();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState('');
@@ -48,7 +50,12 @@ const DokumenLelang = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getDokLelang(llsId);
+        let response;
+        if (type === 'ppk') {
+          response = await getDokLelangPPK(llsId);
+        } else {
+          response = await getDokLelang(llsId);
+        }
         setData(response.data);
         const dokumenIdAttachment = response.data.dokumen?.dll_id_attachment;
         const kontenSpek = response.data.konten?.dll_spek;
@@ -65,7 +72,7 @@ const DokumenLelang = () => {
     };
 
     fetchData();
-  }, [llsId]);
+  }, [llsId, type]);
 
   const handleDownload = async (idContent, versi, fileName) => {
     try {

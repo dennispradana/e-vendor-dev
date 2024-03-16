@@ -5,6 +5,7 @@ import { SkeletonItem } from '../Elements/Skelekton';
 import { TiStar } from 'react-icons/ti';
 import { fileService } from '../../services/file.service';
 import { toasterror, toastsuccess } from '../../utils/ToastMessage';
+import { ppkService } from '../../services/ppk.service';
 
 const initialState = {
   kualifikasi: [],
@@ -13,8 +14,9 @@ const initialState = {
   lainnya: [],
 };
 
-const TableDetaiLelang = () => {
+const TableDetaiLelang = ({ type }) => {
   const { getDatalLelangPjb } = pjbService();
+  const { getDatalLelangPpk } = ppkService();
   const { getFile, downloadFileBa } = fileService();
   const { llsId } = useParams();
   const [data, setData] = useState('');
@@ -38,7 +40,11 @@ const TableDetaiLelang = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getDatalLelangPjb(llsId);
+        let response;
+        type === 'ppk'
+          ? (response = await getDatalLelangPpk(llsId))
+          : (response = await getDatalLelangPjb(llsId));
+
         setData(response.data);
         const handleBaType = async (baType, baKey) => {
           const idAttachment = response.data.berita?.[baKey]?.brc_id_attachment;
@@ -129,12 +135,21 @@ const TableDetaiLelang = () => {
                 <tbody>
                   <tr className="border border-collapse border-blue-200">
                     <td className="p-2">
-                      <Link
-                        className="hover:text-blue-500"
-                        to={`/dokumen-lelang/${data.lelang?.lls_id}`}
-                      >
-                        {data.dokumen?.dll_nama_dokumen}
-                      </Link>
+                      {type === 'ppk' ? (
+                        <Link
+                          className="hover:text-blue-500"
+                          to={`/dokumen-PPK/${data.lelang?.lls_id}`}
+                        >
+                          {data.dokumen?.dll_nama_dokumen}
+                        </Link>
+                      ) : (
+                        <Link
+                          className="hover:text-blue-500"
+                          to={`/dokumen-lelang/${data.lelang?.lls_id}`}
+                        >
+                          {data.dokumen?.dll_nama_dokumen}
+                        </Link>
+                      )}
                     </td>
                   </tr>
                 </tbody>
@@ -153,24 +168,26 @@ const TableDetaiLelang = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td className="p-2">
-                      <div className="grid grid-cols-2">
-                        <div className="px-2">
-                          <div className="flex align-top">
-                            <p className="capitalize">urutan 1</p>
-                            <div className="text-yellow-500 ">
-                              <TiStar />
+                  {data.evaluasi?.pemenang !== null && (
+                    <tr>
+                      <td className="p-2">
+                        <div className="grid grid-cols-2">
+                          <div className="px-2">
+                            <div className="flex align-top">
+                              <p className="capitalize">urutan 1</p>
+                              <div className="text-yellow-500 ">
+                                <TiStar />
+                              </div>
                             </div>
+                            <p>* Pemanang Hasil evaluasi</p>
                           </div>
-                          <p>* Pemanang Hasil evaluasi</p>
+                          <div className="capitalize">
+                            {data.evaluasi?.pemenang?.rkn_nama}
+                          </div>
                         </div>
-                        <div className="capitalize">
-                          {data.evaluasi?.pemenang?.rkn_nama}
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </td>
