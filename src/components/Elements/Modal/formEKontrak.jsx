@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { IoIosCloseCircle, IoMdRemoveCircleOutline } from 'react-icons/io';
-<<<<<<< HEAD
-import { IoIosCloseCircle, IoMdRemoveCircleOutline } from 'react-icons/io';
-=======
->>>>>>> ae194d3cf4239bd868576741a4784fec1f35b39e
 import { ppkService } from '../../../services/ppk.service';
 import { formatRp } from '../../../utils/formatRupiah';
 import { SkeletonItem } from '../Skelekton';
@@ -13,7 +9,6 @@ import * as Yup from 'yup';
 import { toasterror, toastsuccess } from '../../../utils/ToastMessage';
 import Button from '../Button';
 import Spinner from '../Spinner';
-<<<<<<< HEAD
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toasterror, toastsuccess } from '../../../utils/ToastMessage';
@@ -22,22 +17,10 @@ import Spinner from '../Spinner';
 
 const FormEKontrak = ({ close, updated, llsId }) => {
   const { getSuratKontrak, postSppbj } = ppkService();
-const FormEKontrak = ({ close, updated, llsId }) => {
-  const { getSuratKontrak, postSppbj } = ppkService();
-=======
-
-const FormEKontrak = ({ close, updated, llsId }) => {
-  const { getSuratKontrak, postSppbj } = ppkService();
->>>>>>> ae194d3cf4239bd868576741a4784fec1f35b39e
   const [data, setData] = useState('');
   const [loading, setLoading] = useState(true);
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
-<<<<<<< HEAD
-  const [tags, setTags] = useState([]);
-  const [tagInput, setTagInput] = useState('');
-=======
->>>>>>> ae194d3cf4239bd868576741a4784fec1f35b39e
 
   useEffect(() => {
     const fetchData = async () => {
