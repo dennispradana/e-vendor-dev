@@ -14,12 +14,12 @@ import { toasterror, toastsuccess } from '../../utils/ToastMessage';
 import Spinner from '../Elements/Spinner';
 
 const FormSppbj = ({ data, loading, sppbjId }) => {
-  const { updateSppbj } = ppkService();
+  const { updateSppbj, downloadFileSppbj } = ppkService();
+  const [downloading, setDownloading] = useState(false);
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
   const [sppbjAtt, setSppbjAtt] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (data.sppbj?.sppbj_tembusan) {
@@ -69,9 +69,7 @@ const FormSppbj = ({ data, loading, sppbjId }) => {
     try {
       const response = await updateSppbj(sppbjId, newValues);
       if (response.success) {
-        formik.resetForm();
         toastsuccess('Data Disimpan');
-        navigate(`/lelang/${data.lelang?.lls_id}`);
       }
     } catch (error) {
       toasterror(error.message);
@@ -134,6 +132,25 @@ const FormSppbj = ({ data, loading, sppbjId }) => {
 
   const handleBack = () => {
     history.back();
+  };
+
+  const handleDownload = async (idContent) => {
+    try {
+      const response = await downloadFileSppbj(idContent);
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `SPPBJ-[${data.sppbj?.lls_id}].pdf`;
+      a.click();
+      if (response.status === 200) {
+        toastsuccess('File Berhasil Diunduh');
+      } else {
+        toasterror('Gagal mengunduh file');
+      }
+    } catch (error) {
+      toasterror(error.message);
+    }
   };
 
   const inputLampiran = () => {
@@ -516,12 +533,33 @@ const FormSppbj = ({ data, loading, sppbjId }) => {
           <div className="flex gap-4 mt-6">
             <Button
               cN={`btn bg-sky-500 text-white  hover:bg-blue-600 ease-in duration-200 ${
-                formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                formik.isSubmitting || downloading
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ''
               }`}
               type="submit"
-              disabled={formik.isSubmitting}
+              disabled={formik.isSubmitting || downloading}
             >
-              {formik.isSubmitting ? <Spinner /> : 'Simpan'}
+              {formik.isSubmitting || downloading ? <Spinner /> : 'Simpan'}
+            </Button>
+            <Button
+              cN={`btn bg-green-600 text-white hover:bg-green-700 ease-in duration-200 ${
+                formik.isSubmitting || downloading
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ''
+              }`}
+              disabled={formik.isSubmitting || downloading}
+              type="button"
+              onClick={() => {
+                if (!downloading) {
+                  setDownloading(true);
+                  handleDownload(data.sppbj?.sppbj_id).then(() =>
+                    setDownloading(false)
+                  );
+                }
+              }}
+            >
+              {formik.isSubmitting || downloading ? <Spinner /> : 'Cetak'}
             </Button>
             <Button
               cN={`btn bg-slate-300 text-black hover:bg-slate-400 ease-in duration-200 ${
