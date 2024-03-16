@@ -159,7 +159,7 @@ const FormKontrakPPk = ({ data, loading, kontrakId }) => {
                       NIP PPK
                     </th>
                     <td className="px-4 py-2 border-b">
-                      <InputFlex type="date" />
+                      <InputFlex type="text" />
                     </td>
                   </tr>
                   <tr>
