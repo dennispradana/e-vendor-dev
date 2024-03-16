@@ -109,7 +109,7 @@ const TabManajerial = ({ type, formik }) => {
       );
     } else {
       formik.setFieldValue('manajerial', [
-        ...formik.values.landasanhukum,
+        ...formik.values.manajerial,
         {
           id_manajerial: item.id_manajerial,
         },
