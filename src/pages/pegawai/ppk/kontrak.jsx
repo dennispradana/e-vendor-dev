@@ -25,8 +25,6 @@ const KontrakPPK = () => {
     fetchData();
   }, []);
 
-  console.log(data);
-
   const breadcrumbItems = [
     { label: 'Dashboard', url: '/dashboard' },
     { label: 'Lelang', url: `/lelang/${data.lelang?.lls_id}` },

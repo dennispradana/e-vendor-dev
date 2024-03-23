@@ -87,9 +87,37 @@ export const ppkService = () => {
     }
   };
 
+  const updateKontrak = async (kontrakId, dataKontrak) => {
+    try {
+      const response = await api.put(
+        `v1/PPK/kontrak/${kontrakId}`,
+        dataKontrak,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.access_token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
   const downloadFileSppbj = async (sppbjId) => {
     try {
       const response = await api.get(`v1/PPK/print_sppbj/${sppbjId}`, {
+        responseType: 'blob',
+      });
+      return response;
+    } catch (error) {
+      throw new Error('terjadi kesalahaan saat mengunduh File');
+    }
+  };
+
+  const downloadFileKontrak = async (kontrakId) => {
+    try {
+      const response = await api.get(`v1/PPK/print_kontrak/${kontrakId}`, {
         responseType: 'blob',
       });
       return response;
@@ -107,6 +135,8 @@ export const ppkService = () => {
     postSppbj,
     updateSppbj,
     getKontrak,
+    updateKontrak,
     downloadFileSppbj,
+    downloadFileKontrak,
   };
 };
