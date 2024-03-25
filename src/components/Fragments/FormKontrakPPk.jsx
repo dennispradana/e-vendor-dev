@@ -166,8 +166,9 @@ const FormKontrakPPk = ({ data, loading, kontrakId }) => {
           <button
             onClick={handleOpenModal}
             className="px-3 py-2 mb-2 text-white bg-green-500 rounded hover:bg-green-600"
+            type="button"
           >
-            {data.kontrak.kontrak_id_attacment !== null
+            {data.kontrak?.kontrak_id_attacment !== null
               ? 'Lihat Dokumen'
               : 'Unggah Dokumen'}
           </button>

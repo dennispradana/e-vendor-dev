@@ -126,6 +126,39 @@ export const ppkService = () => {
     }
   };
 
+  const getSpk = async (spkId) => {
+    try {
+      const response = await api.get(`v1/PPK/spk/${spkId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
+  const updateSpk = async (spkId, dataSpk) => {
+    try {
+      const response = await api.put(`v1/PPK/spk/${spkId}`, dataSpk, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
+  const downloadFileSpk = async (spkId) => {
+    try {
+      const response = await api.get(`v1/PPK/print_spk/${spkId}`, {
+        responseType: 'blob',
+      });
+      return response;
+    } catch (error) {
+      throw new Error('terjadi kesalahaan saat mengunduh File');
+    }
+  };
+
   return {
     getDatalLelangPpk,
     getDokLelangPPK,
@@ -138,5 +171,8 @@ export const ppkService = () => {
     updateKontrak,
     downloadFileSppbj,
     downloadFileKontrak,
+    getSpk,
+    updateSpk,
+    downloadFileSpk,
   };
 };
