@@ -5,6 +5,7 @@ import { formatRp } from '../../utils/formatRupiah';
 import { SkeletonItem } from '../Elements/Skelekton';
 import { FiFileText } from 'react-icons/fi';
 import FormEKontrak from '../Elements/Modal/formEKontrak';
+import { toasterror } from '../../utils/ToastMessage';
 
 const TabKontrak = () => {
   const { llsId } = useParams();
@@ -19,7 +20,7 @@ const TabKontrak = () => {
       const response = await getKontrakPPK(llsId);
       setData(response.data);
     } catch (error) {
-      console.log(error);
+      toasterror(error);
     } finally {
       setLoading(false);
     }

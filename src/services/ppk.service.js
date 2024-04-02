@@ -159,6 +159,24 @@ export const ppkService = () => {
     }
   };
 
+  const getPenilaian = async (llsId) => {
+    try {
+      const response = await api.get(`v1/PPK/nilai/${llsId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
+  const getDetailPenilaian = async (llsId, ktrId) => {
+    try {
+      const response = await api.get(`v1/PPK/detail_nilai/${llsId}/${ktrId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Mengambil Data');
+    }
+  };
+
   return {
     getDatalLelangPpk,
     getDokLelangPPK,
@@ -174,5 +192,7 @@ export const ppkService = () => {
     getSpk,
     updateSpk,
     downloadFileSpk,
+    getPenilaian,
+    getDetailPenilaian,
   };
 };
