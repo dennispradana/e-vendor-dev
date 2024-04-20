@@ -87,7 +87,7 @@ const TabPenilaianKinerja = () => {
         <tfoot>
           <tr>
             <th></th>
-            {data.total?.ttl_bobot === null ? (
+            {data.total?.ttl_bobot !== '100' ? (
               <>
                 <th colSpan="3" className="px-3 py-4">
                   Nilai Total

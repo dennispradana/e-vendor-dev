@@ -177,6 +177,19 @@ export const ppkService = () => {
     }
   };
 
+  const updateNilai = async (dataNilai) => {
+    try {
+      const response = await api.put(`v1/PPK/penilaian`, dataNilai, {
+        headers: {
+          Authorization: `Bearer ${userToken.access_token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Gagal Menyimpan Penilaian');
+    }
+  };
+
   return {
     getDatalLelangPpk,
     getDokLelangPPK,
@@ -194,5 +207,6 @@ export const ppkService = () => {
     downloadFileSpk,
     getPenilaian,
     getDetailPenilaian,
+    updateNilai,
   };
 };

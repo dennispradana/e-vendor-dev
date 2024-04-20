@@ -3,9 +3,12 @@ import { SkeletonItem } from '../Elements/Skelekton';
 import Button from '../Elements/Button';
 import { TextAreaForm } from '../Elements/Input';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { toasterror, toastsuccess } from '../../utils/ToastMessage';
+import { ppkService } from '../../services/ppk.service';
 
 const DetailNilai = ({ data, loading }) => {
+  const { updateNilai } = ppkService();
   const initialValues = {
     nilai: {
       inf_tamb: '',
@@ -14,6 +17,12 @@ const DetailNilai = ({ data, loading }) => {
       ref_id: '',
     },
   };
+
+  const validation = Yup.object({
+    nilai: Yup.object({
+      ref_id: Yup.string().required('Pilih Salah Satu Jawaban'),
+    }),
+  });
 
   const handleSubmit = async (values, { setSubmitting }) => {
     const newValues = {
@@ -24,7 +33,10 @@ const DetailNilai = ({ data, loading }) => {
       },
     };
     try {
-      console.log(newValues);
+      const response = await updateNilai(newValues);
+      if (response.success) {
+        toastsuccess('Penilian di Simpan');
+      }
     } catch (error) {
       toasterror(error.message);
     } finally {
@@ -34,6 +46,7 @@ const DetailNilai = ({ data, loading }) => {
 
   const formik = useFormik({
     initialValues: initialValues,
+    validationSchema: validation,
     onSubmit: handleSubmit,
   });
 
@@ -81,15 +94,19 @@ const DetailNilai = ({ data, loading }) => {
 
   const inputJawaban = (item) => {
     return (
-      <div className="flex align-top cursor-pointer">
-        <input
-          type="radio"
-          className="w-3"
-          checked={formik.values.nilai.ref_id === item.ref_id}
-          onChange={() => handleJawabanChange(item.ref_id)}
-        />
-        <label className="pl-2 ">{item.ktr_uraian}</label>
-      </div>
+      <>
+        <div className="flex items-start cursor-pointer">
+          <div className="py-1">
+            <input
+              type="radio"
+              className="w-3"
+              checked={formik.values.nilai.ref_id === item.ref_id}
+              onChange={() => handleJawabanChange(item.ref_id)}
+            />
+          </div>
+          <label className="py-1 pl-2">{item.ktr_uraian}</label>
+        </div>
+      </>
     );
   };
 
@@ -117,6 +134,11 @@ const DetailNilai = ({ data, loading }) => {
               {inputJawaban(item)}
             </div>
           ))}
+          {formik.touched.nilai?.ref_id && formik.errors.nilai?.ref_id && (
+            <p className="mt-2 text-sm italic text-red-500">
+              {formik.errors.nilai?.ref_id}
+            </p>
+          )}
         </div>
         <TextAreaForm
           label="Komentar Tambahan (opsioanal)"
