@@ -102,7 +102,7 @@ const TabPenilaianKinerja = () => {
                   Nilai Total
                 </th>
                 <td className="px-3 py-4 text-center ">
-                  {data.total?.ttl_bobot}
+                  {data.total?.ttl_bobot}%
                 </td>
                 <td className="px-3 py-4 text-center ">
                   {data.total?.ttl_nilai}
