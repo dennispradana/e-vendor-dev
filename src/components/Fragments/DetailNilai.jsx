@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toasterror, toastsuccess } from '../../utils/ToastMessage';
 import { ppkService } from '../../services/ppk.service';
+import Spinner from '../Elements/Spinner';
 
 const DetailNilai = ({ data, loading }) => {
   const { updateNilai } = ppkService();
@@ -147,15 +148,21 @@ const DetailNilai = ({ data, loading }) => {
       </div>
       <div className="flex justify-between my-6">
         <Button
-          cN={`btn bg-sky-500 text-white hover:bg-blue-600 ease-in duration-200`}
+          cN={`btn bg-sky-500 text-white hover:bg-blue-600 ease-in duration-200 ${
+            formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
           type="submit"
+          disabled={formik.isSubmitting}
         >
-          Kirim
+          {formik.isSubmitting ? <Spinner /> : 'Kirim'}
         </Button>
         <Button
-          cN={`btn bg-green-600 text-white hover:bg-green-700 ease-in duration-200`}
+          cN={`btn bg-green-600 text-white hover:bg-green-700 ease-in duration-200 ${
+            formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
           type="button"
           onClick={() => handleBack()}
+          disabled={formik.isSubmitting}
         >
           Kembali
         </Button>
