@@ -103,7 +103,7 @@ export const ppkService = () => {
       throw new Error('Gagal Mengambil Data');
     }
   };
-
+  
   const downloadFileSppbj = async (sppbjId) => {
     try {
       const response = await api.get(`v1/PPK/print_sppbj/${sppbjId}`, {

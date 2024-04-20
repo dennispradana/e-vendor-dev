@@ -305,7 +305,6 @@ const FormKontrakPPk = ({ data, loading, kontrakId }) => {
                           formik.errors.kontrak?.kontrak_kota
                         }
                       />
-                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -442,7 +441,6 @@ const FormKontrakPPk = ({ data, loading, kontrakId }) => {
                           formik.errors.kontrak?.jabatan_ppk_kontrak
                         }
                       />
-                    </td>
                   </tr>
                   <tr>
                     <th className="w-1/4 px-4 py-2 align-top border-b border-r">
