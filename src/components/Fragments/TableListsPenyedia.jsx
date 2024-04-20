@@ -5,17 +5,37 @@ import { SkeletonItem } from '../Elements/Skelekton';
 import Pagination from '../Elements/Pagination';
 import { useDebounce } from 'use-debounce';
 import { toasterror } from '../../utils/ToastMessage';
+import { FaRegFolderOpen } from 'react-icons/fa6';
+import DataEmpty from '../Elements/DataEmpty';
+import { Tooltip } from '../Elements/Tooltip';
+import { FiEdit } from 'react-icons/fi';
 
-function TableListsPenyedia() {
-  const [datas, setDatas] = useState([]);
+const initialState = {
+  datas: [],
+  search: '',
+  dataTotal: 0,
+  dataLength: 0,
+  currentPage: 1,
+  totalPages: 1,
+  entryNumber: 1,
+  showItem: 10,
+};
+
+const TableListsPenyedia = () => {
+  const [state, setState] = useState(initialState);
+  const {
+    datas,
+    entryNumber,
+    search,
+    dataTotal,
+    dataLength,
+    currentPage,
+    showItem,
+    totalPages,
+  } = state;
+
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [dataLenght, SetDataLenght] = useState(10);
-  const [dataTotal, SetDataTotal] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [entryNumber, setEntryNumber] = useState(1);
-  const [debaouceSearch] = useDebounce(searchTerm, 2000);
+  const [debaouceSearch] = useDebounce(search, 2000);
   const { getPenyedia } = penyediaService();
   const navigate = useNavigate();
 
@@ -23,70 +43,89 @@ function TableListsPenyedia() {
     const fetchDataPenyedia = async () => {
       try {
         const response = await getPenyedia(
-          dataLenght,
+          showItem,
           currentPage,
           debaouceSearch
         );
-        const responseData = response.data;
-        const number = (currentPage - 1) * dataLenght + 1;
-        setEntryNumber(number);
-        setDatas(responseData);
-        SetDataTotal(response.total);
-        setTotalPages(Math.ceil(response.total / dataLenght));
+        setState((prev) => ({
+          ...prev,
+          dataTotal: response.total,
+          datas: response.data.data,
+          dataLength: response.data.total,
+          totalPages: Math.ceil(response.data.total / state.showItem),
+          entryNumber: (state.currentPage - 1) * state.showItem + 1,
+        }));
         setLoading(false);
       } catch (error) {
         toasterror(error.message);
       }
     };
     fetchDataPenyedia();
-  }, [dataLenght, currentPage, debaouceSearch]);
+  }, [showItem, currentPage, debaouceSearch]);
 
   const handleEdit = (penyediaId) => {
     navigate(`edit/${penyediaId}`);
   };
 
   const handleShowData = (e) => {
-    SetDataLenght(e.target.value);
-    setCurrentPage(1);
+    const showData = e.target.value;
+    setState((prev) => ({
+      ...prev,
+      showItem: showData,
+      currentPage: 1,
+    }));
   };
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
+    const searchTerm = e.target.value;
+    setState((prev) => ({
+      ...prev,
+      search: searchTerm,
+      currentPage: 1,
+    }));
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    setState((prev) => ({
+      ...prev,
+      currentPage: page,
+    }));
   };
 
-  const getStatusComponent = (item) => {
-    const verif =
-      item.rkn_isactive === '1' &&
-      item.rkn_status === '1' &&
-      item.rkn_status_verifikasi === 'verif';
-    const nonVerif = item.rkn_status_verifikasi === 'non';
-    const nonAktif = item.rkn_isactive === '0';
-
-    switch (true) {
-      case nonVerif:
-        return (
-          <p className="p-1 font-bold text-center text-red-400">
-            Belum di Verifikasi
-          </p>
-        );
-      case verif:
-        return (
+  const renderStatus = (item) => {
+    const statusConfig = {
+      verif: {
+        condition:
+          item.rkn_isactive === '1' &&
+          item.rkn_status === '1' &&
+          item.rkn_status_verifikasi === 'verif',
+        render: (
           <p className="p-1 font-bold text-center text-green-600">
             ter-Verifikasi
           </p>
-        );
-      case nonAktif:
-        return (
+        ),
+      },
+      nonVerif: {
+        condition: item.rkn_status_verifikasi === 'non',
+        render: (
+          <p className="p-1 font-bold text-center text-red-400">
+            Belum di Verifikasi
+          </p>
+        ),
+      },
+      nonAktif: {
+        condition: item.rkn_isactive === '0',
+        render: (
           <p className="p-1 font-bold text-center text-red-800">non-aktif</p>
-        );
-      default:
-        return null;
-    }
+        ),
+      },
+    };
+
+    const status = Object.keys(statusConfig).find(
+      (key) => statusConfig[key].condition
+    );
+
+    return status ? statusConfig[status].render : null;
   };
 
   const TableDataPenyedia = () => {
@@ -120,14 +159,14 @@ function TableListsPenyedia() {
                 id="table-search"
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-50 md:w-80 bg-gray-50 focus:outline-violet-300"
                 placeholder="Cari Data Penyedia"
-                value={searchTerm}
+                value={search}
                 onChange={handleSearch}
                 autoFocus
               />
             </div>
           </div>
         </div>
-        <div className="relative flex flex-col h-[60vh] overflow-x-auto rounded-lg">
+        <div className="relative flex flex-col h-[80vh] overflow-x-auto rounded-lg">
           <div className="flex-grow">
             <table className="w-full text-sm text-left text-gray-600 md:text-base">
               <thead className="sticky top-0 text-xs uppercase bg-gray-800 rounded-lg md:text-sm text-gray-50">
@@ -149,7 +188,7 @@ function TableListsPenyedia() {
                 </tr>
               </thead>
               <tbody className="overflow-y-auto ">
-                {datas.length === 0 ? (
+                {dataLength === 0 ? (
                   <tr className="capitalize bg-gray-200 border-b">
                     <td
                       colSpan="10"
@@ -172,7 +211,7 @@ function TableListsPenyedia() {
                       </th>
                       <td className="px-3 py-4 capitalize">{item.rkn_nama}</td>
                       <td className="px-3 py-4 capitalize">
-                        {getStatusComponent(item)}
+                        {renderStatus(item)}
                       </td>
                       <td className="px-3 py-4 text-center capitalize">
                         {item.b__usaha.btu_nama}
@@ -183,12 +222,14 @@ function TableListsPenyedia() {
                       </td>
 
                       <td className="px-6 py-4 text-center">
-                        <button
-                          className="mr-2 font-semibold text-blue-500 hover:underline"
-                          onClick={() => handleEdit(item.rkn_id)}
-                        >
-                          Edit
-                        </button>
+                        <Tooltip text="Edit">
+                          <button
+                            className="mr-2 text-blue-500 hover:text-blue-700"
+                            onClick={() => handleEdit(item.rkn_id)}
+                          >
+                            <FiEdit size="1.2rem" />
+                          </button>
+                        </Tooltip>
                       </td>
                     </tr>
                   ))
@@ -204,24 +245,32 @@ function TableListsPenyedia() {
             </label>
             <select
               className="px-3 py-1 cursor-pointer"
-              value={dataLenght}
+              value={showItem}
               onChange={handleShowData}
             >
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={30}>30</option>
-              <option value={40}>40</option>
-              <option value={50}>50</option>
+              {dataLength <= 10 ? (
+                <option value={dataLength}>{dataLength}</option>
+              ) : (
+                <>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={30}>30</option>
+                  <option value={40}>40</option>
+                  <option value={50}>50</option>
+                </>
+              )}
             </select>
             <p className="ml-2 text-sm italic font-semibold capitalize">
-              dari {dataTotal} data
+              dari {dataLength} data
             </p>
           </div>
-          <Pagination
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-            totalPages={totalPages}
-          />
+          {dataLength > 10 && (
+            <Pagination
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              totalPages={totalPages}
+            />
+          )}
         </div>
       </>
     );
@@ -235,6 +284,13 @@ function TableListsPenyedia() {
           <SkeletonItem itemCount={10} cN="bg-gray-200 h-8" />
         </div>
       </>
+    ) : dataTotal === 0 ? (
+      <div className="flex items-center flex-col justify-center h-[50vh]">
+        <DataEmpty
+          title="Penyedia"
+          icon={<FaRegFolderOpen size="12rem" className="mb-4 text-gray-400" />}
+        />
+      </div>
     ) : (
       <TableDataPenyedia />
     );
@@ -249,6 +305,6 @@ function TableListsPenyedia() {
       </div>
     </div>
   );
-}
+};
 
 export default TableListsPenyedia;

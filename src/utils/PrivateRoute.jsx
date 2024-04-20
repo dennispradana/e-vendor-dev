@@ -23,7 +23,83 @@ export const AdminAcces = ({ redirectPath = '/unauthorized' }) => {
       </MainLayouts>
     );
   }
-  if (!user || user.usrgroup !== 'ADM') {
+  if (!user || user.role !== 'ADM') {
+    return <Navigate to={redirectPath} replace />;
+  }
+
+  return <Outlet />;
+};
+
+export const PenyediaAcces = ({ redirectPath = '/unauthorized' }) => {
+  const { user, loading } = useAuthContext();
+
+  if (loading) {
+    return (
+      <MainLayouts>
+        <div className="flex items-center justify-center h-[80vh]">
+          <Spinner />
+        </div>
+      </MainLayouts>
+    );
+  }
+  if (!user || user.role !== 'RKN') {
+    return <Navigate to={redirectPath} replace />;
+  }
+
+  return <Outlet />;
+};
+
+export const KipbjAccess = ({ redirectPath = '/unauthorized' }) => {
+  const { user, loading } = useAuthContext();
+
+  if (loading) {
+    return (
+      <MainLayouts>
+        <div className="flex items-center justify-center h-[80vh]">
+          <Spinner />
+        </div>
+      </MainLayouts>
+    );
+  }
+  if (!user || user.role !== 'KIPBJ') {
+    return <Navigate to={redirectPath} replace />;
+  }
+
+  return <Outlet />;
+};
+
+export const PpkAccess = ({ redirectPath = '/unauthorized' }) => {
+  const { user, loading } = useAuthContext();
+
+  if (loading) {
+    return (
+      <MainLayouts>
+        <div className="flex items-center justify-center h-[80vh]">
+          <Spinner />
+        </div>
+      </MainLayouts>
+    );
+  }
+  if (!user || user.role !== 'PPK') {
+    return <Navigate to={redirectPath} replace />;
+  }
+
+  return <Outlet />;
+};
+
+export const PpAccess = ({ redirectPath = '/unauthorized' }) => {
+  const { user, loading } = useAuthContext();
+
+  if (loading) {
+    return (
+      <MainLayouts>
+        <div className="flex items-center justify-center h-[80vh]">
+          <Spinner />
+        </div>
+      </MainLayouts>
+    );
+  }
+  if (!user || user.role !== 'PP') {
     return <Navigate to={redirectPath} replace />;
   }
 

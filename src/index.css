@@ -33,6 +33,16 @@ body {
   @apply px-8 w-full font-semibold rounded-lg h-10 capitalize;
 }
 
+.number-input {
+  -moz-appearance: textfield;
+}
+
+.number-input::-webkit-outer-spin-button,
+.number-input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
 .login-bg {
   background-image: url('../src/assets/login.jpg');
   width: 100%;
@@ -47,6 +57,17 @@ body {
   object-fit: cover;
   background-size: cover;
   background-position: center center;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid black;
+  bottom: -8px;
+  left: 50%;
 }
 
 *::-webkit-scrollbar {

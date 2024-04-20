@@ -15,7 +15,7 @@ const RegisterLayout = ({ children }) => {
           sudah punya akun penyedia?
         </p>
         <Link
-          to="/login/penyedia"
+          to="/login"
           className="text-sm font-semibold text-blue-500 capitalize hover:text-blue-700"
         >
           masuk

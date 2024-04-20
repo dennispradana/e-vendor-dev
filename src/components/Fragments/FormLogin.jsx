@@ -6,52 +6,35 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useAuthContext } from '../../contexts/AuthContext';
 import Captcha from '../Elements/Captcha';
+import { PiEyeLight, PiEyeClosedLight } from 'react-icons/pi';
 
-const FormLogin = ({ type }) => {
+const FormLogin = () => {
   const [verified, setIsVerified] = useState(null);
   const [loginFailed, setLoginFailed] = useState('');
-  const { login, loginPenyedia } = useAuthContext();
-  let initialValues;
-  let validationSchema;
+  const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuthContext();
 
   const handleRecaptcha = (value) => {
     setIsVerified(value);
   };
 
-  if (type === 'pegawai') {
-    initialValues = {
-      peg_namauser: '',
-      password: '',
-    };
-    validationSchema = Yup.object({
-      peg_namauser: Yup.string().required('username harus diisi'),
-      password: Yup.string().required('password harus diisi'),
-    });
-  } else {
-    initialValues = {
-      rkn_namauser: '',
-      password: '',
-    };
-    validationSchema = Yup.object({
-      rkn_namauser: Yup.string().required('username Penyedia harus diisi'),
-      password: Yup.string().required('password harus diisi'),
-    });
-  }
+  const initialValues = {
+    username: '',
+    password: '',
+  };
+
+  const validationSchema = Yup.object({
+    username: Yup.string().required('username harus diisi'),
+    password: Yup.string().required('password harus diisi'),
+  });
 
   const handleLogin = async (values, { setSubmitting }) => {
     if (verified) {
       try {
-        if (type === 'pegawai') {
-          await login({
-            peg_namauser: values.peg_namauser,
-            password: values.password,
-          });
-        } else {
-          await loginPenyedia({
-            rkn_namauser: values.rkn_namauser,
-            password: values.password,
-          });
-        }
+        await login({
+          username: values.username,
+          password: values.password,
+        });
       } catch (error) {
         setLoginFailed(error.message);
       } finally {
@@ -69,6 +52,10 @@ const FormLogin = ({ type }) => {
     onSubmit: handleLogin,
   });
 
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
@@ -77,42 +64,47 @@ const FormLogin = ({ type }) => {
             {loginFailed}
           </p>
         )}
-
-        {type === 'pegawai' && (
-          <>
-            <InputForm
-              label="username"
-              type="text"
-              {...formik.getFieldProps('peg_namauser')}
-              error={formik.touched.peg_namauser && formik.errors.peg_namauser}
-            />
-            <InputForm
-              label="password"
-              type="password"
+        <InputForm
+          label="username"
+          type="text"
+          {...formik.getFieldProps('username')}
+          error={formik.touched.username && formik.errors.username}
+        />
+        <div className="mb-6">
+          <label className="mb-4 text-sm font-semibold capitalize ">
+            Password
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className={`w-full mt-2 p-1 px-3 text-gray-700 bg-white border ${
+                formik.touched.password && formik.errors.password
+                  ? 'border-red-500 focus:ring-red-600'
+                  : 'border-gray-300  focus:ring-sky-600'
+              } rounded-md shadow-sm appearance-none focus:outline-none focus:ring-2  focus:border-transparent`}
               {...formik.getFieldProps('password')}
-              error={formik.touched.password && formik.errors.password}
             />
-            <Captcha onCaptchaChange={handleRecaptcha} />
-          </>
-        )}
-        {type === 'penyedia' && (
-          <>
-            <InputForm
-              label="username"
-              type="text"
-              {...formik.getFieldProps('rkn_namauser')}
-              error={formik.touched.rkn_namauser && formik.errors.rkn_namauser}
-            />
-            <InputForm
-              label="password"
-              type="password"
-              {...formik.getFieldProps('password')}
-              error={formik.touched.password && formik.errors.password}
-            />
-            <Captcha onCaptchaChange={handleRecaptcha} />
-          </>
-        )}
-
+            <div className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-600">
+              <button
+                type="button"
+                onClick={handleShowPassword}
+                className={`mt-2 ${showPassword ? '' : 'text-blue-600'}`}
+              >
+                {showPassword ? (
+                  <PiEyeLight size="1.2rem" />
+                ) : (
+                  <PiEyeClosedLight size="1.2rem" />
+                )}
+              </button>
+            </div>
+          </div>
+          {formik.touched.password && formik.errors.password && (
+            <p className="mt-2 text-sm italic text-red-500">
+              {formik.errors.password}
+            </p>
+          )}
+        </div>
+        <Captcha onCaptchaChange={handleRecaptcha} />
         <Button
           cN={`btn-full bg-blue-600 text-white hover:bg-blue-800 ease-in duration-200 ${
             formik.isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
