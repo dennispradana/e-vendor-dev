@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500;700;900&display=swap');
+
+.tiptap > * + * {
+  margin-top: 0.75em;
+}
+
+.tiptap ul,
+.tiptap ol {
+  padding: 0 1rem;
+}
+
+.tiptap h1 {
+  line-height: 1.1;
+  font-size: 32px;
+}
+
+.tiptap h2 {
+  line-height: 1.1;
+  font-size: 28px;
+}
+
+.tiptap blockquote {
+  padding-left: 1rem;
+  border-left: 3px solid #999999;
+}
+
+.tiptap hr {
+  border: none;
+  border-top: 3px solid #999999;
+  margin: 2rem 0;
+}
+
+/* ............................ */
+
+.menuBar {
+  padding-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.menuBar .sideRight {
+  display: flex;
+  align-items: center;
+}
+
+.menuBar button {
+  font-size: 14px;
+  outline: none;
+  border: none;
+  background: none;
+  color: rgb(70, 70, 70);
+  cursor: pointer;
+  padding: 3px;
+}
+
+.menuBar button:hover {
+  background: rgb(197, 197, 197);
+}
+
+button.is_active {
+  background: rgb(197, 197, 197);
+  padding: 2px 3px;
+  border-radius: 2px;
+}

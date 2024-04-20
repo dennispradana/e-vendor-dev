@@ -81,6 +81,8 @@ import LelangPPK from './pages/pegawai/ppk/lelangPPK';
 import DokumenPPK from './pages/pegawai/ppk/dokPPK';
 import UpdateSppbj from './pages/pegawai/ppk/updateSppbj';
 import KontrakPPK from './pages/pegawai/ppk/kontrak';
+import SpkPPK from './pages/pegawai/ppk/spk';
+import DetailPenilaian from './pages/pegawai/ppk/detailNilai';
 
 const AppRoute = () => {
   const auth = useAuthContext();
@@ -203,7 +205,11 @@ const AppRoute = () => {
             <Route path="/dokumen-PPK/:llsId" element={<DokumenPPK />} />
             <Route path="/sppbj/:sppbjId" element={<UpdateSppbj />} />
             <Route path="/kontrak/:kontrakId" element={<KontrakPPK />} />
-            <Route path="/spk/:spkId" element={<KontrakPPK />} />
+            <Route path="/spk/:spkId" element={<SpkPPK />} />
+            <Route
+              path="/detail-nilai/:llsId/:ktrId"
+              element={<DetailPenilaian />}
+            />
           </Route>
           <Route element={<PpAccess />}>
             <Route path="data-paket" element={<DataPaket />}>
